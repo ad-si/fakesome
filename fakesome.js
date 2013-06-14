@@ -1,5 +1,3 @@
-// fakesome {{ VERSION }} by Adrian Sieber (adriansieber.com)
-
 !function(window, document, undefined) {
 
 	var tld = ['com', 'de', 'org', 'net'],

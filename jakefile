@@ -1,0 +1,50 @@
+var fs = require('fs'),
+	uglify = require('uglify-js')
+
+function buildMinifiedJs(string) {
+
+	var ast,
+		compressor = uglify.Compressor()
+
+	ast = uglify.parse(string)
+	ast.figure_out_scope()
+	ast.transform(compressor)
+	ast.figure_out_scope()
+	ast.compute_char_frequency()
+	ast.mangle_names()
+
+	return ast.print_to_string({"comments": /fakesome/ })
+}
+
+
+desc('Default build process')
+task('default', ['fakesome.min.js'], function() {
+})
+
+
+desc('Compile fakesome.min.js')
+task('fakesome.min.js', [], function() {
+
+	var jsString = fs.readFileSync('src/fakesome.js').toString(),
+		file = fs.openSync('fakesome.min.js', 'w+'),
+		version
+
+	version = JSON.parse(fs.readFileSync('package.json')).version
+
+	jsString = buildMinifiedJs(
+		jsString
+			.replace('{{ VERSION }}', version)
+	)
+
+	fs.writeSync(file, jsString)
+
+	console.log('Building ' + this.name + ' succeeded')
+})
+
+desc('Remove compiled files')
+task('clean', [], function() {
+
+	fs.unlink('fakesome.min.js', function(err) {
+		if(err) console.log(err)
+	})
+})

@@ -1,0 +1,200 @@
+*
+	border: 0
+	margin: 0
+	padding: 0
+	-moz-box-sizing: border-box
+	box-sizing: border-box
+
+html
+	height: 100%
+
+body
+	font-size: 14px
+	font-family: "Arial", sans-serif
+	//font-family: "Times New Roman", sans-serif
+	line-height: 1.3
+	background-color: rgb(205,92,92)
+	color: rgb(80,80,80)
+	height: 100%
+	position: relative
+
+h1, h2, h3, h4, h5, h6
+	font-family: Arial, sans-serif
+
+h1
+	font-size: 3em
+	font-family: 'Finger Paint', cursive
+	color: rgb(0,0,0)
+
+h2
+	font-size: 1.6em
+	color: rgb(170, 56, 61)
+	margin-bottom: 0.5em
+h3
+	font-size: 1.2em
+	margin-bottom: 0.4em
+	color: rgb(50,50,50)
+
+h1 + p
+	font-size: 1.2em
+
+h2 + p
+	margin-bottom: 2em
+
+hr
+	height: 1px
+	background-color: rgba(0,0,0,0.1)
+	margin-bottom: 3em
+
+.ribbon
+	position: absolute
+	top: 0
+	right: 0
+
+table
+	border-collapse: collapse
+	margin-bottom: 1em
+	caption
+		text-align: left
+		font-family: sans-serif
+		font-size: 1.2em
+		margin-bottom: 0.4em
+		font-weight: 900
+		color: rgb(50,50,50)
+	tr
+		&:nth-of-type(2n)
+			background-color: rgba(0,0,0,0.05)
+		&:nth-of-type(2n + 1)
+			background-color: rgba(0,0,0,0)
+	th
+		background-color: rgba(0,0,0,0.05)
+		font-family: sans-serif
+		font-size: 0.9em
+		&:empty
+			display: none
+	th,
+	td
+		padding: 0.2em 0.4em
+		border: 1px solid rgb(180,180,180)
+	td.code
+		padding: 0
+
+
+pre
+	font-size: 0.8em
+
+p code,
+dd code
+	margin: 0 0.1em
+	padding: 0.1em 1em
+	white-space: wrap
+	border: 1px solid rgb(200,200,200)
+	background-color: rgb(240,240,240)
+	border-radius: 3px
+	font-family: Consolas, 'Liberation Mono', Courier, monospace
+	font-size: 0.9em
+
+#wrapper
+	width: 960px
+	margin: 0 auto
+	background-color: rgb(230,230,230)
+
+aside
+	display: inline-block
+	vertical-align: top
+	width: 160px
+	height: 100%
+	overflow-y: auto
+
+nav
+	position: fixed
+	overflow-y: auto
+	height: 100%
+	width: 160px
+	padding: 20px 0
+	background-color: rgba(0,0,0,0.1)
+	ul
+		list-style-type: none
+		li
+			padding: 0 20px
+		a
+			text-decoration: none
+			color: rgb(50,50,50)
+			font-size: 0.9em
+			font-family: Arial, sans-serif
+
+article
+	display: inline-block
+	vertical-align: top
+	width: 800px
+	padding: 30px
+
+
+section
+	margin-bottom: 2em
+	dl
+		span
+			border-radius: 0.2em
+			padding: 0.1em 0.4em
+			-webkit-font-smoothing: antialiased
+			font-smoothing: antialiased
+			color: white
+			.function
+				background-color: rgb(96, 131, 170)
+			.object
+				background-color: rgb(96, 131, 170)
+			.number
+				background-color: rgb(96, 131, 170)
+			.boolean
+				background-color: rgb(96, 131, 170)
+	.args
+		margin-bottom: 1.5em
+		dl
+			font-size: 0.9em
+		dt
+			font-weight: 900
+			display: inline-block
+		dd
+			display: inline-block
+	.name
+		width: 150px
+		margin-bottom: 0.4em
+		span
+			display: inline-block
+			color: rgb(200,20,0)
+			font-weight: 900
+	.type
+		width: 160px
+		span
+			background-color: rgb(96, 131, 170)
+	.default
+		width: 120px
+		span
+			background-color: rgb(110, 169, 117)
+	.properties
+		width: 100%
+		background-color: rgba(0,0,0,0.1)
+		padding: 1em 2em
+		margin: 1em 0
+		dt
+			vertical-align: middle
+			min-width: 8em
+			margin-bottom: 0.4em
+		dd
+			vertical-align: middle
+		.desc
+			width: 260px
+	.desc
+		vertical-align: middle
+		width: 300px
+
+
+
+
+
+header
+	margin-bottom: 50px
+
+.returns
+	margin-bottom: 2em
+	display: inline-block

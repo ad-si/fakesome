@@ -1,0 +1,228 @@
+* {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+html {
+  height: 100%;
+}
+body {
+  font-size: 14px;
+  font-family: "Arial", sans-serif;
+  line-height: 1.3;
+  background-color: #cd5c5c;
+  color: #505050;
+  height: 100%;
+  position: relative;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: Arial, sans-serif;
+}
+h1 {
+  font-size: 3em;
+  font-family: 'Finger Paint', cursive;
+  color: #000;
+}
+h2 {
+  font-size: 1.6em;
+  color: #aa383d;
+  margin-bottom: 0.5em;
+}
+h3 {
+  font-size: 1.2em;
+  margin-bottom: 0.4em;
+  color: #323232;
+}
+h1 + p {
+  font-size: 1.2em;
+}
+h2 + p {
+  margin-bottom: 2em;
+}
+hr {
+  height: 1px;
+  background-color: rgba(0,0,0,0.1);
+  margin-bottom: 3em;
+}
+.ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+table {
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+table caption {
+  text-align: left;
+  font-family: sans-serif;
+  font-size: 1.2em;
+  margin-bottom: 0.4em;
+  font-weight: 900;
+  color: #323232;
+}
+table tr:nth-of-type(2n) {
+  background-color: rgba(0,0,0,0.05);
+}
+table tr:nth-of-type(2n + 1) {
+  background-color: rgba(0,0,0,0);
+}
+table th {
+  background-color: rgba(0,0,0,0.05);
+  font-family: sans-serif;
+  font-size: 0.9em;
+}
+table th:empty {
+  display: none;
+}
+table th,
+table td {
+  padding: 0.2em 0.4em;
+  border: 1px solid #b4b4b4;
+}
+table td.code {
+  padding: 0;
+}
+pre {
+  font-size: 0.8em;
+}
+p code,
+dd code {
+  margin: 0 0.1em;
+  padding: 0.1em 1em;
+  white-space: wrap;
+  border: 1px solid #c8c8c8;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  font-family: Consolas, 'Liberation Mono', Courier, monospace;
+  font-size: 0.9em;
+}
+#wrapper {
+  width: 960px;
+  margin: 0 auto;
+  background-color: #e6e6e6;
+}
+aside {
+  display: inline-block;
+  vertical-align: top;
+  width: 160px;
+  height: 100%;
+  overflow-y: auto;
+}
+nav {
+  position: fixed;
+  overflow-y: auto;
+  height: 100%;
+  width: 160px;
+  padding: 20px 0;
+  background-color: rgba(0,0,0,0.1);
+}
+nav ul {
+  list-style-type: none;
+}
+nav ul li {
+  padding: 0 20px;
+}
+nav ul a {
+  text-decoration: none;
+  color: #323232;
+  font-size: 0.9em;
+  font-family: Arial, sans-serif;
+}
+article {
+  display: inline-block;
+  vertical-align: top;
+  width: 800px;
+  padding: 30px;
+}
+section {
+  margin-bottom: 2em;
+}
+section dl span {
+  border-radius: 0.2em;
+  padding: 0.1em 0.4em;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  color: #fff;
+}
+section dl span .function {
+  background-color: #6083aa;
+}
+section dl span .object {
+  background-color: #6083aa;
+}
+section dl span .number {
+  background-color: #6083aa;
+}
+section dl span .boolean {
+  background-color: #6083aa;
+}
+section .args {
+  margin-bottom: 1.5em;
+}
+section .args dl {
+  font-size: 0.9em;
+}
+section .args dt {
+  font-weight: 900;
+  display: inline-block;
+}
+section .args dd {
+  display: inline-block;
+}
+section .name {
+  width: 150px;
+  margin-bottom: 0.4em;
+}
+section .name span {
+  display: inline-block;
+  color: #c81400;
+  font-weight: 900;
+}
+section .type {
+  width: 160px;
+}
+section .type span {
+  background-color: #6083aa;
+}
+section .default {
+  width: 120px;
+}
+section .default span {
+  background-color: #6ea975;
+}
+section .properties {
+  width: 100%;
+  background-color: rgba(0,0,0,0.1);
+  padding: 1em 2em;
+  margin: 1em 0;
+}
+section .properties dt {
+  vertical-align: middle;
+  min-width: 8em;
+  margin-bottom: 0.4em;
+}
+section .properties dd {
+  vertical-align: middle;
+}
+section .properties .desc {
+  width: 260px;
+}
+section .desc {
+  vertical-align: middle;
+  width: 300px;
+}
+header {
+  margin-bottom: 50px;
+}
+.returns {
+  margin-bottom: 2em;
+  display: inline-block;
+}

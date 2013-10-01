@@ -57,6 +57,7 @@ hr {
   right: 0;
 }
 table {
+  width: 100%;
   border-collapse: collapse;
   margin-bottom: 1em;
 }
@@ -89,6 +90,7 @@ table td {
 }
 table td.code {
   padding: 0;
+  background-color: #323232;
 }
 pre {
   font-size: 0.8em;
@@ -145,24 +147,36 @@ article {
 section {
   margin-bottom: 2em;
 }
-section dl span {
+section dl span,
+section span.returns {
   border-radius: 0.2em;
   padding: 0.1em 0.4em;
   -webkit-font-smoothing: antialiased;
   font-smoothing: antialiased;
   color: #fff;
 }
-section dl span .function {
+section dl span .function,
+section span.returns .function {
   background-color: #6083aa;
 }
-section dl span .object {
+section dl span .object,
+section span.returns .object {
   background-color: #6083aa;
 }
-section dl span .number {
+section dl span .number,
+section span.returns .number {
   background-color: #6083aa;
 }
-section dl span .boolean {
+section dl span .boolean,
+section span.returns .boolean {
   background-color: #6083aa;
+}
+section span.returns {
+  margin-right: 50px;
+  background-color: #6083aa;
+}
+section .returns {
+  display: inline-block;
 }
 section .args {
   margin-bottom: 1.5em;
@@ -197,6 +211,9 @@ section .default {
 }
 section .default span {
   background-color: #6ea975;
+}
+section .default:empty {
+  display: none;
 }
 section .properties {
   width: 100%;

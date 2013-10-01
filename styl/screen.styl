@@ -52,6 +52,7 @@ hr
 	right: 0
 
 table
+	width: 100%
 	border-collapse: collapse
 	margin-bottom: 1em
 	caption
@@ -78,6 +79,7 @@ table
 		border: 1px solid rgb(180,180,180)
 	td.code
 		padding: 0
+		background-color: rgb(50,50,50)
 
 
 pre
@@ -132,8 +134,8 @@ article
 
 section
 	margin-bottom: 2em
-	dl
-		span
+	dl span,
+	span.returns
 			border-radius: 0.2em
 			padding: 0.1em 0.4em
 			-webkit-font-smoothing: antialiased
@@ -147,6 +149,11 @@ section
 				background-color: rgb(96, 131, 170)
 			.boolean
 				background-color: rgb(96, 131, 170)
+	span.returns
+		margin-right: 50px
+		background-color: rgb(96, 131, 170)
+	.returns
+		display: inline-block
 	.args
 		margin-bottom: 1.5em
 		dl
@@ -171,6 +178,8 @@ section
 		width: 120px
 		span
 			background-color: rgb(110, 169, 117)
+		&:empty
+			display: none
 	.properties
 		width: 100%
 		background-color: rgba(0,0,0,0.1)

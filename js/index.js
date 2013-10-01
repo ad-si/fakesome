@@ -6,6 +6,15 @@
 		return (query[1]) ? query : query[0]
 	}
 
+	function truncate(str){
+
+		str = String(str)
+
+		return (str.search(/\s/) === -1 && str.length > 40) ?
+			str.substr(0,40) + '…' :
+			str
+	}
+
 	// TODO: Catch exception globally
 	// TODO: Include https://github.com/fent/randexp.js
 
@@ -31,14 +40,14 @@
 					['dl.args$args'],
 					['h3', method.return ? 'Returns' : false],
 					['span.returns$returns', method.return ? method.return.type : false],
-					['p', method.return ? method.return.desc : false],
+					['p.returns', method.return ? method.return.desc : false],
 					['h3', 'Examples'],
 					['table',
 						['thead',
 							['tr',
 								['th', 'Code'],
 								['th', 'Description'],
-								['th', 'Returns']
+								['th', 'Example Return']
 							]
 						],
 						['tbody$examples']
@@ -60,7 +69,7 @@
 							['span', arg.type]
 						],
 						['dd.default',
-							['span',  arg.default || false]
+							['span', arg.default || false]
 						],
 						['dd.desc&', arg.desc]
 					]
@@ -115,10 +124,21 @@
 		if (method.tests)
 			method.tests.forEach(function (test) {
 
-				var testArgs = ""
+				var testArgs = []
 
-				if (test.args)
-					testArgs = test.args.join(', ')
+				if (test.args) {
+
+					test.args.forEach(function (arg) {
+
+						if (arg.constructor === Object)
+							testArgs.push(JSON.stringify(arg, null, '    '))
+						else
+							testArgs.push(String(arg).replace(/\t/g, '    '))
+
+					}, test)
+
+					testArgs = testArgs.join(', ')
+				}
 
 
 				shaven(
@@ -130,7 +150,7 @@
 								],
 							],
 							['td', test.desc],
-							['td', String(fakesome[method.name].apply(null, test.args))]
+							['td&', truncate(fakesome[method.name].apply(null, test.args))]
 						]
 					]
 				)
@@ -151,7 +171,7 @@
 
 	var codeSnippets = document.querySelectorAll('pre code')
 
-	for(var a = 0; a < codeSnippets.length; a++){
+	for (var a = 0; a < codeSnippets.length; a++) {
 
 		//console.log(hljs.highlight('javascript', codeSnippets[a].innerHTML).value)
 
@@ -159,6 +179,8 @@
 
 
 	}
+
+	fakesome.img()
 
 
 	/*console.log(fakesome.matrix(10, 10, ['n', 'e', 's', 'w']))

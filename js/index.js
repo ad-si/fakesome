@@ -1,48 +1,27 @@
 !function (window, document) {
 
-	function $(query) {
-		query = document.querySelectorAll(query)
+	var templates = {
 
-		return (query[1]) ? query : query[0]
-	}
+		section: function (target, data) {
 
-	function truncate(str){
-
-		str = String(str)
-
-		return (str.search(/\s/) === -1 && str.length > 40) ?
-			str.substr(0,40) + '…' :
-			str
-	}
-
-	// TODO: Catch exception globally
-	// TODO: Include https://github.com/fent/randexp.js
-
-
-	documentation.forEach(function (method) {
-
-		var argNames = []
-
-		if (method.args)
-			method.args.forEach(function (arg) {
-				argNames.push(arg.name)
-			})
-
-		var html = shaven(
-			[$('#documentation'),
+			return [target,
 				['section',
 					['h2',
-						{id: method.name},
-						'fakesome.' + method.name + '(' + argNames.join(', ') + ')'
+						{id: data.name},
+						'fakesome.' + data.name + '(' +
+							(data.args ? data.args.map(function (item) {
+								return item.name
+							}).join(', ') : '') +
+							')'
 					],
-					['p&', method.desc],
+					['p&', data.desc],
 					['h3', 'Parameters'],
 					['dl.args$args'],
-					['h3', method.return ? 'Returns' : false],
-					['span.returns$returns', method.return ? method.return.type : false],
-					['p.returns', method.return ? method.return.desc : false],
-					['h3', 'Examples'],
-					['table',
+					['h3', data.return ? 'Returns' : false],
+					['span.returns$returns', data.return ? data.return.type : false],
+					['p.returns', data.return ? data.return.desc : false],
+					['h3', data.tests ? 'Examples' : false],
+					['table', data.tests ? '' : false,
 						['thead',
 							['tr',
 								['th', 'Code'],
@@ -55,25 +34,67 @@
 				],
 				['hr']
 			]
-		)
+		},
+		arguments: function (target, arg) {
+			return [target,
+				['dt.name', arg.name,
+					['span', arg.required ? "*" : false]
+				],
+				['dd.type',
+					['span', arg.type]
+				],
+				['dd.default',
+					['span', arg.default || false]
+				],
+				['dd.desc&', arg.desc]
+			]
+		},
+		toc: function(target, data){
+
+			return [target,
+				['li',
+					['a', {href: '#' + data.name}, capitalize(data.name)],
+					['br']
+				]
+			]
+		}
+
+	}
+
+	function $(query) {
+		query = document.querySelectorAll(query)
+
+		return (query[1]) ? query : query[0]
+	}
+
+	function truncate(str) {
+
+		str = String(str)
+
+		return (str.search(/\s/) === -1 && str.length > 40) ?
+			str.substr(0, 40) + '…' :
+			str
+	}
+
+	function capitalize(str){
+
+		return str.charAt(0).toUpperCase() + str.substr(1)
+	}
+
+	// TODO: Catch exceptions globally
+	// TODO: Include https://github.com/fent/randexp.js
+
+
+	documentation.forEach(function (method) {
+
+		if (!fakesome[method.name]) return
+
+		var html = shaven(templates.section($('#documentation'), method))
 
 		if (method.args)
 			method.args.forEach(function (arg) {
 
-				var list = shaven(
-					[html.args,
-						['dt.name', arg.name,
-							['span', arg.required ? "*" : false]
-						],
-						['dd.type',
-							['span', arg.type]
-						],
-						['dd.default',
-							['span', arg.default || false]
-						],
-						['dd.desc&', arg.desc]
-					]
-				)
+				var list = shaven(templates.arguments(html.args, arg))
 
 				if (arg.properties) {
 
@@ -132,6 +153,8 @@
 
 						if (arg.constructor === Object)
 							testArgs.push(JSON.stringify(arg, null, '    '))
+						else if (Array.isArray(arg))
+							testArgs.push(JSON.stringify(arg, null, ''))
 						else
 							testArgs.push(String(arg).replace(/\t/g, '    '))
 
@@ -140,6 +163,13 @@
 					testArgs = testArgs.join(', ')
 				}
 
+				var exampleReturn =  fakesome[method.name].apply(null, test.args)
+
+
+				if(typeof exampleReturn === 'object')
+					exampleReturn = JSON.stringify(exampleReturn, null, '    ').replace(/\n/g, '<br>')
+				else
+					exampleReturn = truncate(exampleReturn)
 
 				shaven(
 					[html.examples,
@@ -150,7 +180,7 @@
 								],
 							],
 							['td', test.desc],
-							['td&', truncate(fakesome[method.name].apply(null, test.args))]
+							['td&', exampleReturn]
 						]
 					]
 				)
@@ -158,45 +188,15 @@
 			})
 
 
-		shaven(
-			[$('nav ul'),
-				['li',
-					['a', {href: '#' + method.name}, method.name],
-					['br']
-				]
-			]
-		)
+		// TODO Categories: Basic, General, Language Specific, Special
+
+		shaven(templates.toc($('nav ul'), method))
 	})
 
 
 	var codeSnippets = document.querySelectorAll('pre code')
 
-	for (var a = 0; a < codeSnippets.length; a++) {
-
-		//console.log(hljs.highlight('javascript', codeSnippets[a].innerHTML).value)
-
+	for (var a = 0; a < codeSnippets.length; a++)
 		codeSnippets[a].innerHTML = hljs.highlight('javascript', codeSnippets[a].innerHTML).value
-
-
-	}
-
-	fakesome.img()
-
-
-	/*console.log(fakesome.matrix(10, 10, ['n', 'e', 's', 'w']))
-
-	 console.log(fakesome.text(10))
-
-	 console.log(fakesome.word(10))
-
-	 console.log(fakesome.sentence(10))
-
-	 console.log(fakesome.objects({
-	 event: ["payment", "sleep", "food"],
-	 start: "datetime 2010-01-01 2013-01-01",
-	 end: "datetime 2010-01-01 2013-01-01",
-	 user: "base64 "
-
-	 }, 100))*/
 
 }(window, document)

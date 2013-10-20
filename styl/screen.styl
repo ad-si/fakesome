@@ -12,7 +12,7 @@ body
 	font-size: 14px
 	font-family: "Arial", sans-serif
 	//font-family: "Times New Roman", sans-serif
-	line-height: 1.3
+	line-height: 1.4
 	background-color: rgb(205,92,92)
 	color: rgb(80,80,80)
 	height: 100%
@@ -43,8 +43,11 @@ h2 + p
 
 hr
 	height: 1px
-	background-color: rgba(0,0,0,0.1)
+	background-color: rgba(0,0,0,0.3)
 	margin-bottom: 3em
+	width: 760px
+	position: relative
+	left: -10px
 
 .ribbon
 	position: absolute
@@ -88,7 +91,7 @@ pre
 p code,
 dd code
 	margin: 0 0.1em
-	padding: 0.1em 1em
+	padding: 0.1em 0.5em
 	white-space: wrap
 	border: 1px solid rgb(200,200,200)
 	background-color: rgb(240,240,240)
@@ -137,7 +140,8 @@ section
 	dl span,
 	span.returns
 			border-radius: 0.2em
-			padding: 0.1em 0.4em
+			display: inline-block
+			padding: 0 0.4em
 			-webkit-font-smoothing: antialiased
 			font-smoothing: antialiased
 			color: white
@@ -152,8 +156,6 @@ section
 	span.returns
 		margin-right: 50px
 		background-color: rgb(96, 131, 170)
-	.returns
-		display: inline-block
 	.args
 		margin-bottom: 1.5em
 		dl
@@ -179,7 +181,7 @@ section
 		span
 			background-color: rgb(110, 169, 117)
 		&:empty
-			display: none
+			background-color: transparent
 	.properties
 		width: 100%
 		background-color: rgba(0,0,0,0.1)
@@ -190,11 +192,11 @@ section
 			min-width: 8em
 			margin-bottom: 0.4em
 		dd
-			vertical-align: middle
+			vertical-align: top
 		.desc
 			width: 260px
 	.desc
-		vertical-align: middle
+		vertical-align: top
 		width: 300px
 
 

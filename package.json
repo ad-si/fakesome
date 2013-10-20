@@ -1,10 +1,10 @@
 {
-  "name": "fakesome",
-  "version": "0.0.1",
-  "devDependencies": {
-    "uglify-js": "~2.3.2"
-  },
-  "dependencies": {
-    "color": "~0.4.4"
-  }
+	"name": "fakesome",
+	"version": "0.0.2",
+	"devDependencies": {
+		"uglify-js": "~2.3.2"
+	},
+	"dependencies": {
+		"color": "~0.4.4"
+	}
 }

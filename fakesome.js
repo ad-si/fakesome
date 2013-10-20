@@ -1,4 +1,4 @@
-// fakesome {{ VERSION }} by Adrian Sieber (adriansieber.com)
+// fakesome 0.0.2 by Adrian Sieber (adriansieber.com)
 
 !function (window, document) {
 

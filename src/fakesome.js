@@ -1,5 +1,10 @@
 // fakesome {{ VERSION }} by Adrian Sieber (adriansieber.com)
 
+// TODO: Convert to npm-module and use browserify
+// TODO: Enhance fakesome with custom methods
+// TODO: unique function
+
+
 !function (window, document) {
 
 	var tld = ['com', 'de', 'org', 'net'],
@@ -18,7 +23,7 @@
 			"tempor invidunt ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam" +
 			"et justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum" +
 			"dolor sit amet",
-		functions = {}
+		fn = {}
 
 
 	function randomInt(min, max) {
@@ -143,9 +148,8 @@
 		return array[Math.floor(Math.random() * array.length)]
 	}
 
-	// TODO: Feature to make the return of values optional (inclusive weight argument)
 
-	functions = {
+	fn = {
 
 		boolean: function (chanceOfTrue) {
 
@@ -193,8 +197,6 @@
 					}
 				}
 			}
-
-			console.log(schema)
 
 			return schema
 		},
@@ -592,10 +594,10 @@
 
 	window.fakesome = {}
 
-	for (var key in functions) {
-		if (functions.hasOwnProperty(key)) {
+	for (var key in fn) {
+		if (fn.hasOwnProperty(key)) {
 			!function (key) {
-				window.fakesome[key] = functions[key]
+				window.fakesome[key] = fn[key]
 			}(key)
 		}
 	}
@@ -606,17 +608,17 @@
 
 		chanceOfReturn = chanceOfReturn || 0.5
 
-		for (var key in functions) {
-			if (functions.hasOwnProperty(key)) {
+		for (var key in fn) {
+			if (fn.hasOwnProperty(key)) {
 				!function (key) {
 
 					returnObject[key] = function () {
 
-						var args = Array.prototype.slice.apply(null, arguments),
+						var args = Array.prototype.slice.call(arguments),
 							array = []
 
 						if (Math.random() < chanceOfReturn)
-							return functions[key].apply(null, args)
+							return fn[key].apply(null, args)
 						else
 							return null
 					}
@@ -633,17 +635,17 @@
 
 		number = number || 10
 
-		for (var key in functions) {
-			if (functions.hasOwnProperty(key)) {
+		for (var key in fn) {
+			if (fn.hasOwnProperty(key)) {
 				!function (key) {
 
 					returnObject[key] = function () {
 
-						var args = Array.prototype.slice.apply(null, arguments),
+						var args = Array.prototype.slice.call(arguments),
 							array = []
 
 						for (var i = 0; i < number; i++) {
-							array.push(functions[key].apply(null, args))
+							array.push(fn[key].apply(null, args))
 						}
 
 						return array
@@ -654,5 +656,7 @@
 
 		return returnObject
 	}
+
+	fakesome.fn = fn
 
 }(window, document)

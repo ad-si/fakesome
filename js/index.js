@@ -8,14 +8,15 @@
 				['section',
 					['h2',
 						{id: data.name},
-						'fakesome.' + data.name + '(' +
+						'fakesome.' + data.name +
+							(data.type === 'property' ? '' : '(') +
 							(data.args ? data.args.map(function (item) {
 								return item.name
 							}).join(', ') : '') +
-							')'
+							(data.type === 'property' ? '' : ')')
 					],
 					['p&', data.desc],
-					['h3', 'Parameters'],
+					['h3', 'Parameters', data.args ? '' : false],
 					['dl.args$args'],
 					['h3', data.return ? 'Returns' : false],
 					['span.returns$returns', data.return ? data.return.type : false],
@@ -87,6 +88,8 @@
 
 	documentation.forEach(function (method) {
 
+		var testIsVisibile = method.tests && method.tests.some(function(test){return test.visible})
+
 		if (!fakesome[method.name]) return
 
 		var html = shaven(templates.section($('#documentation'), method))
@@ -142,7 +145,8 @@
 			})
 
 
-		if (method.tests)
+		if (testIsVisibile)
+
 			method.tests.forEach(function (test) {
 
 				var testArgs = []

@@ -27,6 +27,7 @@ var documentation = [
 		tests: [
 			{
 				desc: 'true or false',
+				visible: true,
 				args: null,
 				test: function (value) {
 					return value === true || value === false
@@ -53,6 +54,7 @@ var documentation = [
 		tests: [
 			{
 				desc: 'true or false',
+				visible: true,
 				args: null,
 				test: function (value) {
 					return value === true || value === false
@@ -60,6 +62,7 @@ var documentation = [
 			},
 			{
 				desc: '70% probability of true',
+				visible: true,
 				args: [0.7],
 				test: function (value) {
 					return value === true || value === false
@@ -99,6 +102,7 @@ var documentation = [
 		tests: [
 			{
 				desc: 'Integers between inclusive -4503599627370495 and 4503599627370495',
+				visible: true,
 				args: [],
 				test: function (value) {
 					return value >= 0 && value <= 1
@@ -106,6 +110,7 @@ var documentation = [
 			},
 			{
 				desc: 'Integers between 0 and 1000',
+				visible: true,
 				args: [0, 1000],
 				test: function (value) {
 					return value >= 0 && value <= 1000
@@ -113,6 +118,7 @@ var documentation = [
 			},
 			{
 				desc: 'Integers between -1000 and 0',
+				visible: true,
 				args: [-1000, 0],
 				test: function (value) {
 					return value >= -1000 && value <= 0
@@ -120,6 +126,7 @@ var documentation = [
 			},
 			{
 				desc: 'Prime Numbers between inclusive 2 and inclusive 1000',
+				visible: true,
 				args: [2, 1000,
 					function (n) {
 
@@ -150,6 +157,7 @@ var documentation = [
 			{
 				name: 'minimum',
 				desc: 'Set the lower boundary of the range',
+				visible: true,
 				type: 'Number',
 				required: false,
 				default: '-1e12'
@@ -157,6 +165,7 @@ var documentation = [
 			{
 				name: 'maximum',
 				desc: 'Set the upper boundary of the range',
+				visible: true,
 				type: 'Number',
 				required: false,
 				default: '1e12'
@@ -164,6 +173,7 @@ var documentation = [
 			{
 				name: 'filter',
 				desc: 'Function to filter the possible numbers. Receives the number as a parameter and returns true or false. <code>function(number)</code>',
+				visible: true,
 				type: 'Function',
 				optional: true
 			}
@@ -175,6 +185,7 @@ var documentation = [
 		tests: [
 			{
 				desc: 'Floats between inclusive 0 and 9',
+				visible: true,
 				args: [0, 9],
 				test: function (value) {
 					return value >= 0 && value <= 1
@@ -182,6 +193,7 @@ var documentation = [
 			},
 			{
 				desc: 'Floats between 0 and 1000',
+				visible: true,
 				args: [0, 1000],
 				test: function (value) {
 					return value >= 0 && value <= 1000
@@ -189,6 +201,7 @@ var documentation = [
 			},
 			{
 				desc: 'Floats between -1000 and 0',
+				visible: true,
 				args: [-1000, 0],
 				test: function (value) {
 					return value >= -1000 && value <= 0
@@ -228,12 +241,14 @@ var documentation = [
 		tests: [
 			{
 				desc: 'Random Unicode character',
+				visible: true,
 				test: function (value) {
 					return true
 				}
 			},
 			{
 				desc: 'Random printable ASCII character',
+				visible: true,
 				args: [32, 126],
 				test: function (value) {
 					return true
@@ -241,6 +256,7 @@ var documentation = [
 			},
 			{
 				desc: 'Random uppercase character',
+				visible: true,
 				args: [65, 90],
 				test: function (value) {
 					return true
@@ -270,6 +286,7 @@ var documentation = [
 		tests: [
 			{
 				desc: 'String of 10 lower case ASCII characters.',
+				visible: true,
 				args: null,
 				test: function (value) {
 					return typeof(value) == 'string' && value.search(' ') == -1
@@ -277,6 +294,7 @@ var documentation = [
 			},
 			{
 				desc: 'String of 15 weird characters',
+				visible: true,
 				args: [
 					['●', '☃', ''],
 					15
@@ -302,6 +320,7 @@ var documentation = [
 		tests: [
 			{
 				desc: '1 word',
+				visible: true,
 				args: null,
 				test: function (value) {
 					return typeof(value) == 'string' && value.search(' ') == -1
@@ -309,6 +328,7 @@ var documentation = [
 			},
 			{
 				desc: 'String of 10 space separated words',
+				visible: true,
 				args: [10],
 				test: function (value) {
 					return typeof(value) == 'string'
@@ -331,6 +351,7 @@ var documentation = [
 		tests: [
 			{
 				desc: 'A text section consisting of 100 characters',
+				visible: true,
 				args: null,
 				test: function (value) {
 					return typeof(value) == 'string' && value.search(' ') == -1
@@ -338,6 +359,7 @@ var documentation = [
 			},
 			{
 				desc: 'String of 10 characters',
+				visible: true,
 				args: [10],
 				test: function (value) {
 					return typeof(value) == 'string'
@@ -367,6 +389,7 @@ var documentation = [
 		tests: [
 			{
 				desc: 'Get a sentence with 5 to 25 words',
+				visible: true,
 				args: null,
 				test: function (value) {
 					return typeof(value) == 'string' && value.search(' ') == -1
@@ -374,6 +397,7 @@ var documentation = [
 			},
 			{
 				desc: 'Get a sentence with 40 to 50 words',
+				visible: true,
 				args: [40, 50],
 				test: function (value) {
 					return typeof(value) == 'string' && value.search(' ') == -1
@@ -381,6 +405,7 @@ var documentation = [
 			},
 			{
 				desc: 'Get a sentence with exactly 4 words',
+				visible: true,
 				args: [4, 4],
 				test: function (value) {
 					return typeof(value) == 'string'
@@ -417,6 +442,7 @@ var documentation = [
 		tests: [
 			{
 				desc: 'Get one sentence',
+				visible: true,
 				args: null,
 				test: function (value) {
 					return typeof(value) == 'string' && value.search(' ') == -1
@@ -424,6 +450,7 @@ var documentation = [
 			},
 			{
 				desc: 'Get 4 sentences',
+				visible: true,
 				args: [4],
 				test: function (value) {
 					return typeof(value) == 'string'
@@ -431,6 +458,7 @@ var documentation = [
 			},
 			{
 				desc: 'Get 10 sentences with 1 to 5 words each.',
+				visible: true,
 				args: [5, 1, 5],
 				test: function (value) {
 					return typeof(value) == 'string'
@@ -557,6 +585,7 @@ var documentation = [
 		tests: [
 			{
 				desc: 'Base64 image data',
+				visible: true,
 				args: null,
 				test: function (value) {
 					return true
@@ -564,6 +593,7 @@ var documentation = [
 			},
 			{
 				desc: 'Base64 image tag',
+				visible: true,
 				args: [
 					{
 						tag: true,
@@ -577,6 +607,7 @@ var documentation = [
 			},
 			{
 				desc: 'Base64 image tag',
+				visible: true,
 				args: [
 					{
 						tag: true,
@@ -592,6 +623,7 @@ var documentation = [
 			},
 			{
 				desc: 'Base64 image tag',
+				visible: true,
 				args: [
 					{
 						tag: true,
@@ -607,6 +639,7 @@ var documentation = [
 			},
 			{
 				desc: 'Grayscale image',
+				visible: true,
 				args: [
 					{
 						tag: true,
@@ -704,6 +737,7 @@ var documentation = [
 		tests: [
 			{
 				desc: 'URL to a random image on lorempixel.com',
+				visible: true,
 				args: null,
 				test: function (value) {
 					return true
@@ -711,6 +745,7 @@ var documentation = [
 			},
 			{
 				desc: 'URL to a random image on placekitten.com',
+				visible: true,
 				args: [
 					{
 						site: 'placekitten.com',
@@ -746,6 +781,39 @@ var documentation = [
 		desc: ''
 	},
 	{
+		name: 'data',
+		desc: 'Create a javascript Object with custom key-value pairs. ' +
+			'The values can either be primitives or be generated with other fakesome methods.',
+		args: [
+			{
+				name: 'schema',
+				desc: 'The schema of the object to be returned.',
+				type: 'Object',
+				required: true
+			}
+		],
+		return: {
+			desc: 'Object with specified key-value pairs.',
+			type: 'Object'
+		},
+		tests: [
+			{
+				desc: 'User entry',
+				visible: true,
+				args: [{
+					name: 'word()',
+					age: 'integer(0,100)',
+					premium: 'boolean()',
+					country: "de",
+					logins: 89
+				}],
+				test: function (value) {
+					return value === true || value === false
+				}
+			}
+		]
+	},
+	{
 		name: 'array',
 		desc: 'This method enables you to return arrays of faked data. ' +
 			'Simply chain one of the other fakesome methods after the array method ' +
@@ -777,16 +845,7 @@ var documentation = [
 					default: 'Math.rand()'
 				}
 			]
-		},
-		tests: [
-			{
-				desc: '',
-				args: null,
-				test: function (value) {
-					return value === true || value === false
-				}
-			}
-		]
+		}
 	},
 	{
 		name: 'maybe',
@@ -810,35 +869,15 @@ var documentation = [
 		}
 	},
 	{
-		name: 'data',
-		desc: 'Create a javascript Object with custom key-value pairs. ' +
-			'The values can either be primitives or be generated with other fakesome methods.',
-		args: [
-			{
-				name: 'schema',
-				desc: 'The schema of the object to be returned.',
-				type: 'Object',
-				required: true
-			}
-		],
-		return: {
-			desc: 'Object with specified key-value pairs.',
-			type: 'Object'
-		},
-		tests: [
-			{
-				desc: 'User entry',
-				args: [{
-					name: 'word()',
-					age: 'integer(0,100)',
-					premium: 'boolean()',
-					country: "de",
-					logins: 89
-				}],
-				test: function (value) {
-					return value === true || value === false
-				}
-			}
-		]
+		name: 'fn',
+		desc: 'Extend fakesome with your own modules. ' +
+			'E.g. To create a  module <code>fakesome.longWord()</code> simply extend ' +
+			'<code>fakesome.fn</code> with the corresponding function: ' +
+			'<code>' +
+			'fakesome.fn.longWord = function(){' +
+			'   return "supercalifragilisticexpialidocious"'+
+			'}' +
+			'</code>',
+		type: 'property'
 	}
 ]

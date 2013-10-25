@@ -43,7 +43,6 @@ var documentation = [
 				name: 'chanceOfTrue',
 				desc: 'Set the probability of getting returned true.',
 				type: 'Number',
-				required: false,
 				default: 0.5
 			}
 		],
@@ -75,17 +74,15 @@ var documentation = [
 		desc: 'Returns a random integer.<br><br>For unlimited large integers (string of digits) use <code>fakesome.string()</code>',
 		args: [
 			{
-				name: 'minimum',
+				name: 'minValue',
 				desc: 'Set the lower boundary of the range',
 				type: 'Number',
-				required: false,
 				default: '-(2^53/2)+1'
 			},
 			{
-				name: 'maximum',
+				name: 'maxValue',
 				desc: 'Set the upper boundary of the range',
 				type: 'Number',
-				required: false,
 				default: '(2^53/2)-1'
 			},
 			{
@@ -152,22 +149,20 @@ var documentation = [
 	},
 	{
 		name: 'float',
-		desc: 'Returns a random float between  and .',
+		desc: 'Returns a random float ',
 		args: [
 			{
-				name: 'minimum',
+				name: 'minValue',
 				desc: 'Set the lower boundary of the range',
 				visible: true,
 				type: 'Number',
-				required: false,
 				default: '-1e12'
 			},
 			{
-				name: 'maximum',
+				name: 'maxValue',
 				desc: 'Set the upper boundary of the range',
 				visible: true,
 				type: 'Number',
-				required: false,
 				default: '1e12'
 			},
 			{
@@ -217,21 +212,18 @@ var documentation = [
 				name: 'min',
 				desc: '',
 				type: 'Number',
-				required: false,
 				default: 32
 			},
 			{
 				name: 'max',
 				desc: '',
 				type: 'Number',
-				required: false,
 				default: 1114112
 			},
 			{
 				name: 'filter',
 				desc: '',
-				type: 'Function',
-				required: false
+				type: 'Function'
 			}
 		],
 		return: {
@@ -272,15 +264,13 @@ var documentation = [
 				name: 'alphabet',
 				desc: 'All the characters to choose from.',
 				type: 'Array',
-				default: 'a - z',
-				required: false
+				default: 'a - z'
 			},
 			{
 				name: 'length',
 				desc: 'Length of the string to be returned.',
 				type: 'Number',
-				default: '10',
-				required: false
+				default: '10'
 			}
 		],
 		tests: [
@@ -307,19 +297,24 @@ var documentation = [
 	},
 	{
 		name: 'word',
-		desc: 'Returns a single word, or a specified number of words.',
+		desc: 'Returns a random word with a minimum and maximum number of characters.',
 		args: [
 			{
-				name: 'number',
-				desc: '',
+				name: 'minChars',
+				desc: 'Minimum number of characters in the word',
 				type: 'Number',
-				default: 1,
-				required: false
+				default: 1
+			},
+			{
+				name: 'maxChars',
+				desc: 'Maximum number of characters in the word',
+				type: 'Number',
+				default: 20
 			}
 		],
 		tests: [
 			{
-				desc: '1 word',
+				desc: 'Random word with 1 to 20 characters',
 				visible: true,
 				args: null,
 				test: function (value) {
@@ -327,9 +322,51 @@ var documentation = [
 				}
 			},
 			{
-				desc: 'String of 10 space separated words',
+				desc: 'Random word with 2 to 5 characters',
 				visible: true,
-				args: [10],
+				args: [2, 5],
+				test: function (value) {
+					return typeof(value) == 'string'
+				}
+			}
+		]
+	},
+	{
+		name: 'words',
+		desc: 'Get the specified number of words with a maximum and minimum number of characters.',
+		args: [
+			{
+				name: 'quantity',
+				desc: 'Number of words',
+				type: 'Number',
+				default: 10
+			},
+			{
+				name: 'minChars',
+				desc: 'The minimum number of characters',
+				type: 'Number',
+				default: 1
+			},
+			{
+				name: 'maxChars',
+				desc: 'The maximum number of characters',
+				type: 'Number',
+				default: 20
+			}
+		],
+		tests: [
+			{
+				desc: 'String of 10 space separated words with between 1 and 20 characters',
+				visible: true,
+				args: null,
+				test: function (value) {
+					return typeof(value) == 'string' && value.search(' ') == -1
+				}
+			},
+			{
+				desc: 'String of 5 space separated words with between 2 and 3 characters',
+				visible: true,
+				args: [5, 2, 3],
 				test: function (value) {
 					return typeof(value) == 'string'
 				}
@@ -344,8 +381,7 @@ var documentation = [
 				name: 'number',
 				desc: 'The number of characters in the text section.',
 				type: 'Number',
-				default: 100,
-				required: false
+				default: 100
 			}
 		],
 		tests: [
@@ -369,21 +405,19 @@ var documentation = [
 	},
 	{
 		name: 'sentence',
-		desc: 'Get a sentence with a minimum and maximum of words.',
+		desc: 'Get a sentence with a minimum and maximum number of words.',
 		args: [
 			{
 				name: 'min',
 				desc: 'Minimum number of words in the sentence',
 				type: 'Number',
-				default: 5,
-				required: false
+				default: 5
 			},
 			{
 				name: 'max',
 				desc: 'Maximum number of words in the sentence',
 				type: 'Number',
-				default: 25,
-				required: false
+				default: 25
 			}
 		],
 		tests: [
@@ -415,28 +449,25 @@ var documentation = [
 	},
 	{
 		name: 'sentences',
-		desc: 'Get specified number of sentences with between 5 and 25 words.',
+		desc: 'Get the specified number of sentences with a maximum and minimum number of words.',
 		args: [
 			{
 				name: 'number',
 				desc: 'The number of sentences.',
 				type: 'Number',
-				default: 1,
-				required: false
+				default: 1
 			},
 			{
 				name: 'min',
 				desc: 'Minimum number of words per sentence',
 				type: 'Number',
-				default: 5,
-				required: false
+				default: 5
 			},
 			{
 				name: 'max',
 				desc: 'Maximum number of words per sentence',
 				type: 'Number',
-				default: 25,
-				required: false
+				default: 25
 			}
 		],
 		tests: [
@@ -800,13 +831,15 @@ var documentation = [
 			{
 				desc: 'User entry',
 				visible: true,
-				args: [{
-					name: 'word()',
-					age: 'integer(0,100)',
-					premium: 'boolean()',
-					country: "de",
-					logins: 89
-				}],
+				args: [
+					{
+						name: 'word()',
+						age: 'integer(0,100)',
+						premium: 'boolean()',
+						country: "de",
+						logins: 89
+					}
+				],
 				test: function (value) {
 					return value === true || value === false
 				}
@@ -824,7 +857,6 @@ var documentation = [
 				name: 'number',
 				desc: 'Number of elements in the array.',
 				type: 'Number',
-				required: false,
 				default: 10
 			}
 		],
@@ -859,7 +891,6 @@ var documentation = [
 				desc: 'Probability that the chained function returns a value. ' +
 					'Otherwise it will return <code>null</code>.',
 				type: 'Number',
-				required: false,
 				default: 0.5
 			}
 		],
@@ -875,7 +906,7 @@ var documentation = [
 			'<code>fakesome.fn</code> with the corresponding function: ' +
 			'<code>' +
 			'fakesome.fn.longWord = function(){' +
-			'   return "supercalifragilisticexpialidocious"'+
+			'   return "supercalifragilisticexpialidocious"' +
 			'}' +
 			'</code>',
 		type: 'property'

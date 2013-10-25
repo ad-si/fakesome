@@ -10,11 +10,11 @@
 					['h2',
 						{id: data.name},
 						'fakesome.' + data.name +
-							(data.type === 'property' ? '' : '(') +
+							(data.type === 'property' ? '' : '( ') +
 							(data.args ? data.args.map(function (item) {
 								return item.name
 							}).join(', ') : '') +
-							(data.type === 'property' ? '' : ')')
+							(data.type === 'property' ? '' : ' )')
 					],
 					['p&', data.desc],
 					['h3', 'Parameters', data.args ? '' : false],

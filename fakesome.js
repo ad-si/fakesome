@@ -1,4 +1,4 @@
-// fakesome 0.0.3 by Adrian Sieber (adriansieber.com)
+// fakesome 0.0.4 by Adrian Sieber (adriansieber.com)
 
 // TODO: Convert to npm-module and use browserify
 // TODO: Enhance fakesome with custom methods
@@ -149,6 +149,23 @@
 		return array[Math.floor(Math.random() * array.length)]
 	}
 
+	function findFirst(array, test) {
+
+		var result = null
+
+		array.some(function (element, index) {
+
+			var testResult = test(element)
+
+			if (testResult)
+				result = element
+
+			return testResult
+		})
+
+		return result
+	}
+
 
 	fn = {
 
@@ -210,7 +227,7 @@
 		 },
 		 */
 
-		float: function (min, max, filter) {
+		float: function (minValue, maxValue, filter) {
 
 			var randInt
 
@@ -220,14 +237,14 @@
 					throw new TypeError('Filter must be a function.')
 
 				do {
-					randInt = randomFloat(min, max)
+					randInt = randomFloat(minValue, maxValue)
 
 				} while (!filter(randInt))
 
 				return randInt
 			}
 
-			return randomFloat(min, max)
+			return randomFloat(minValue, maxValue)
 		},
 
 		img: function (conf) {
@@ -431,7 +448,7 @@
 			return url
 		},
 
-		integer: function (min, max, filter) {
+		integer: function (minValue, maxValue, filter) {
 
 			var randInt
 
@@ -441,14 +458,14 @@
 					throw new TypeError('Filter must be a function.')
 
 				do {
-					randInt = randomInt(min, max)
+					randInt = randomInt(minValue, maxValue)
 
 				} while (!filter(randInt))
 
 				return randInt
 			}
 
-			return randomInt(min, max)
+			return randomInt(minValue, maxValue)
 		},
 
 		/*
@@ -575,29 +592,46 @@
 		 },
 		 */
 
-		word: function (quantity) {
+		word: function (minChars, maxChars) {
 
-			typeCheck(quantity, 'number')
+			var word,
+				test
 
-			quantity = quantity || 1
+			typeCheck(minChars, 'number')
+			typeCheck(maxChars, 'number')
 
-			return lorem
-				.split(" ")
-				.slice(0, quantity)
-				.join(" ")
+			minChars = minChars || 1
+			maxChars = maxChars || 20
+
+			test = function (element) {
+				return element.length >= minChars && element.length <= maxChars
+			}
+
+
+			word = findFirst(shuffle(lorem.split(' ')), test)
+
+			if (word)
+				return word
+			else
+				throw new RangeError('No word with between ' + minChars + ' and ' + maxChars + ' characters available.')
+
 		},
 
-		words: function (quantity) {
+		words: function (quantity, minChars, maxChars) {
 
-			quantity = quantity || 1
+			var words = [],
+				i
 
-			if (typeof quantity != 'number')
-				throw new TypeError('The argument must be of type number and not ' + typeof quantity)
+			typeCheck(quantity, 'number')
+			typeCheck(minChars, 'number')
+			typeCheck(maxChars, 'number')
 
-			return lorem
-				.split(" ")
-				.slice(0, quantity)
-				.join(" ")
+			quantity = quantity || 10
+
+			for (i = 0; i < quantity; i++)
+				words.push(fn.word(minChars, maxChars))
+
+			return words.join(' ')
 		}
 	}
 

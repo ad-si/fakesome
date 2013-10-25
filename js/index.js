@@ -5,6 +5,7 @@
 		section: function (target, data) {
 
 			return [target,
+				['hr'],
 				['section',
 					['h2',
 						{id: data.name},
@@ -32,8 +33,7 @@
 						],
 						['tbody$examples']
 					]
-				],
-				['hr']
+				]
 			]
 		},
 		arguments: function (target, arg) {
@@ -163,8 +163,6 @@
 							testArgs.push(String(arg).replace(/\t/g, '    '))
 
 					}, test)
-
-					testArgs = testArgs.join(', ')
 				}
 
 				var exampleReturn =  fakesome[method.name].apply(null, test.args)
@@ -180,7 +178,7 @@
 						['tr',
 							['td.code',
 								['pre',
-									['code', 'fakesome.' + method.name + '(' + testArgs + ')']
+									['code', 'fakesome.' + method.name + '(' + testArgs.join(', ') + ')']
 								],
 							],
 							['td', test.desc],

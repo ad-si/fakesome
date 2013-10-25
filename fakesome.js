@@ -1,4 +1,9 @@
-// fakesome 0.0.2 by Adrian Sieber (adriansieber.com)
+// fakesome 0.0.3 by Adrian Sieber (adriansieber.com)
+
+// TODO: Convert to npm-module and use browserify
+// TODO: Enhance fakesome with custom methods
+// TODO: unique function
+
 
 !function (window, document) {
 
@@ -18,7 +23,8 @@
 			"tempor invidunt ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam" +
 			"et justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum" +
 			"dolor sit amet",
-		functions = {}
+		fn = {},
+		fakesome
 
 
 	function randomInt(min, max) {
@@ -143,9 +149,8 @@
 		return array[Math.floor(Math.random() * array.length)]
 	}
 
-	// TODO: Feature to make the return of values optional (inclusive weight argument)
 
-	functions = {
+	fn = {
 
 		boolean: function (chanceOfTrue) {
 
@@ -168,13 +173,15 @@
 			return String.fromCharCode(randomInt(max, min))
 		},
 
-		config: function (object) {
+		/*
+		 config: function (object) {
 
-			var defaultValues = {
-				outputFormat: "JSON"
-			}
+		 var defaultValues = {
+		 outputFormat: "JSON"
+		 }
 
-		},
+		 },
+		 */
 
 		//color: randomColor,
 
@@ -193,8 +200,6 @@
 					}
 				}
 			}
-
-			console.log(schema)
 
 			return schema
 		},
@@ -446,7 +451,8 @@
 			return randomInt(min, max)
 		},
 
-		/*name: function () {
+		/*
+		 name: function () {
 		 var name = ''
 
 		 syllables.forEach(function (syl) {
@@ -454,7 +460,8 @@
 		 })
 
 		 return name
-		 },*/
+		 },
+		 */
 
 		object: function (scheme, number) {
 
@@ -469,7 +476,8 @@
 
 		},
 
-		/*matrix: function (width, height, valueSet) {
+		/*
+		 matrix: function (width, height, valueSet) {
 
 		 var a,
 		 i,
@@ -486,7 +494,8 @@
 
 		 return matrix
 
-		 },*/
+		 },
+		 */
 
 		sentence: function (min, max) {
 
@@ -560,9 +569,11 @@
 				.join("")
 		},
 
-		/*url: function () {
-			return this.name() + '.com'
-		},*/
+		/*
+		 url: function () {
+		 return this.name() + '.com'
+		 },
+		 */
 
 		word: function (quantity) {
 
@@ -590,15 +601,13 @@
 		}
 	}
 
-	window.fakesome = {}
+	fakesome = {}
 
-	for (var key in functions) {
-		if (functions.hasOwnProperty(key)) {
+	for (var key in fn)
+		if (fn.hasOwnProperty(key))
 			!function (key) {
-				window.fakesome[key] = functions[key]
+				fakesome[key] = fn[key]
 			}(key)
-		}
-	}
 
 	fakesome.maybe = function (chanceOfReturn) {
 
@@ -606,17 +615,17 @@
 
 		chanceOfReturn = chanceOfReturn || 0.5
 
-		for (var key in functions) {
-			if (functions.hasOwnProperty(key)) {
+		for (var key in fn) {
+			if (fn.hasOwnProperty(key)) {
 				!function (key) {
 
 					returnObject[key] = function () {
 
-						var args = Array.prototype.slice.apply(null, arguments),
+						var args = Array.prototype.slice.call(arguments),
 							array = []
 
 						if (Math.random() < chanceOfReturn)
-							return functions[key].apply(null, args)
+							return fn[key].apply(null, args)
 						else
 							return null
 					}
@@ -633,17 +642,17 @@
 
 		number = number || 10
 
-		for (var key in functions) {
-			if (functions.hasOwnProperty(key)) {
+		for (var key in fn) {
+			if (fn.hasOwnProperty(key)) {
 				!function (key) {
 
 					returnObject[key] = function () {
 
-						var args = Array.prototype.slice.apply(null, arguments),
+						var args = Array.prototype.slice.call(arguments),
 							array = []
 
 						for (var i = 0; i < number; i++) {
-							array.push(functions[key].apply(null, args))
+							array.push(fn[key].apply(null, args))
 						}
 
 						return array
@@ -653,6 +662,21 @@
 		}
 
 		return returnObject
+	}
+
+	fakesome.fn = fn
+
+
+	if (typeof module === "object" && module && typeof module.exports === "object")
+		module.exports = fakesome
+
+	else if (typeof define === "function" && define.amd)
+		define("fakesome", [], function () {
+			return fakesome
+		})
+
+	if (typeof window === "object" && typeof window.document === "object") {
+		window.fakesome = fakesome
 	}
 
 }(window, document)

@@ -53,7 +53,7 @@ var documentation = [
 		},
 		tests: [
 			{
-				desc: 'true or false',
+				desc: 'true or false with a 50:50 chance',
 				visible: true,
 				args: null,
 				test: function (value) {
@@ -61,9 +61,9 @@ var documentation = [
 				}
 			},
 			{
-				desc: '70% probability of true',
+				desc: '80% probability of true',
 				visible: true,
-				args: [0.7],
+				args: [0.8],
 				test: function (value) {
 					return value === true || value === false
 				}

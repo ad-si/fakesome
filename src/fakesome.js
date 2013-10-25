@@ -23,7 +23,8 @@
 			"tempor invidunt ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam" +
 			"et justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum" +
 			"dolor sit amet",
-		fn = {}
+		fn = {},
+		fakesome
 
 
 	function randomInt(min, max) {
@@ -172,13 +173,15 @@
 			return String.fromCharCode(randomInt(max, min))
 		},
 
-		config: function (object) {
+		/*
+		 config: function (object) {
 
-			var defaultValues = {
-				outputFormat: "JSON"
-			}
+		 var defaultValues = {
+		 outputFormat: "JSON"
+		 }
 
-		},
+		 },
+		 */
 
 		//color: randomColor,
 
@@ -448,7 +451,8 @@
 			return randomInt(min, max)
 		},
 
-		/*name: function () {
+		/*
+		 name: function () {
 		 var name = ''
 
 		 syllables.forEach(function (syl) {
@@ -456,7 +460,8 @@
 		 })
 
 		 return name
-		 },*/
+		 },
+		 */
 
 		object: function (scheme, number) {
 
@@ -471,7 +476,8 @@
 
 		},
 
-		/*matrix: function (width, height, valueSet) {
+		/*
+		 matrix: function (width, height, valueSet) {
 
 		 var a,
 		 i,
@@ -488,7 +494,8 @@
 
 		 return matrix
 
-		 },*/
+		 },
+		 */
 
 		sentence: function (min, max) {
 
@@ -562,9 +569,11 @@
 				.join("")
 		},
 
-		/*url: function () {
-			return this.name() + '.com'
-		},*/
+		/*
+		 url: function () {
+		 return this.name() + '.com'
+		 },
+		 */
 
 		word: function (quantity) {
 
@@ -592,15 +601,13 @@
 		}
 	}
 
-	window.fakesome = {}
+	fakesome = {}
 
-	for (var key in fn) {
-		if (fn.hasOwnProperty(key)) {
+	for (var key in fn)
+		if (fn.hasOwnProperty(key))
 			!function (key) {
-				window.fakesome[key] = fn[key]
+				fakesome[key] = fn[key]
 			}(key)
-		}
-	}
 
 	fakesome.maybe = function (chanceOfReturn) {
 
@@ -658,5 +665,18 @@
 	}
 
 	fakesome.fn = fn
+
+
+	if (typeof module === "object" && module && typeof module.exports === "object")
+		module.exports = fakesome
+
+	else if (typeof define === "function" && define.amd)
+		define("fakesome", [], function () {
+			return fakesome
+		})
+
+	if (typeof window === "object" && typeof window.document === "object") {
+		window.fakesome = fakesome
+	}
 
 }(window, document)

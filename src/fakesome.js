@@ -1,7 +1,6 @@
 // fakesome {{ VERSION }} by Adrian Sieber (adriansieber.com)
 
 // TODO: Convert to npm-module and use browserify
-// TODO: Enhance fakesome with custom methods
 // TODO: unique function
 
 

@@ -792,6 +792,26 @@ var documentation = [
 		}
 	},
 	{
+		name: 'unique',
+		desc: 'Chain other faksome methods after <code>maybe()</code> ' +
+			'to . ' +
+			'E.g. <code>fakesome.maybe().integer(0,9)</code> ' +
+			'will return an integer or null with a 50:50 chance.',
+		args: [
+			{
+				name: 'chanceOfReturn',
+				desc: 'Probability that the chained function returns a value. ' +
+					'Otherwise it will return <code>null</code>.',
+				type: 'Number',
+				default: 0.5
+			}
+		],
+		return: {
+			desc: 'Array of elements',
+			type: 'Array'
+		}
+	},
+	{
 		name: 'fn',
 		desc: 'Extend fakesome with your own modules. ' +
 			'E.g. To create a  module <code>fakesome.longWord()</code> simply extend ' +

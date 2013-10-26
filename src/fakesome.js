@@ -23,6 +23,7 @@
 			"et justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum" +
 			"dolor sit amet",
 		fn = {},
+		uniqueArray = [],
 		fakesome
 
 
@@ -661,6 +662,46 @@
 							return fn[key].apply(null, args)
 						else
 							return null
+					}
+				}(key)
+			}
+		}
+
+		return returnObject
+	}
+
+	fakesome.unique = function (reset) {
+
+		var returnObject = {}
+
+		if (reset === true)
+			uniqueArray = []
+
+		for (var key in fn) {
+			if (fn.hasOwnProperty(key)) {
+				!function (key) {
+
+					returnObject[key] = function () {
+
+						var args = Array.prototype.slice.call(arguments),
+							counter = 0,
+							value
+
+						do {
+							if(counter >= 100)
+								throw new Error('Unique value couldn\'t be generated (efficiently). ' +
+									'Please increase the domain.')
+
+							value = fn[key].apply(null, args)
+
+							counter++
+						}
+
+						while (uniqueArray.indexOf(value) >= 0)
+
+						uniqueArray.push(value)
+
+						return value
 					}
 				}(key)
 			}

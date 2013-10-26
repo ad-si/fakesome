@@ -32,8 +32,14 @@ h1 {
 }
 h2 {
   font-size: 1.6em;
-  color: #aa383d;
+  color: #aa0a00;
   margin-bottom: 0.5em;
+}
+h2 span {
+  color: #505050;
+}
+h2 span:first-of-type {
+  color: #cd5c5c;
 }
 h3 {
   font-size: 1.2em;

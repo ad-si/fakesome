@@ -4,16 +4,20 @@
 
 		section: function (target, data) {
 
+			// TODO: wrap parameters in span
+
 			return [target,
 				['hr'],
 				['section',
-					['h2',
+					['h2&',
 						{id: data.name},
-						'fakesome.' + data.name +
+						'<span>fakesome.</span>' + data.name +
 							(data.type === 'property' ? '' : '( ') +
+							'<span>' +
 							(data.args ? data.args.map(function (item) {
 								return item.name
-							}).join(', ') : '') +
+							}).join('</span>, <span>') : '') +
+							'</span>' +
 							(data.type === 'property' ? '' : ' )')
 					],
 					['p&', data.desc],
@@ -80,6 +84,44 @@
 	function capitalize(str){
 
 		return str.charAt(0).toUpperCase() + str.substr(1)
+	}
+
+	function prettyPrint(item){
+
+		function calculateOffset(string){
+
+			return string
+				.match(/\t+/g)
+				.reduce(function (a, b) {
+					return a.length < b.length ? a.length : b.length
+				})
+		}
+
+		function removeLeadingTabs(string){
+
+			var offset = calculateOffset(string),
+				pattern = new RegExp(new Array(offset + 1).join('\t'), 'g')
+
+			console.log(string
+				.replace(pattern, '')
+				.replace(/\t/g, '    '))
+
+			return string
+				.replace(pattern, '')
+				.replace(/\t/g, '    ')
+		}
+
+
+		if (item.constructor === Object)
+			return JSON.stringify(item, null, '    ')
+
+		if (Array.isArray(item))
+			return JSON.stringify(item, null, '')
+
+		if (typeof item === 'function')
+			return removeLeadingTabs(String(item))
+
+		return String(item).replace(/\t/g, '    ')
 	}
 
 	// TODO: Catch exceptions globally
@@ -154,15 +196,8 @@
 				if (test.args) {
 
 					test.args.forEach(function (arg) {
-
-						if (arg.constructor === Object)
-							testArgs.push(JSON.stringify(arg, null, '    '))
-						else if (Array.isArray(arg))
-							testArgs.push(JSON.stringify(arg, null, ''))
-						else
-							testArgs.push(String(arg).replace(/\t/g, '    '))
-
-					}, test)
+						testArgs.push(prettyPrint(arg))
+					})
 				}
 
 				var exampleReturn =  fakesome[method.name].apply(null, test.args)

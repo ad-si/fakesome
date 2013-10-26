@@ -24,14 +24,11 @@ var documentation = [
 				type: 'Object'
 			}
 		],
-		tests: [
+		examples: [
 			{
 				desc: 'true or false',
 				visible: true,
-				args: null,
-				test: function (value) {
-					return value === true || value === false
-				}
+				args: null
 			}
 		]
 	},
@@ -50,22 +47,16 @@ var documentation = [
 			desc: 'true or false',
 			type: 'Boolean'
 		},
-		tests: [
+		examples: [
 			{
 				desc: 'true or false with a 50:50 chance',
 				visible: true,
-				args: null,
-				test: function (value) {
-					return value === true || value === false
-				}
+				args: null
 			},
 			{
 				desc: '80% probability of true',
 				visible: true,
-				args: [0.8],
-				test: function (value) {
-					return value === true || value === false
-				}
+				args: [0.8]
 			}
 		]
 	},
@@ -96,30 +87,21 @@ var documentation = [
 			type: 'Number',
 			desc: 'The randomly generated integer.'
 		},
-		tests: [
+		examples: [
 			{
 				desc: 'Integers between inclusive -4503599627370495 and 4503599627370495',
 				visible: true,
-				args: [],
-				test: function (value) {
-					return value >= 0 && value <= 1
-				}
+				args: []
 			},
 			{
 				desc: 'Integers between 0 and 1000',
 				visible: true,
-				args: [0, 1000],
-				test: function (value) {
-					return value >= 0 && value <= 1000
-				}
+				args: [0, 1000]
 			},
 			{
 				desc: 'Integers between -1000 and 0',
 				visible: true,
-				args: [-1000, 0],
-				test: function (value) {
-					return value >= -1000 && value <= 0
-				}
+				args: [-1000, 0]
 			},
 			{
 				desc: 'Prime Numbers between inclusive 2 and inclusive 1000',
@@ -140,10 +122,7 @@ var documentation = [
 
 						return true
 					}
-				],
-				test: function (value) {
-					return value >= -1000 && value <= 0
-				}
+				]
 			}
 		]
 	},
@@ -177,30 +156,21 @@ var documentation = [
 			type: 'Number',
 			desc: 'The randomly generated Number (float).'
 		},
-		tests: [
+		examples: [
 			{
 				desc: 'Floats between inclusive 0 and 9',
 				visible: true,
-				args: [0, 9],
-				test: function (value) {
-					return value >= 0 && value <= 1
-				}
+				args: [0, 9]
 			},
 			{
 				desc: 'Floats between 0 and 1000',
 				visible: true,
-				args: [0, 1000],
-				test: function (value) {
-					return value >= 0 && value <= 1000
-				}
+				args: [0, 1000]
 			},
 			{
 				desc: 'Floats between -1000 and 0',
 				visible: true,
-				args: [-1000, 0],
-				test: function (value) {
-					return value >= -1000 && value <= 0
-				}
+				args: [-1000, 0]
 			}
 		]
 	},
@@ -230,29 +200,20 @@ var documentation = [
 			type: 'String',
 			desc: 'The randomly generated character.'
 		},
-		tests: [
+		examples: [
 			{
 				desc: 'Random Unicode character',
-				visible: true,
-				test: function (value) {
-					return true
-				}
+				visible: true
 			},
 			{
 				desc: 'Random printable ASCII character',
 				visible: true,
-				args: [32, 126],
-				test: function (value) {
-					return true
-				}
+				args: [32, 126]
 			},
 			{
 				desc: 'Random uppercase character',
 				visible: true,
-				args: [65, 90],
-				test: function (value) {
-					return true
-				}
+				args: [65, 90]
 			}
 		]
 	},
@@ -273,14 +234,11 @@ var documentation = [
 				default: '10'
 			}
 		],
-		tests: [
+		examples: [
 			{
 				desc: 'String of 10 lower case ASCII characters.',
 				visible: true,
-				args: null,
-				test: function (value) {
-					return typeof(value) == 'string' && value.search(' ') == -1
-				}
+				args: null
 			},
 			{
 				desc: 'String of 15 weird characters',
@@ -288,10 +246,7 @@ var documentation = [
 				args: [
 					['●', '☃', ''],
 					15
-				],
-				test: function (value) {
-					return typeof(value) == 'string'
-				}
+				]
 			}
 		]
 	},
@@ -312,22 +267,16 @@ var documentation = [
 				default: 20
 			}
 		],
-		tests: [
+		examples: [
 			{
 				desc: 'Random word with 1 to 20 characters',
 				visible: true,
-				args: null,
-				test: function (value) {
-					return typeof(value) == 'string' && value.search(' ') == -1
-				}
+				args: null
 			},
 			{
 				desc: 'Random word with 2 to 5 characters',
 				visible: true,
-				args: [2, 5],
-				test: function (value) {
-					return typeof(value) == 'string'
-				}
+				args: [2, 5]
 			}
 		]
 	},
@@ -354,22 +303,16 @@ var documentation = [
 				default: 20
 			}
 		],
-		tests: [
+		examples: [
 			{
 				desc: 'String of 10 space separated words with between 1 and 20 characters',
 				visible: true,
-				args: null,
-				test: function (value) {
-					return typeof(value) == 'string' && value.search(' ') == -1
-				}
+				args: null
 			},
 			{
 				desc: 'String of 5 space separated words with between 2 and 3 characters',
 				visible: true,
-				args: [5, 2, 3],
-				test: function (value) {
-					return typeof(value) == 'string'
-				}
+				args: [5, 2, 3]
 			}
 		]
 	},
@@ -384,22 +327,16 @@ var documentation = [
 				default: 100
 			}
 		],
-		tests: [
+		examples: [
 			{
 				desc: 'A text section consisting of 100 characters',
 				visible: true,
-				args: null,
-				test: function (value) {
-					return typeof(value) == 'string' && value.search(' ') == -1
-				}
+				args: null
 			},
 			{
 				desc: 'String of 10 characters',
 				visible: true,
-				args: [10],
-				test: function (value) {
-					return typeof(value) == 'string'
-				}
+				args: [10]
 			}
 		]
 	},
@@ -420,30 +357,21 @@ var documentation = [
 				default: 25
 			}
 		],
-		tests: [
+		examples: [
 			{
 				desc: 'Get a sentence with 5 to 25 words',
 				visible: true,
-				args: null,
-				test: function (value) {
-					return typeof(value) == 'string' && value.search(' ') == -1
-				}
+				args: null
 			},
 			{
 				desc: 'Get a sentence with 40 to 50 words',
 				visible: true,
-				args: [40, 50],
-				test: function (value) {
-					return typeof(value) == 'string' && value.search(' ') == -1
-				}
+				args: [40, 50]
 			},
 			{
 				desc: 'Get a sentence with exactly 4 words',
 				visible: true,
-				args: [4, 4],
-				test: function (value) {
-					return typeof(value) == 'string'
-				}
+				args: [4, 4]
 			}
 		]
 	},
@@ -470,30 +398,21 @@ var documentation = [
 				default: 25
 			}
 		],
-		tests: [
+		examples: [
 			{
 				desc: 'Get one sentence',
 				visible: true,
-				args: null,
-				test: function (value) {
-					return typeof(value) == 'string' && value.search(' ') == -1
-				}
+				args: null
 			},
 			{
 				desc: 'Get 4 sentences',
 				visible: true,
-				args: [4],
-				test: function (value) {
-					return typeof(value) == 'string'
-				}
+				args: [4]
 			},
 			{
 				desc: 'Get 10 sentences with 1 to 5 words each.',
 				visible: true,
-				args: [5, 1, 5],
-				test: function (value) {
-					return typeof(value) == 'string'
-				}
+				args: [5, 1, 5]
 			}
 		]
 	},
@@ -613,14 +532,11 @@ var documentation = [
 			}
 
 		],
-		tests: [
+		examples: [
 			{
 				desc: 'Base64 image data',
 				visible: true,
-				args: null,
-				test: function (value) {
-					return true
-				}
+				args: null
 			},
 			{
 				desc: 'Base64 image tag',
@@ -631,10 +547,7 @@ var documentation = [
 						width: 200,
 						height: 100
 					}
-				],
-				test: function (value) {
-					return true
-				}
+				]
 			},
 			{
 				desc: 'Base64 image tag',
@@ -647,10 +560,7 @@ var documentation = [
 						minColor: 'rgba(200,0,0,0.1)',
 						maxColor: 'rgba(255,200,200,0.4)'
 					}
-				],
-				test: function (value) {
-					return true
-				}
+				]
 			},
 			{
 				desc: 'Base64 image tag',
@@ -663,10 +573,7 @@ var documentation = [
 						elements: 10,
 						bgColor: 'rgb(120,220,240)'
 					}
-				],
-				test: function (value) {
-					return true
-				}
+				]
 			},
 			{
 				desc: 'Grayscale image',
@@ -678,10 +585,7 @@ var documentation = [
 						elements: 1000,
 						filter: 'grayscale'
 					}
-				],
-				test: function (value) {
-					return true
-				}
+				]
 			},
 			{
 				desc: 'Black & white image',
@@ -691,10 +595,7 @@ var documentation = [
 						width: 200,
 						filter: 'bw'
 					}
-				],
-				test: function (value) {
-					return true
-				}
+				]
 			}
 		]
 	},
@@ -765,14 +666,11 @@ var documentation = [
 				]
 			}
 		],
-		tests: [
+		examples: [
 			{
 				desc: 'URL to a random image on lorempixel.com',
 				visible: true,
-				args: null,
-				test: function (value) {
-					return true
-				}
+				args: null
 			},
 			{
 				desc: 'URL to a random image on placekitten.com',
@@ -784,10 +682,7 @@ var documentation = [
 						height: 250,
 						grayscale: true
 					}
-				],
-				test: function (value) {
-					return true
-				}
+				]
 			}
 		]
 	},
@@ -827,7 +722,7 @@ var documentation = [
 			desc: 'Object with specified key-value pairs.',
 			type: 'Object'
 		},
-		tests: [
+		examples: [
 			{
 				desc: 'User entry',
 				visible: true,
@@ -839,10 +734,7 @@ var documentation = [
 						country: "de",
 						logins: 89
 					}
-				],
-				test: function (value) {
-					return value === true || value === false
-				}
+				]
 			}
 		]
 	},

@@ -1,10 +1,10 @@
-// fakesome 0.0.6 by Adrian Sieber (adriansieber.com)
+// fakesome 0.0.7 by Adrian Sieber (adriansieber.com)
 
 // TODO: Convert to npm-module and use browserify
 // TODO: unique function
 
 
-!function (window, document) {
+!function () {
 
 	var tld = ['com', 'de', 'org', 'net'],
 		syllables = [
@@ -712,4 +712,4 @@
 		window.fakesome = fakesome
 	}
 
-}(window, document)
+}()

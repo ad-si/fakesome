@@ -4,7 +4,7 @@
 // TODO: unique function
 
 
-!function (window, document) {
+!function () {
 
 	var tld = ['com', 'de', 'org', 'net'],
 		syllables = [
@@ -712,4 +712,4 @@
 		window.fakesome = fakesome
 	}
 
-}(window, document)
+}()

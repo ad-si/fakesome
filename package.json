@@ -1,6 +1,6 @@
 {
 	"name": "fakesome",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"devDependencies": {
 		"uglify-js": "~2.3.2",
 		"mocha": "~1.13.0"

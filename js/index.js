@@ -26,8 +26,8 @@
 					['h3', data.return ? 'Returns' : false],
 					['span.returns$returns', data.return ? data.return.type : false],
 					['p.returns', data.return ? data.return.desc : false],
-					['h3', data.tests ? 'Examples' : false],
-					['table', data.tests ? '' : false,
+					['h3', data.examples ? 'Examples' : false],
+					['table', data.examples ? '' : false,
 						['thead',
 							['tr',
 								['th', 'Code'],
@@ -130,7 +130,9 @@
 
 	documentation.forEach(function (method) {
 
-		var testIsVisibile = method.tests && method.tests.some(function(test){return test.visible})
+		var exampleIsVisibile = method.examples && method.examples.some(function(example){
+			return example.visible
+		})
 
 		if (!fakesome[method.name]) return
 
@@ -187,20 +189,20 @@
 			})
 
 
-		if (testIsVisibile)
+		if (exampleIsVisibile)
 
-			method.tests.forEach(function (test) {
+			method.examples.forEach(function (example) {
 
-				var testArgs = []
+				var exampleArgs = []
 
-				if (test.args) {
+				if (example.args) {
 
-					test.args.forEach(function (arg) {
-						testArgs.push(prettyPrint(arg))
+					example.args.forEach(function (arg) {
+						exampleArgs.push(prettyPrint(arg))
 					})
 				}
 
-				var exampleReturn =  fakesome[method.name].apply(null, test.args)
+				var exampleReturn =  fakesome[method.name].apply(null, example.args)
 
 
 				if(typeof exampleReturn === 'object')
@@ -213,10 +215,10 @@
 						['tr',
 							['td.code',
 								['pre',
-									['code', 'fakesome.' + method.name + '(' + testArgs.join(', ') + ')']
+									['code', 'fakesome.' + method.name + '(' + exampleArgs.join(', ') + ')']
 								],
 							],
-							['td', test.desc],
+							['td', example.desc],
 							['td&', exampleReturn]
 						]
 					]

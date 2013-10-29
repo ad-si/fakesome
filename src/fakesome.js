@@ -1,8 +1,3 @@
-// fakesome {{ VERSION }} by Adrian Sieber (adriansieber.com)
-
-// TODO: Convert to npm-module and use browserify
-// TODO: unique function
-
 var color = require('color')
 
 var tld = ['com', 'de', 'org', 'net'],

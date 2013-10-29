@@ -1,6 +1,8 @@
 var fs = require('fs'),
 	uglify = require('uglify-js'),
-	version = JSON.parse(fs.readFileSync('package.json')).version
+	browserify = require('browserify'),
+	version = require('./package.json').version
+
 
 function buildMinifiedJs(string) {
 
@@ -17,6 +19,22 @@ function buildMinifiedJs(string) {
 	return ast.print_to_string({"comments": /fakesome/ })
 }
 
+function bundleModules(callback) {
+
+	var jsString = '// fakesome ' + version +' by Adrian Sieber (adriansieber.com)\n\n',
+		b = browserify()
+			.add('./src/fakesome.js')
+			.bundle()
+
+	b.on('data', function (chunk) {
+		jsString += chunk
+	})
+
+	b.on('end', function () {
+		callback(jsString)
+	})
+}
+
 
 desc('Default build process')
 task('default', ['fakesome.min.js', 'fakesome.js'], function () {
@@ -26,29 +44,33 @@ task('default', ['fakesome.min.js', 'fakesome.js'], function () {
 desc('Compile fakesome.min.js')
 task('fakesome.min.js', [], function () {
 
-	var jsString = fs.readFileSync('src/fakesome.js').toString(),
-		file = fs.openSync('fakesome.min.js', 'w+')
+	var fileName = this.name,
+		file = fs.openSync(fileName, 'w+')
 
-	jsString = buildMinifiedJs(
-		jsString
-			.replace('{{ VERSION }}', version)
-	)
 
-	fs.writeSync(file, jsString)
+	bundleModules(function (jsString) {
 
-	console.log('Building ' + this.name + ' succeeded')
+		fs.writeSync(file, buildMinifiedJs(jsString))
+
+		console.log('Building ' + fileName + ' succeeded')
+	})
+
 })
 
 
 desc('Compile fakesome.js')
 task('fakesome.js', [], function () {
 
-	var jsString = fs.readFileSync('src/fakesome.js').toString(),
-		file = fs.openSync('fakesome.js', 'w+')
+	var fileName = this.name,
+		file = fs.openSync(fileName, 'w+')
 
-	fs.writeSync(file, jsString.replace('{{ VERSION }}', version))
 
-	console.log('Building ' + this.name + ' succeeded')
+	bundleModules(function (jsString) {
+
+		fs.writeSync(file, jsString)
+
+		console.log('Building ' + fileName + ' succeeded')
+	})
 })
 
 

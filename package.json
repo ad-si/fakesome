@@ -1,15 +1,16 @@
 {
-	"name": "fakesome",
-	"version": "0.0.8",
-	"devDependencies": {
-		"uglify-js": "~2.3.2",
-		"mocha": "~1.13.0"
-	},
-	"dependencies": {
-		"color": "~0.4.4"
-	},
-	"scripts": {
-		"test": "mocha"
-	},
-	"main": "src/fakesome.js"
+  "name": "fakesome",
+  "version": "0.0.9",
+  "devDependencies": {
+    "uglify-js": "~2.3.2",
+    "mocha": "~1.13.0"
+  },
+  "dependencies": {
+    "color": "~0.4.4",
+    "browserify": "~2.35.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "main": "src/fakesome.js"
 }

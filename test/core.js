@@ -49,6 +49,7 @@ describe('Fakesome', function () {
 		})
 	})
 
+
 	describe('integer()', function () {
 
 		var max = Math.pow(2, 53) / 2 + 1,
@@ -71,6 +72,37 @@ describe('Fakesome', function () {
 			})
 		})
 
+	})
+
+
+	describe('float()', function () {
+
+		var max = 1e12,
+			min = -1e12
+
+		it('should return a float', function(){
+
+			repeat('often', function () {
+				var value = fakesome.float()
+				assert(String(value).search('.') !== -1, value)
+			})
+		})
+
+		it('should return a value between including ' + max + ' and ' + min, function () {
+
+			repeat('often', function () {
+				var value = fakesome.float()
+				assert(value >= min && value <= max, value)
+			})
+		})
+
+		it('should return a value between including -10 and +10', function () {
+
+			repeat('often', function () {
+				var value = fakesome.float(-10, 10)
+				assert(value >= -10 && value <= 10, value)
+			})
+		})
 	})
 
 
@@ -133,9 +165,9 @@ describe('Fakesome', function () {
 
 	describe('color()', function () {
 
-		it('should return a valid rgba color without transparency', function () {
+		it('should return a valid rgb color without transparency', function () {
 
-			var pattern = /^rgba\(([0-2]?[0-9]?[0-9], ){3}1\)$/
+			var pattern = /^rgb\(([0-2]?[0-9]?[0-9], ){2}[0-2]?[0-9]?[0-9]\)$/
 
 			repeat('few', function () {
 

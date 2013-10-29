@@ -27,7 +27,7 @@
 	},
 	"scripts": {
 		"test": "mocha",
-		"prepublish": "jake"
+		"prepublish": "mocha && jake"
 	},
 	"main": "src/fakesome.js",
 	"engines": {

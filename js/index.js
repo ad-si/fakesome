@@ -4,8 +4,6 @@
 
 		section: function (target, data) {
 
-			// TODO: wrap parameters in span
-
 			return [target,
 				['hr'],
 				['section',
@@ -102,15 +100,13 @@
 			var offset = calculateOffset(string),
 				pattern = new RegExp(new Array(offset + 1).join('\t'), 'g')
 
-			console.log(string
-				.replace(pattern, '')
-				.replace(/\t/g, '    '))
-
 			return string
 				.replace(pattern, '')
 				.replace(/\t/g, '    ')
 		}
 
+		if(item === null)
+			return 'null'
 
 		if (item.constructor === Object)
 			return JSON.stringify(item, null, '    ')
@@ -120,6 +116,9 @@
 
 		if (typeof item === 'function')
 			return removeLeadingTabs(String(item))
+
+		if (typeof item === 'string')
+			return '"' + item + '"'
 
 		return String(item).replace(/\t/g, '    ')
 	}
@@ -134,7 +133,9 @@
 			return example.visible
 		})
 
-		if (!fakesome[method.name]) return
+		if (!fakesome[method.name])
+			return
+
 
 		var html = shaven(templates.section($('#documentation'), method))
 

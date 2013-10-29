@@ -133,9 +133,9 @@ describe('Fakesome', function () {
 
 	describe('color()', function () {
 
-		it('should return a valid rgba color', function () {
+		it('should return a valid rgba color without transparency', function () {
 
-			var pattern = /^rgba\(([0-2]?[0-9]?[0-9], ){3}(0|1)\.[0-9]+\)$/
+			var pattern = /^rgba\(([0-2]?[0-9]?[0-9], ){3}1\)$/
 
 			repeat('few', function () {
 
@@ -146,9 +146,9 @@ describe('Fakesome', function () {
 		})
 
 
-		it('should return a valid hsla color', function () {
+		it('should return a valid hsla color without transparency', function () {
 
-			var pattern = /^hsla\([0-3]?[0-9]?[0-9], ([0-1]?[0-9]?[0-9]%, ){2}(0|1)\.[0-9]+\)$/
+			var pattern = /^hsla\([0-3]?[0-9]?[0-9], ([0-1]?[0-9]?[0-9]%, ){2}1\)$/
 
 			repeat('few', function () {
 

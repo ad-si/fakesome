@@ -196,6 +196,8 @@ section .args dt {
   display: inline-block;
 }
 section .args dd {
+  vertical-align: top;
+  margin: 0 0.5em 0.5em 0;
   display: inline-block;
 }
 section .name {
@@ -208,7 +210,7 @@ section .name span {
   font-weight: 900;
 }
 section .type {
-  width: 160px;
+  width: 120px;
 }
 section .type span {
   background-color: #6083aa;

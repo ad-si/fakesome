@@ -696,7 +696,39 @@ var documentation = [
 	},
 	{
 		name: 'color',
-		desc: ''
+		desc: 'Returns a random color',
+		args: [
+			{
+				name: 'min',
+				desc: 'Set the darkest (and most transparent) possible color',
+				type: 'Number',
+				default: 'rgb(0, 0, 0)'
+			},
+			{
+				name: 'max',
+				desc: 'Set the brightest (and least transparent) possible color',
+				type: 'Number',
+				default: 'rgb(255, 255, 255)'
+			},
+			{
+				name: 'type',
+				desc: 'Notation type of the returned color',
+				type: 'String',
+				default: 'rgb'
+			}
+		],
+		examples: [
+			{
+				desc: 'Random rgb color',
+				visible: true,
+				args: []
+			},
+			{
+				desc: 'Random hsl color',
+				visible: true,
+				args: [null, null, 'hsl']
+			}
+		]
 	},
 	{
 		name: 'filePath',

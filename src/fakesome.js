@@ -75,12 +75,11 @@ function decimalPlaces(number) {
 
 function randomColor(min, max, type) {
 
-	var string = '',
-		value
+	var value
 
-	min = min || 'rgba(0,0,0,0)'
-	max = max || 'rgba(255,255,255,1)'
-	type = type || 'rgba'
+	min = min || 'rgb(0,0,0)'
+	max = max || 'rgb(255,255,255)'
+	type = type || 'rgb'
 
 	min = color(min)
 	max = color(max)
@@ -94,7 +93,7 @@ function randomColor(min, max, type) {
 		.alpha(randomFloat(min.alpha(), max.alpha()))
 
 
-	if (type == 'rgb') return value.rgbaString()
+	if (type == 'rgb') return value.rgbString()
 	if (type == 'rgba') return value.rgbaString()
 	if (type == 'hsl') return value.hslString()
 	if (type == 'hsla') return value.hslaString()
@@ -278,7 +277,7 @@ fn = {
 
 		for (a = 0; a < conf.elements; a++) {
 
-			ctx.fillStyle = randomColor('rgba', conf.minColor, conf.maxColor)
+			ctx.fillStyle = randomColor(conf.minColor, conf.maxColor)
 			ctx.fillRect(
 				randomInt(-conf.elementSize, conf.width),
 				randomInt(-conf.elementSize, conf.height),

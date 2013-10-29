@@ -6,8 +6,8 @@ var fs = require('fs'),
 
 function buildMinifiedJs(string) {
 
-	var ast,
-		compressor = uglify.Compressor()
+	var compressor = uglify.Compressor(),
+		ast
 
 	ast = uglify.parse(string)
 	ast.figure_out_scope()
@@ -30,7 +30,7 @@ function bundleModules(callback) {
 		jsString += chunk
 	})
 
-	b.on('end', function () {
+	b.on('end', function(){
 		callback(jsString)
 	})
 }
@@ -39,6 +39,9 @@ function bundleModules(callback) {
 desc('Default build process')
 task('default', ['fakesome.min.js', 'fakesome.js'], function () {
 })
+
+desc('Watchtask for default build process')
+watchTask(['default'])
 
 
 desc('Compile fakesome.min.js')

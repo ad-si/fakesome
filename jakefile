@@ -1,7 +1,14 @@
 var fs = require('fs'),
 	uglify = require('uglify-js'),
 	browserify = require('browserify'),
-	version = require('./package.json').version
+	version = require('./package.json').version,
+	stylus = require('stylus'),
+	nib = require('nib'),
+	buildFiles = [
+		'fakesome.js',
+		'fakesome.min.js',
+		'css/screen.css'
+	]
 
 
 function buildMinifiedJs(string) {
@@ -21,7 +28,7 @@ function buildMinifiedJs(string) {
 
 function bundleModules(callback) {
 
-	var jsString = '// fakesome ' + version +' by Adrian Sieber (adriansieber.com)\n\n',
+	var jsString = '// fakesome ' + version + ' by Adrian Sieber (adriansieber.com)\n\n',
 		b = browserify()
 			.add('./src/fakesome.js')
 			.bundle()
@@ -30,22 +37,24 @@ function bundleModules(callback) {
 		jsString += chunk
 	})
 
-	b.on('end', function(){
+	b.on('end', function () {
 		callback(jsString)
 	})
 }
 
 
 desc('Default build process')
-task('default', ['fakesome.min.js', 'fakesome.js'], function () {
-})
+task('default', buildFiles)
 
-desc('Watchtask for default build process')
-watchTask(['default'])
+watchTask(['default'], function () {
+	this.watchFiles.include([
+		'./**/*.styl'
+	])
+})
 
 
 desc('Compile fakesome.min.js')
-task('fakesome.min.js', [], function () {
+file('fakesome.min.js', ['src/fakesome.js'], function () {
 
 	var fileName = this.name,
 		file = fs.openSync(fileName, 'w+')
@@ -62,11 +71,10 @@ task('fakesome.min.js', [], function () {
 
 
 desc('Compile fakesome.js')
-task('fakesome.js', [], function () {
+file('fakesome.js', ['src/fakesome.js'], function () {
 
 	var fileName = this.name,
 		file = fs.openSync(fileName, 'w+')
-
 
 	bundleModules(function (jsString) {
 
@@ -77,10 +85,42 @@ task('fakesome.js', [], function () {
 })
 
 
+desc('Build minified CSS file for production.')
+file('css/screen.css', ['styl/screen.styl'], function () {
+
+	var all = '',
+		files = ['styl/screen.styl'],
+		fileName = this.name
+
+	files.forEach(function (file) {
+		all += fs.readFileSync(file, 'utf8').toString()
+		all += '\n'
+	})
+
+	stylus(all)
+		.set('filename', 'css/' + fileName)
+		.set('compress', true)
+		.use(nib())
+		.import('nib')
+		.render(function (err, css) {
+
+			if (err) throw err
+
+			fs.writeFileSync(fileName, css)
+
+			console.log('Building ' + fileName + ' succeeded')
+		})
+})
+
+
 desc('Remove compiled files')
 task('clean', [], function () {
 
-	fs.unlink('fakesome.min.js', function (err) {
-		if (err) throw err
+	buildFiles.forEach(function (file) {
+
+		fs.unlink(file, function (err) {
+			if (err) throw err
+			console.log('Deleted ' + file)
+		})
 	})
 })

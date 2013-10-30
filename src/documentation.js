@@ -867,11 +867,11 @@ var documentation = [
 		desc: 'Extend fakesome with your own modules. ' +
 			'E.g. To create a  module <code>fakesome.longWord()</code> simply extend ' +
 			'<code>fakesome.fn</code> with the corresponding function: ' +
-			'<code>' +
-			'fakesome.fn.longWord = function(){' +
-			'   return "supercalifragilisticexpialidocious"' +
+			'<pre><code>' +
+			'fakesome.fn.longWord = function(){\n' +
+			'    return "supercalifragilisticexpialidocious"\n' +
 			'}' +
-			'</code>',
+			'</code></pre>',
 		type: 'property'
 	}
 ]

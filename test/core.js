@@ -106,6 +106,30 @@ describe('Fakesome', function () {
 	})
 
 
+	describe('character()', function () {
+
+		it('should return a random unicode character', function(){
+
+			repeat('often', function () {
+				var value = fakesome.character(),
+					charCode = value.charCodeAt(0)
+
+				// TODO: Handle non-Basic-Multilingual-Plane characters
+				assert(charCode >= 0 && charCode <= 65536, value)
+			})
+		})
+
+		it('should return a random uppercase character', function(){
+
+			repeat('often', function () {
+				var value = fakesome.character(65, 90)
+
+				assert(value.search(/[A-Z]/) === 0, value)
+			})
+		})
+	})
+
+
 	describe('unique()', function () {
 
 		var length = 8

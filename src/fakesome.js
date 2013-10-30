@@ -23,6 +23,8 @@ var tld = ['com', 'de', 'org', 'net'],
 
 function randomInt(min, max) {
 
+	var tmp
+
 	// (2^53/2) - 1
 	if (min === undefined || min === null) min = -4503599627370495
 	if (max === undefined || max === null) max = 4503599627370495
@@ -30,10 +32,19 @@ function randomInt(min, max) {
 	min = Number(min)
 	max = Number(max)
 
+	if (max < min) {
+		tmp = max
+		max = min
+		min = tmp
+	}
+
+
 	if (typeof(min) !== "number")
 		throw new TypeError("Min must be a number.")
+
 	if (typeof(max) !== "number")
 		throw new TypeError("Max must be a number.")
+
 
 	if (!isInt(min))
 		throw new TypeError("Min must be an Integer. Not " + min)
@@ -181,10 +192,14 @@ fn = {
 
 	character: function (min, max) {
 
+		var charCode
+
 		min = min || 32
 		max = max || 1114112
 
-		return String.fromCharCode(randomInt(max, min))
+		charCode = randomInt(min, max)
+
+		return String.fromCharCode(charCode)
 	},
 
 	/*

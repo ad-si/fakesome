@@ -50,28 +50,86 @@ describe('Fakesome', function () {
 	})
 
 
-	describe('integer()', function () {
+	describe('character()', function () {
 
-		var max = Math.pow(2, 53) / 2 + 1,
-			min = -max
-
-		it('should return a value between including ' + max + ' and ' + min, function () {
+		it('should return a random unicode character', function(){
 
 			repeat('often', function () {
-				var value = fakesome.integer()
-				assert(value >= min && value <= max, value)
+				var value = fakesome.character(),
+					charCode = value.charCodeAt(0)
+
+				// TODO: Handle non-Basic-Multilingual-Plane characters
+				assert(charCode >= 0 && charCode <= 65536, value)
+			})
+		})
+
+		it('should return a random uppercase character', function(){
+
+			repeat('often', function () {
+				var value = fakesome.character(65, 90)
+
+				assert(value.search(/[A-Z]/) === 0, value)
+			})
+		})
+	})
+
+
+	describe('color()', function () {
+
+		it('should return a valid rgb color without transparency', function () {
+
+			var pattern = /^rgb\(([0-2]?[0-9]?[0-9], ){2}[0-2]?[0-9]?[0-9]\)$/
+
+			repeat('few', function () {
+
+				var color = fakesome.color()
+
+				assert.equal(color.search(pattern), 0, color)
 			})
 		})
 
 
-		it('should return a value between including -10 and +10', function () {
+		it('should return a valid hsla color without transparency', function () {
 
-			repeat('often', function () {
-				var value = fakesome.integer(-10, 10)
-				assert(value >= -10 && value <= 10, value)
+			var pattern = /^hsla\([0-3]?[0-9]?[0-9], ([0-1]?[0-9]?[0-9]%, ){2}1\)$/
+
+			repeat('few', function () {
+
+				var color = fakesome.color(null, null, 'hsla')
+
+				assert.equal(color.search(pattern), 0, color)
 			})
 		})
 
+
+		it('should return a slightly transparent medium dark rgba color', function () {
+
+			var	pattern = /^rgba\(([5-9]?[0-9], ){3}(0|1)\.[5-9][0-9]*\)$/
+
+			repeat('few', function () {
+
+				var color = fakesome.color('rgba(50, 50, 50, 0.5)', 'rgb(99, 99, 99)')
+
+				assert.equal(color.search(pattern), 0, color)
+			})
+		})
+	})
+
+
+	describe('element()', function () {
+
+		it('should return a random array-element', function () {
+
+			var array = ['a', 9, ['b'], {c: ''}]
+
+			repeat('few', function () {
+
+				var element = fakesome.element(array),
+					message = JSON.stringify(element) + ' is not in ' + JSON.stringify(array)
+
+					assert(array.indexOf(element) !== -1, message)
+			})
+		})
 	})
 
 
@@ -106,27 +164,28 @@ describe('Fakesome', function () {
 	})
 
 
-	describe('character()', function () {
+	describe('integer()', function () {
 
-		it('should return a random unicode character', function(){
+		var max = Math.pow(2, 53) / 2 + 1,
+			min = -max
+
+		it('should return a value between including ' + max + ' and ' + min, function () {
 
 			repeat('often', function () {
-				var value = fakesome.character(),
-					charCode = value.charCodeAt(0)
-
-				// TODO: Handle non-Basic-Multilingual-Plane characters
-				assert(charCode >= 0 && charCode <= 65536, value)
+				var value = fakesome.integer()
+				assert(value >= min && value <= max, value)
 			})
 		})
 
-		it('should return a random uppercase character', function(){
+
+		it('should return a value between including -10 and +10', function () {
 
 			repeat('often', function () {
-				var value = fakesome.character(65, 90)
-
-				assert(value.search(/[A-Z]/) === 0, value)
+				var value = fakesome.integer(-10, 10)
+				assert(value >= -10 && value <= 10, value)
 			})
 		})
+
 	})
 
 
@@ -183,48 +242,6 @@ describe('Fakesome', function () {
 				for (i = 0; i < length; i++)
 					values.push(fakesome.unique().integer(0, 5))
 			}, Error, values)
-		})
-	})
-
-
-	describe('color()', function () {
-
-		it('should return a valid rgb color without transparency', function () {
-
-			var pattern = /^rgb\(([0-2]?[0-9]?[0-9], ){2}[0-2]?[0-9]?[0-9]\)$/
-
-			repeat('few', function () {
-
-				var color = fakesome.color()
-
-				assert.equal(color.search(pattern), 0, color)
-			})
-		})
-
-
-		it('should return a valid hsla color without transparency', function () {
-
-			var pattern = /^hsla\([0-3]?[0-9]?[0-9], ([0-1]?[0-9]?[0-9]%, ){2}1\)$/
-
-			repeat('few', function () {
-
-				var color = fakesome.color(null, null, 'hsla')
-
-				assert.equal(color.search(pattern), 0, color)
-			})
-		})
-
-
-		it('should return a slightly transparent medium dark rgba color', function () {
-
-			var	pattern = /^rgba\(([5-9]?[0-9], ){3}(0|1)\.[5-9][0-9]*\)$/
-
-			repeat('few', function () {
-
-				var color = fakesome.color('rgba(50, 50, 50, 0.5)', 'rgb(99, 99, 99)')
-
-				assert.equal(color.search(pattern), 0, color)
-			})
 		})
 	})
 })

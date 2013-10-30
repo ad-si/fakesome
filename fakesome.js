@@ -1320,6 +1320,8 @@ fn = {
 	 },
 	 */
 
+	element: randomElement,
+
 	float: function (minValue, maxValue, filter) {
 
 		var randInt

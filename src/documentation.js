@@ -251,6 +251,25 @@ var documentation = [
 		]
 	},
 	{
+		name: 'element',
+		desc: 'Returns a random element of an array',
+		args: [
+			{
+				name: 'array',
+				desc: 'The array to choose the element from',
+				type: 'Array',
+				required: true
+			}
+		],
+		examples: [
+			{
+				desc: 'A random fruit',
+				visible: true,
+				args: [['apple', 'banana', 'pear']]
+			}
+		]
+	},
+	{
 		name: 'word',
 		desc: 'Returns a random word with a minimum and maximum number of characters.',
 		args: [

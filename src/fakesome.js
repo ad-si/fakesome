@@ -1,4 +1,5 @@
-var color = require('color')
+var color = require('color'),
+	clone = require('clone')
 
 var tld = ['com', 'de', 'org', 'net'],
 	syllables = [
@@ -216,13 +217,15 @@ fn = {
 
 	data: function (schema) {
 
-		for (var key in schema) {
-			if (schema.hasOwnProperty(key)) {
+		var object = clone(schema)
+
+		for (var key in object) {
+			if (object.hasOwnProperty(key)) {
 
 				// If method exists evaluate
-				if (fakesome[String(schema[key]).match(/^\w+/)[0]]) {
+				if (fakesome[String(object[key]).match(/^\w+/)[0]]) {
 					try {
-						schema[key] = eval('fakesome.' + schema[key])
+						object[key] = eval('fakesome.' + object[key])
 					}
 					catch (e) {
 					}
@@ -230,7 +233,7 @@ fn = {
 			}
 		}
 
-		return schema
+		return object
 	},
 
 	/*
@@ -736,11 +739,10 @@ fakesome.array = function (number) {
 
 				returnObject[key] = function () {
 
-					var args = Array.prototype.slice.call(arguments),
-						array = []
+					var array = []
 
 					for (var i = 0; i < number; i++) {
-						array.push(fn[key].apply(null, args))
+						array.push(fn[key].apply(null, arguments))
 					}
 
 					return array

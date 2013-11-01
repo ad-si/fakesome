@@ -6,15 +6,53 @@ var assert = require("assert"),
 
 function repeat(number, func) {
 
-	if (number === 'few') number = 1000
-	if (number === 'often') number = 100000
+	if (number === 'few') number = fewRepetitions
+	if (number === 'often') number = repetitions
 
 	for (var i = 0; i < number; i++)
 		func()
 }
 
+function checkEquality(obj1, obj2) {
+
+	if (Object.keys(obj1).length !== Object.keys(obj1).length)
+		return false
+
+	for (var i in obj1)
+		if (obj1.hasOwnProperty(i) &&
+			(!obj2.hasOwnProperty(i) || obj1[i] !== obj2[i]))
+			return false
+
+	return true
+}
+
 
 describe('Fakesome', function () {
+
+
+	describe('array()', function () {
+
+		it('should generate different objects', function () {
+
+			var array,
+				elementEquality
+
+			array = fakesome.array(5).data({
+				name: 'word()',
+				age: 'integer(0, 100)',
+				note: 'asdfasdf sfd asdf'
+			})
+
+			elementEquality = array.some(function (element, index) {
+
+				if (index === 0) return false
+
+				return checkEquality(element, array[index - 1])
+			})
+
+			assert(!elementEquality)
+		})
+	})
 
 	describe('boolean()', function () {
 
@@ -52,7 +90,7 @@ describe('Fakesome', function () {
 
 	describe('character()', function () {
 
-		it('should return a random unicode character', function(){
+		it('should return a random unicode character', function () {
 
 			repeat('often', function () {
 				var value = fakesome.character(),
@@ -63,7 +101,7 @@ describe('Fakesome', function () {
 			})
 		})
 
-		it('should return a random uppercase character', function(){
+		it('should return a random uppercase character', function () {
 
 			repeat('often', function () {
 				var value = fakesome.character(65, 90)
@@ -104,7 +142,7 @@ describe('Fakesome', function () {
 
 		it('should return a slightly transparent medium dark rgba color', function () {
 
-			var	pattern = /^rgba\(([5-9]?[0-9], ){3}(0|1)\.[5-9][0-9]*\)$/
+			var pattern = /^rgba\(([5-9]?[0-9], ){3}(0|1)\.[5-9][0-9]*\)$/
 
 			repeat('few', function () {
 
@@ -112,6 +150,21 @@ describe('Fakesome', function () {
 
 				assert.equal(color.search(pattern), 0, color)
 			})
+		})
+	})
+
+
+	describe('data()', function () {
+
+		it('should have different values ', function () {
+
+
+			/*console.log(fakesome.array(5).data({
+			 name: 'word()',
+			 age: 'integer(0, 100)',
+			 note: 'asdfasdf sfd asdf '
+			 }))*/
+
 		})
 	})
 
@@ -127,7 +180,7 @@ describe('Fakesome', function () {
 				var element = fakesome.element(array),
 					message = JSON.stringify(element) + ' is not in ' + JSON.stringify(array)
 
-					assert(array.indexOf(element) !== -1, message)
+				assert(array.indexOf(element) !== -1, message)
 			})
 		})
 	})
@@ -138,7 +191,7 @@ describe('Fakesome', function () {
 		var max = 1e12,
 			min = -1e12
 
-		it('should return a float', function(){
+		it('should return a float', function () {
 
 			repeat('often', function () {
 				var value = fakesome.float()

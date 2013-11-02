@@ -21,6 +21,20 @@
     <aside>
         <nav>
             <ul></ul>
+            <hr>
+            <div id=buttons>
+                <span>Version 0.1.2</span>
+                <iframe class=github
+                        src=http://ghbtns.com/github-btn.html?user=adius&repo=fakesome&type=watch&count=true&size=small>
+                </iframe>
+                <a href="https://twitter.com/share"
+                   class="twitter-share-button"
+                   data-via="AdrianSieber"
+                   data-text="Fakesome - The fake data generator"
+                   style=display:none>
+                    Tweet
+                </a>
+            </div>
         </nav>
     </aside><article>
 
@@ -35,13 +49,23 @@
 </div>
 
 
-
 <script src="js/shaven.min.js"></script>
 <script src="js/highlight.min.js"></script>
-<script src="js/color.min.js"></script>
 <script src="src/documentation.js"></script>
 <script src="fakesome.js"></script>
 <script src="modules/example.js"></script>
 <script src="js/index.js"></script>
+<script>
+    !function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+        if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = p + '://platform.twitter.com/widgets.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+    }(document, 'script', 'twitter-wjs');
+    document.querySelector('.twitter-share-button').style.display = 'block !important'
+</script>
 </body>
 </html>

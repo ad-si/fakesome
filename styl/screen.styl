@@ -47,13 +47,6 @@ h1 + p
 h2 + p
 	margin-bottom: 2em
 
-hr
-	height: 1px
-	background-color: gray(0, 0.3)
-	margin-bottom: 1.5em
-	width: 760px
-	position: relative
-	left: -10px
 
 .ribbon
 	position: absolute
@@ -125,23 +118,48 @@ nav
 	overflow-y: auto
 	height: 100%
 	width: 160px
-	padding: 20px 0
+	padding: 1em 0 20px 0
 	background-color: rgba(0,0,0,0.1)
 	ul
 		list-style-type: none
+		margin-bottom: 1em
 		li
-			padding: 0 20px
+			padding: 0 0 0 2em
 		a
 			text-decoration: none
 			color: rgb(50,50,50)
 			font-size: 0.9em
 			font-family: Arial, sans-serif
+	hr
+		height: 1px
+		width: 100%
+		background-color: gray(0, 0.1)
+		margin-bottom: 1em
+
+#buttons
+	padding: 0 0 0 2em
+	.github
+		display: inline
+		width: 100px
+		height: 20px
+	> span
+		display: block
+		margin-bottom: 1em
+		color: gray(140)
+		font-size: 0.8em
 
 article
 	display: inline-block
 	vertical-align: top
 	width: 800px
 	padding: 30px
+	hr
+		height: 1px
+		background-color: gray(0, 0.3)
+		margin-bottom: 1.5em
+		width: 760px
+		position: relative
+		left: -10px
 
 
 section
@@ -184,11 +202,11 @@ section
 			color: rgb(200,20,0)
 			font-weight: 900
 	.type
-		width: 120px
+		min-width: 120px
 		span
 			background-color: rgb(96, 131, 170)
 	.default
-		width: 120px
+		min-width: 120px
 		span
 			background-color: rgb(110, 169, 117)
 		&:empty

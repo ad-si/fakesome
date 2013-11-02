@@ -7,7 +7,8 @@ var fs = require('fs'),
 	buildFiles = [
 		'fakesome.js',
 		'fakesome.min.js',
-		'css/screen.css'
+		'css/screen.css',
+		'index.html'
 	]
 
 
@@ -110,6 +111,23 @@ file('css/screen.css', ['styl/screen.styl'], function () {
 
 			console.log('Building ' + fileName + ' succeeded')
 		})
+})
+
+
+desc('Compile index.html')
+file('index.html', ['src/fakesome.js'], function () {
+
+	var fileName = this.name,
+		data
+
+	data = fs.readFileSync(fileName, {encoding: 'utf8'})
+
+	data = data.replace(
+		/<span>Version [\.0-9]+<\/span>/g,
+		'<span>Version ' + version + '</span>'
+	)
+
+	fs.writeFileSync(fileName, data)
 })
 
 

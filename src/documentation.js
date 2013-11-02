@@ -838,34 +838,31 @@ var documentation = [
 			}
 		],
 		return: {
-			desc: 'Array of elements',
-			type: 'Array'
+			desc: 'All registered methods',
+			type: 'Object'
 		}
 	},
 	{
 		name: 'unique',
-		desc: 'Chain other faksome methods after <code>maybe()</code> ' +
-			'to . ' +
-			'E.g. <code>fakesome.maybe().integer(0,9)</code> ' +
-			'will return an integer or null with a 50:50 chance.',
+		desc: 'Chain other faksome methods after <code>unique()</code> ' +
+			'to prevent them from returning the same value twice.',
 		args: [
 			{
-				name: 'chanceOfReturn',
-				desc: 'Probability that the chained function returns a value. ' +
-					'Otherwise it will return <code>null</code>.',
-				type: 'Number',
-				default: 0.5
+				name: 'reset',
+				desc: 'Resets the unique values array. ',
+				type: 'Boolean',
+				default: 'false'
 			}
 		],
 		return: {
-			desc: 'Array of elements',
-			type: 'Array'
+			desc: 'All registered methods',
+			type: 'Object'
 		}
 	},
 	{
 		name: 'fn',
 		desc: 'Extend fakesome with your own modules. ' +
-			'E.g. To create a  module <code>fakesome.longWord()</code> simply extend ' +
+			'E.g. To create the module <code>fakesome.longWord()</code> simply extend ' +
 			'<code>fakesome.fn</code> with the corresponding function: ' +
 			'<pre><code>' +
 			'fakesome.fn.longWord = function(){\n' +

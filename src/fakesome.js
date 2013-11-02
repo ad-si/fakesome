@@ -1,5 +1,8 @@
+"use strict";
+
 var color = require('color'),
 	clone = require('clone')
+
 
 var tld = ['com', 'de', 'org', 'net'],
 	syllables = [

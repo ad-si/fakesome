@@ -269,8 +269,9 @@ fn = {
 
 	img: function (conf) {
 
-		var canvas = document.createElement('canvas'),
-			ctx = canvas.getContext('2d'),
+		var Canvas,
+			canvas,
+			ctx,
 			defaults = {
 				tag: false,
 				width: 100,
@@ -287,6 +288,15 @@ fn = {
 			a,
 			i
 
+		if (typeof window === "object" && typeof window.document === "object")
+			canvas = document.createElement('canvas')
+
+		else {
+			Canvas = require('canvas')
+			canvas = new Canvas()
+		}
+
+		ctx = canvas.getContext('2d')
 
 		conf = conf || {}
 
@@ -370,8 +380,8 @@ fn = {
 			textWidth = ctx.measureText(textString).width
 
 			x = (conf.width - textWidth) / 2
-			if(conf.size)
-				y = conf.height / 2 + fontSize/2
+			if (conf.size)
+				y = conf.height / 2 + fontSize / 2
 			else
 				y = conf.height / 2
 
@@ -394,8 +404,8 @@ fn = {
 
 			x = (conf.width - textWidth) / 2
 
-			if(conf.text)
-				y = conf.height / 2 - fontSize/2
+			if (conf.text)
+				y = conf.height / 2 - fontSize / 2
 			else
 				y = conf.height / 2
 

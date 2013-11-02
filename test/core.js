@@ -218,6 +218,21 @@ describe('Fakesome', function () {
 	})
 
 
+	describe('img()', function () {
+
+		it('should return a image', function () {
+
+			repeat(10, function () {
+
+				var value = fakesome.img()
+
+				assert(value.search(/^data:image\/png;base64,[a-zA-Z\d\/\+]+=*$/) === 0, value)
+			})
+		})
+
+	})
+
+
 	describe('integer()', function () {
 
 		var max = Math.pow(2, 53) / 2 + 1,
@@ -459,9 +474,10 @@ describe('Fakesome', function () {
 
 			repeat('few', function () {
 
-				var value = fakesome.words()
+				var value = fakesome.words(),
+					length = value.split(' ').length
 
-				assert(value.split(' ').length === 10, 'Not 10 words but ' + value.split(' ').length)
+				assert(length === 10, 'Not 10 words but ' + length)
 				assert(value.search(/^[\w ]+$/) === 0, value + ' contains not just letters and whitespace')
 			})
 		})
@@ -470,9 +486,10 @@ describe('Fakesome', function () {
 
 			repeat('few', function () {
 
-				var value = fakesome.words(5, 2, 4)
+				var value = fakesome.words(5, 2, 4),
+					length = value.split(' ').length
 
-				assert(value.split(' ').length === 5, 'Not 5 words but ' + value.split(' ').length)
+				assert(length === 5, 'Not 5 words but ' + length)
 				assert(value.search(/^[\w ]+$/) === 0, value + ' contains not just letters')
 			})
 		})

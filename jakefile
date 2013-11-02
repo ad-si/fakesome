@@ -32,6 +32,7 @@ function bundleModules(callback) {
 	var jsString = '// fakesome ' + version + ' by Adrian Sieber (adriansieber.com)\n\n',
 		b = browserify()
 			.add('./src/fakesome.js')
+			.ignore('canvas')
 			.bundle()
 
 	b.on('data', function (chunk) {

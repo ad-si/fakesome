@@ -1,6 +1,6 @@
 {
 	"name": "fakesome",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Easily create colossal amounts of fake data",
 	"keywords": [
 		"fake",
@@ -27,7 +27,8 @@
 	},
 	"dependencies": {
 		"color": "~0.4.4",
-		"clone": "~0.1.11"
+		"clone": "~0.1.11",
+		"canvas": "~1.1.2"
 	},
 	"scripts": {
 		"test": "mocha",

@@ -1,6 +1,8 @@
-// fakesome 0.2.0 by Adrian Sieber (adriansieber.com)
+// fakesome 0.2.1 by Adrian Sieber (adriansieber.com)
 
 ;(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+
+},{}],2:[function(require,module,exports){
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 exports.readIEEE754 = function(buffer, offset, isBE, mLen, nBytes) {
   var e, m,
@@ -2380,7 +2382,7 @@ function hasOwnProperty(obj, prop) {
 },{"_shims":5}]},{},[])
 ;;module.exports=require("buffer-browserify")
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var Buffer=require("__browserify_Buffer").Buffer;"use strict";
 
 function objectToString(o) {
@@ -2541,7 +2543,7 @@ clone.clonePrototype = function(parent) {
   return new c();
 };
 
-},{"__browserify_Buffer":1}],3:[function(require,module,exports){
+},{"__browserify_Buffer":2}],4:[function(require,module,exports){
 /* MIT license */
 var convert = require("color-convert"),
     string = require("color-string");
@@ -2908,7 +2910,7 @@ Color.prototype.setChannel = function(space, index, val) {
    return this;
 }
 
-},{"color-convert":5,"color-string":6}],4:[function(require,module,exports){
+},{"color-convert":6,"color-string":7}],5:[function(require,module,exports){
 /* MIT license */
 
 module.exports = {
@@ -3401,7 +3403,7 @@ for (var key in cssKeywords) {
   reverseKeywords[JSON.stringify(cssKeywords[key])] = key;
 }
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var conversions = require("./conversions");
 
 var exports = {};
@@ -3440,7 +3442,7 @@ for (var func in conversions) {
     }
   })(func);
 }
-},{"./conversions":4}],6:[function(require,module,exports){
+},{"./conversions":5}],7:[function(require,module,exports){
 /* MIT license */
 var convert = require("color-convert");
 
@@ -3619,7 +3621,7 @@ function hexDouble(num) {
   return (str.length < 2) ? "0" + str : str;
 }
 
-},{"color-convert":5}],7:[function(require,module,exports){
+},{"color-convert":6}],8:[function(require,module,exports){
 "use strict";
 
 var color = require('color'),
@@ -3891,8 +3893,9 @@ fn = {
 
 	img: function (conf) {
 
-		var canvas = document.createElement('canvas'),
-			ctx = canvas.getContext('2d'),
+		var Canvas,
+			canvas,
+			ctx,
 			defaults = {
 				tag: false,
 				width: 100,
@@ -3909,6 +3912,15 @@ fn = {
 			a,
 			i
 
+		if (typeof window === "object" && typeof window.document === "object")
+			canvas = document.createElement('canvas')
+
+		else {
+			Canvas = require('canvas')
+			canvas = new Canvas()
+		}
+
+		ctx = canvas.getContext('2d')
 
 		conf = conf || {}
 
@@ -3992,8 +4004,8 @@ fn = {
 			textWidth = ctx.measureText(textString).width
 
 			x = (conf.width - textWidth) / 2
-			if(conf.size)
-				y = conf.height / 2 + fontSize/2
+			if (conf.size)
+				y = conf.height / 2 + fontSize / 2
 			else
 				y = conf.height / 2
 
@@ -4016,8 +4028,8 @@ fn = {
 
 			x = (conf.width - textWidth) / 2
 
-			if(conf.text)
-				y = conf.height / 2 - fontSize/2
+			if (conf.text)
+				y = conf.height / 2 - fontSize / 2
 			else
 				y = conf.height / 2
 
@@ -4416,5 +4428,5 @@ if (typeof window === "object" && typeof window.document === "object") {
 	window.fakesome = fakesome
 }
 
-},{"clone":2,"color":3}]},{},[7])
+},{"canvas":1,"clone":3,"color":4}]},{},[8])
 ;

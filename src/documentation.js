@@ -805,7 +805,7 @@ var documentation = [
 		desc: ''
 	},
 	{
-		name: 'data',
+		name: 'object',
 		desc: 'Create a javascript Object with custom key-value pairs. ' +
 			'The values can either be primitives or be generated with other fakesome methods.',
 		args: [

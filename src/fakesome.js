@@ -142,15 +142,21 @@ function shuffle(array) {
 	return array
 }
 
+function getType(obj) {
+
+	// http://javascriptweblog.wordpress.com/2011/08/08/fixing-the-javascript-typeof-operator
+
+	return ({})
+		.toString
+		.call(obj)
+		.match(/\s([a-zA-Z]+)/)[1]
+		.toLowerCase()
+}
+
 function typeCheck(value, expectedType) {
 
-	if (value !== undefined) {
-
-		var actualType = Array.isArray(value) ? 'array' : typeof value
-
-		if (actualType != expectedType)
-			throw new TypeError('The argument must be of type ' + expectedType + ' and not ' + actualType)
-	}
+	if (value !== undefined && getType(value) !== expectedType)
+		throw new TypeError('The argument must be of type ' + expectedType + ' and not ' + actualType)
 }
 
 function capitalize(text) {
@@ -217,27 +223,6 @@ fn = {
 	 */
 
 	color: randomColor,
-
-	data: function (schema) {
-
-		var object = clone(schema)
-
-		for (var key in object) {
-			if (object.hasOwnProperty(key)) {
-
-				// If method exists evaluate
-				if (fakesome[String(object[key]).match(/^\w+/)[0]]) {
-					try {
-						object[key] = eval('fakesome.' + object[key])
-					}
-					catch (e) {
-					}
-				}
-			}
-		}
-
-		return object
-	},
 
 	/*
 	 date: function (startDate, endDate) {
@@ -533,17 +518,36 @@ fn = {
 	 },
 	 */
 
-	object: function (scheme, number) {
+	object: function (schema) {
 
-		var obj = {}
+		function evaluateObject(object){
 
-		for (var key in scheme) {
-			if (scheme.hasOwnProperty(key)) {
+			for (var key in object) {
+				if (object.hasOwnProperty(key)) {
+					!function () {
 
+						var value = object[key]
 
+						// If method exists evaluate
+						if (typeof value === 'string' && fakesome[value.match(/^\w+/)[0]]) {
+
+							try {
+								object[key] = eval('fakesome.' + value)
+							}
+							catch (e) {
+								console.log('Couldn\'t evaluate fakesome.' + value)
+							}
+						}
+						else if (getType(value) === "object")
+							evaluateObject(value)
+					}()
+				}
 			}
+
+			return object
 		}
 
+		return evaluateObject(clone(schema))
 	},
 
 	/*

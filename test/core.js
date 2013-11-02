@@ -27,6 +27,15 @@ function checkEquality(obj1, obj2) {
 	return true
 }
 
+function toType(obj) {
+
+	return ({})
+		.toString
+		.call(obj)
+		.match(/\s([a-zA-Z]+)/)[1]
+		.toLowerCase()
+}
+
 
 describe('Fakesome', function () {
 
@@ -38,7 +47,7 @@ describe('Fakesome', function () {
 			var array,
 				elementEquality
 
-			array = fakesome.array(5).data({
+			array = fakesome.array(5).object({
 				name: 'word()',
 				age: 'integer(0, 100)',
 				note: 'asdfasdf sfd asdf'
@@ -156,21 +165,6 @@ describe('Fakesome', function () {
 	})
 
 
-	describe('data()', function () {
-
-		it('should have different values ', function () {
-
-
-			/*console.log(fakesome.array(5).data({
-			 name: 'word()',
-			 age: 'integer(0, 100)',
-			 note: 'asdfasdf sfd asdf '
-			 }))*/
-
-		})
-	})
-
-
 	describe('element()', function () {
 
 		it('should return a random array-element', function () {
@@ -221,7 +215,7 @@ describe('Fakesome', function () {
 
 	describe('img()', function () {
 
-		it('should return a image', function () {
+		it('should return an image', function () {
 
 			repeat(10, function () {
 
@@ -263,7 +257,7 @@ describe('Fakesome', function () {
 
 			request.head(value, function (error, res) {
 
-				if(error) throw error
+				if (error) throw error
 
 				assert(res.statusCode === 200, 'GET ' + value + ' ' + res.statusCode)
 
@@ -296,6 +290,50 @@ describe('Fakesome', function () {
 			})
 		})
 
+	})
+
+
+	describe('object()', function () {
+
+		it('should generate an object', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.object({
+					name: 'word()',
+					age: 'integer(1, 100)',
+					note: 'Awesome person'
+				})
+
+				assert(value.name)
+				assert(value.age)
+				assert(value.note)
+
+				assert(value.name.search(/^\w+$/) === 0, value.name + ' is not a valid name')
+				assert(value.age >= 1 && value.age <= 100, value.age + ' is not a valid age')
+				assert(value.note.search(/^[\w ]+$/) === 0, value.note + ' is not a valid note')
+			})
+		})
+
+		it('should work recursively', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.object({
+					name: 'John',
+					father: {
+						name: 'word()',
+						age: 'integer(1, 100)'
+					}
+				})
+
+				assert(value.name)
+				assert(value.father)
+
+				assert(value.father.name.search(/^\w+$/) === 0, value.father.name + ' is not a valid name')
+				assert(value.father.age >= 1 && value.father.age <= 100, value.father.age + ' is not a valid age')
+			})
+		})
 	})
 
 

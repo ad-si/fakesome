@@ -575,7 +575,7 @@ var documentation = [
 					{
 						tag: true,
 						width: 200,
-						text: true,
+						size: true,
 						minColor: 'rgba(200,0,0,0.1)',
 						maxColor: 'rgba(255,200,200,0.4)'
 					}
@@ -588,7 +588,8 @@ var documentation = [
 					{
 						tag: true,
 						width: 200,
-						text: 'Placeholder',
+						size: true,
+						text: 'Placeholder Text',
 						elements: 10,
 						bgColor: 'rgb(120,220,240)'
 					}

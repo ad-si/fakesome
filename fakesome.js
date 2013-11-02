@@ -1,4 +1,4 @@
-// fakesome 0.1.3 by Adrian Sieber (adriansieber.com)
+// fakesome 0.1.4 by Adrian Sieber (adriansieber.com)
 
 ;(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -3896,6 +3896,7 @@ fn = {
 			defaults = {
 				tag: false,
 				width: 100,
+				size: false,
 				height: 100,
 				elements: 100,
 				bgColor: 'white',
@@ -3905,7 +3906,6 @@ fn = {
 			},
 			imgData,
 			data,
-			key,
 			a,
 			i
 
@@ -3918,7 +3918,7 @@ fn = {
 		canvas.height = conf.height
 
 		ctx.fillStyle = conf.bgColor
-		ctx.fillRect(0, 0, conf.width, conf.width)
+		ctx.fillRect(0, 0, conf.width, conf.height)
 
 		for (a = 0; a < conf.elements; a++) {
 
@@ -3976,34 +3976,57 @@ fn = {
 			return imageData
 		}
 
+		// TODO: Check background color (histogram) and choose text color accordingly
+
 		function setText() {
 
-			var textString,
-				fontSize,
+			var textString = conf.text,
+				fontSize = Math.min((conf.width / textString.length) * 1.4, conf.height * 0.3),
 				textWidth,
-				textHeight,
 				x,
 				y
 
-			textString = (conf.text === true) ? conf.width + '×' + conf.height : conf.text
-
-			fontSize = Math.min((conf.width / textString.length), conf.height * 0.8),
-
-				// TODO: Check background color (histogram) and choose text color accordingly
-				ctx.fillStyle = 'rgba(0,0,0,0.7'
-			ctx.font = 'bold ' + fontSize + "px Arial"
+			ctx.fillStyle = 'rgba(0,0,0,0.7)'
+			ctx.font = fontSize + "px Arial"
 
 			textWidth = ctx.measureText(textString).width
 
 			x = (conf.width - textWidth) / 2
-			y = conf.height / 2
+			if(conf.size)
+				y = conf.height / 2 + fontSize/2
+			else
+				y = conf.height / 2
 
 			ctx.textBaseline = "middle"
 			ctx.fillText(textString, x, y)
 		}
 
+		function setSize() {
 
-		imgData = ctx.getImageData(0, 0, conf.width, conf.height);
+			var string = conf.width + '×' + conf.height,
+				fontSize = Math.min((conf.width / string.length), conf.height * 0.3),
+				textWidth,
+				x,
+				y
+
+			ctx.fillStyle = 'rgba(0,0,0,0.7)'
+			ctx.font = 'bold ' + fontSize + "px Arial"
+
+			textWidth = ctx.measureText(string).width
+
+			x = (conf.width - textWidth) / 2
+
+			if(conf.text)
+				y = conf.height / 2 - fontSize/2
+			else
+				y = conf.height / 2
+
+			ctx.textBaseline = "middle"
+			ctx.fillText(string, x, y)
+		}
+
+
+		imgData = ctx.getImageData(0, 0, conf.width, conf.height)
 
 		if (conf.filter) {
 
@@ -4015,7 +4038,7 @@ fn = {
 		}
 
 		if (conf.text) setText()
-
+		if (conf.size) setSize()
 
 		data = canvas.toDataURL()
 

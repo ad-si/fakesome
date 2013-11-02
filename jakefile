@@ -55,7 +55,7 @@ watchTask(['default'], function () {
 
 
 desc('Compile fakesome.min.js')
-file('fakesome.min.js', ['src/fakesome.js'], function () {
+file('fakesome.min.js', ['src/fakesome.js', 'package.json'], function () {
 
 	var fileName = this.name,
 		file = fs.openSync(fileName, 'w+')
@@ -72,7 +72,7 @@ file('fakesome.min.js', ['src/fakesome.js'], function () {
 
 
 desc('Compile fakesome.js')
-file('fakesome.js', ['src/fakesome.js'], function () {
+file('fakesome.js', ['src/fakesome.js', 'package.json'], function () {
 
 	var fileName = this.name,
 		file = fs.openSync(fileName, 'w+')
@@ -115,7 +115,7 @@ file('css/screen.css', ['styl/screen.styl'], function () {
 
 
 desc('Compile index.html')
-file('index.html', ['src/fakesome.js'], function () {
+file('index.html', ['src/fakesome.js', 'package.json'], function () {
 
 	var fileName = this.name,
 		data
@@ -128,6 +128,8 @@ file('index.html', ['src/fakesome.js'], function () {
 	)
 
 	fs.writeFileSync(fileName, data)
+
+	console.log('Building ' + fileName + ' succeeded')
 })
 
 

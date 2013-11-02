@@ -286,6 +286,10 @@ var documentation = [
 				default: 20
 			}
 		],
+		return: {
+			type: 'String',
+			desc: 'The word'
+		},
 		examples: [
 			{
 				desc: 'Random word with 1 to 20 characters',
@@ -322,6 +326,10 @@ var documentation = [
 				default: 20
 			}
 		],
+		return: {
+			type: 'String',
+			desc: 'Space separated string of the words'
+		},
 		examples: [
 			{
 				desc: 'String of 10 space separated words with between 1 and 20 characters',
@@ -340,8 +348,14 @@ var documentation = [
 		desc: 'Get a text section with a certain number of characters.',
 		args: [
 			{
-				name: 'number',
-				desc: 'The number of characters in the text section.',
+				name: 'min',
+				desc: 'Minimum number of characters in the text section.',
+				type: 'Number',
+				default: 50
+			},
+			{
+				name: 'max',
+				desc: 'Maximum number of characters in the text section.',
 				type: 'Number',
 				default: 100
 			}

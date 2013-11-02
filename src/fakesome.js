@@ -617,16 +617,15 @@ fn = {
 		return string.join('')
 	},
 
-	text: function (quantity) {
+	text: function (min, max) {
 
-		typeCheck(quantity, 'number')
+		typeCheck(min, 'number')
+		typeCheck(max, 'number')
 
-		quantity = quantity || 100
+		min = min || 50
+		max = max || 100
 
-		return lorem
-			.split("")
-			.slice(0, quantity)
-			.join("")
+		return lorem.substr(0, randomInt(min, max))
 	},
 
 	/*

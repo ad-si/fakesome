@@ -243,6 +243,60 @@ describe('Fakesome', function () {
 	})
 
 
+	describe('string()', function () {
+
+		it('should return a random sequence of 10 lowercase ascii characters', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.string()
+
+				assert(value.length === 10, 'Length should be 10 and not ' + value.length)
+				assert(value.search(/^[a-z]+$/) === 0, value + ' contains not just a-z')
+			})
+		})
+
+		it('should return a random sequence of 50 uppercase ascii characters', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.string('ABCDEFGHIJKLMNOPQRSTUVW'.split(''), 50)
+
+				assert(value.length === 50, 'Length should be 50 and not ' + value.length)
+				assert(value.search(/^[A-Z]+$/) === 0, value + ' contains not just a-z')
+			})
+		})
+
+	})
+
+
+	describe('text()', function () {
+
+		it('should return a text with 50-100 characters', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.text()
+
+				assert(value.length >= 50 && value.length <= 100, 'Length should be 50-100 and not ' + value.length)
+				assert(value.search(/^[\w ]+$/) === 0, value + ' contains invalid characters')
+			})
+		})
+
+		it('should return a text with 20-40 characters', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.text(20, 40)
+
+				assert(value.length >= 20 && value.length <= 40, 'Length should be 20-40 and not ' + value.length)
+				assert(value.search(/^[\w ]+$/) === 0, value + ' contains invalid characters')
+			})
+		})
+
+	})
+
+
 	describe('unique()', function () {
 
 
@@ -297,7 +351,7 @@ describe('Fakesome', function () {
 			for (i = 1; i < length; i++)
 				values.push(fakesome.unique().integer(0, 9))
 
-			fakesome.unique().element([0,1,2,3,4,5,6,7,8,9])
+			fakesome.unique().element([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 
 			//assert.equal(values.length, length)
 			//assert(!testForDuplicates(values), values)
@@ -314,4 +368,59 @@ describe('Fakesome', function () {
 			}, Error, values)
 		})
 	})
+
+
+	describe('word()', function () {
+
+		it('should return a random word with 1 to 20 characters', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.word()
+
+				assert(value.length >= 1 && value.length <= 20, 'Length is not between 1 to 20 but ' + value.length)
+				assert(value.search(/^\w+$/) === 0, value + ' contains not just letters')
+			})
+		})
+
+		it('should return a random word with 5 to 10 characters', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.word(5, 10)
+
+				assert(value.length >= 5 && value.length <= 10, 'Length is not between 5 to 10 but ' + value.length)
+				assert(value.search(/^\w+$/) === 0, value + ' contains not just letters')
+			})
+		})
+
+	})
+
+
+	describe('words()', function () {
+
+		it('should return 10 random space separated words with 1 to 20 characters', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.words()
+
+				assert(value.split(' ').length === 10, 'Not 10 words but ' + value.split(' ').length)
+				assert(value.search(/^[\w ]+$/) === 0, value + ' contains not just letters and whitespace')
+			})
+		})
+
+		it('should return 5 random space separated words with 2 to 4 characters', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.words(5, 2, 4)
+
+				assert(value.split(' ').length === 5, 'Not 5 words but ' + value.split(' ').length)
+				assert(value.search(/^[\w ]+$/) === 0, value + ' contains not just letters')
+			})
+		})
+
+	})
+
 })

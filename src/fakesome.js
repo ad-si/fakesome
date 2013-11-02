@@ -21,7 +21,7 @@ var tld = ['com', 'de', 'org', 'net'],
 		"et justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum" +
 		"dolor sit amet",
 	fn = {},
-	uniqueArray = [],
+	uniqueMap = {},
 	fakesome
 
 
@@ -694,9 +694,6 @@ fakesome.unique = function (reset) {
 
 	var returnObject = {}
 
-	if (reset === true)
-		uniqueArray = []
-
 	for (var key in fn) {
 		if (fn.hasOwnProperty(key)) {
 			!function (key) {
@@ -707,8 +704,11 @@ fakesome.unique = function (reset) {
 						counter = 0,
 						value
 
+					if (reset === true || uniqueMap[key] === undefined)
+						uniqueMap[key] = []
+
 					do {
-						if (counter >= 100)
+						if (counter >= 1000)
 							throw new Error('Unique value couldn\'t be generated (efficiently). ' +
 								'Please increase the domain.')
 
@@ -717,9 +717,9 @@ fakesome.unique = function (reset) {
 						counter++
 					}
 
-					while (uniqueArray.indexOf(value) >= 0)
+					while (uniqueMap[key].indexOf(value) >= 0)
 
-					uniqueArray.push(value)
+					uniqueMap[key].push(value)
 
 					return value
 				}

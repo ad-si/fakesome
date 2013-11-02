@@ -1,4 +1,4 @@
-// fakesome 0.1.2 by Adrian Sieber (adriansieber.com)
+// fakesome 0.1.3 by Adrian Sieber (adriansieber.com)
 
 ;(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -3643,7 +3643,7 @@ var tld = ['com', 'de', 'org', 'net'],
 		"et justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum" +
 		"dolor sit amet",
 	fn = {},
-	uniqueArray = [],
+	uniqueMap = {},
 	fakesome
 
 
@@ -4316,9 +4316,6 @@ fakesome.unique = function (reset) {
 
 	var returnObject = {}
 
-	if (reset === true)
-		uniqueArray = []
-
 	for (var key in fn) {
 		if (fn.hasOwnProperty(key)) {
 			!function (key) {
@@ -4329,8 +4326,11 @@ fakesome.unique = function (reset) {
 						counter = 0,
 						value
 
+					if (reset === true || uniqueMap[key] === undefined)
+						uniqueMap[key] = []
+
 					do {
-						if (counter >= 100)
+						if (counter >= 1000)
 							throw new Error('Unique value couldn\'t be generated (efficiently). ' +
 								'Please increase the domain.')
 
@@ -4339,9 +4339,9 @@ fakesome.unique = function (reset) {
 						counter++
 					}
 
-					while (uniqueArray.indexOf(value) >= 0)
+					while (uniqueMap[key].indexOf(value) >= 0)
 
-					uniqueArray.push(value)
+					uniqueMap[key].push(value)
 
 					return value
 				}

@@ -845,7 +845,8 @@ var documentation = [
 	{
 		name: 'unique',
 		desc: 'Chain other faksome methods after <code>unique()</code> ' +
-			'to prevent them from returning the same value twice.',
+			'to prevent them from returning the same value twice. ' +
+			'There is a scope of uniqueness for each method.',
 		args: [
 			{
 				name: 'reset',

@@ -54,6 +54,7 @@ describe('Fakesome', function () {
 		})
 	})
 
+
 	describe('boolean()', function () {
 
 		function testBoolean(probability) {
@@ -244,7 +245,6 @@ describe('Fakesome', function () {
 
 	describe('unique()', function () {
 
-		var length = 8
 
 		function testForDuplicates(array) {
 
@@ -265,7 +265,8 @@ describe('Fakesome', function () {
 
 		it('should return only unique values', function () {
 
-			var values = []
+			var values = [],
+				length = 8
 
 			for (i = 0; i < length; i++)
 				values.push(fakesome.unique().integer(0, 9))
@@ -277,13 +278,29 @@ describe('Fakesome', function () {
 
 		it('should be resetted', function () {
 
-			var values = [fakesome.unique(true).integer(0, 9)]
+			var length = 8,
+				values = [fakesome.unique(true).integer(0, 9)]
 
 			for (i = 1; i < length; i++)
 				values.push(fakesome.unique().integer(0, 9))
 
 			assert.equal(values.length, length)
 			assert(!testForDuplicates(values), values)
+		})
+
+
+		it('should keep one array of values per method', function () {
+
+			var length = 10,
+				values = [fakesome.unique(true).integer(0, 9)]
+
+			for (i = 1; i < length; i++)
+				values.push(fakesome.unique().integer(0, 9))
+
+			fakesome.unique().element([0,1,2,3,4,5,6,7,8,9])
+
+			//assert.equal(values.length, length)
+			//assert(!testForDuplicates(values), values)
 		})
 
 

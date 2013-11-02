@@ -128,7 +128,7 @@ var documentation = [
 	},
 	{
 		name: 'float',
-		desc: 'Returns a random float ',
+		desc: 'Returns a random float.',
 		args: [
 			{
 				name: 'minValue',
@@ -154,7 +154,7 @@ var documentation = [
 		],
 		return: {
 			type: 'Number',
-			desc: 'The randomly generated Number (float).'
+			desc: 'The randomly generated float.'
 		},
 		examples: [
 			{
@@ -234,6 +234,10 @@ var documentation = [
 				default: '10'
 			}
 		],
+		return: {
+			type: 'String',
+			desc: 'The string.'
+		},
 		examples: [
 			{
 				desc: 'String of 10 lower case ASCII characters.',
@@ -261,6 +265,10 @@ var documentation = [
 				required: true
 			}
 		],
+		return: {
+			type: " ",
+			desc: 'An element from the source array.'
+		},
 		examples: [
 			{
 				desc: 'A random fruit',
@@ -360,6 +368,10 @@ var documentation = [
 				default: 100
 			}
 		],
+		return: {
+			type: 'String',
+			desc: 'The text'
+		},
 		examples: [
 			{
 				desc: 'A text section consisting of 100 characters',
@@ -390,6 +402,10 @@ var documentation = [
 				default: 25
 			}
 		],
+		return: {
+			type: 'String',
+			desc: 'The sentence'
+		},
 		examples: [
 			{
 				desc: 'Get a sentence with 5 to 25 words',
@@ -431,6 +447,10 @@ var documentation = [
 				default: 25
 			}
 		],
+		return: {
+			type: 'String',
+			desc: 'The sentences.'
+		},
 		examples: [
 			{
 				desc: 'Get one sentence',
@@ -565,6 +585,10 @@ var documentation = [
 			}
 
 		],
+		return: {
+			type: 'String',
+			desc: 'The image as base64 data or as html-tag.'
+		},
 		examples: [
 			{
 				desc: 'Base64 image data',
@@ -700,6 +724,10 @@ var documentation = [
 				]
 			}
 		],
+		return: {
+			type: 'String',
+			desc: 'The URL.'
+		},
 		examples: [
 			{
 				desc: 'URL to a random image on lorempixel.com',
@@ -751,6 +779,10 @@ var documentation = [
 				default: 'rgb'
 			}
 		],
+		return: {
+			type: 'String',
+			desc: 'The color'
+		},
 		examples: [
 			{
 				desc: 'Random rgb color',

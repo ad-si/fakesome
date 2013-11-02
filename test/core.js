@@ -270,6 +270,62 @@ describe('Fakesome', function () {
 	})
 
 
+	describe('sentence()', function () {
+
+		it('should return a sentence with 5 to 25 words', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.sentence(),
+					length = value.split(' ').length
+
+				assert(length >= 5 && length <= 25, 'Length should be 5-25 and not ' + length)
+				assert(value.search(/^[\w ]+\.$/) === 0, value + ' contains invalid characters')
+			})
+		})
+
+		it('should return a sentence with 2 to 10 words', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.sentence(2, 10),
+					length = value.split(' ').length
+
+				assert(length >= 2 && length <= 10, 'Length should be 2-10 and not ' + length)
+				assert(value.search(/^[\w ]+\.$/) === 0, value + ' contains invalid characters')
+			})
+		})
+	})
+
+
+	describe('sentences()', function () {
+
+		it('should return a sentence with 5 to 25 words', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.sentence(),
+					length = value.split(' ').length
+
+				assert(length >= 5 && length <= 25, 'Length should be 5-25 and not ' + length)
+				assert(value.search(/^[\w ]+\.$/) === 0, value + ' contains invalid characters')
+			})
+		})
+
+		it('should return a sentence with 2 to 10 words', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.sentence(2, 10),
+					length = value.split(' ').length
+
+				assert(length >= 2 && length <= 10, 'Length should be 2-10 and not ' + length)
+				assert(value.search(/^[\w ]+\.$/) === 0, value + ' contains invalid characters')
+			})
+		})
+	})
+
+
 	describe('text()', function () {
 
 		it('should return a text with 50-100 characters', function () {

@@ -122,10 +122,7 @@ file('index.html', ['src/fakesome.js', 'package.json'], function () {
 
 	data = fs.readFileSync(fileName, {encoding: 'utf8'})
 
-	data = data.replace(
-		/<span>Version [\.0-9]+<\/span>/g,
-		'<span>Version ' + version + '</span>'
-	)
+	data = data.replace(/Version [\.0-9]+/g, 'Version ' + version)
 
 	fs.writeFileSync(fileName, data)
 

@@ -217,6 +217,28 @@ describe('Fakesome', function () {
 	})
 
 
+	describe('fn', function () {
+
+		var word = 'supercalifragilisticexpialidocious'
+
+		fakesome.fn.longWord = function(){
+			return word
+		}
+
+		it('should be possible to register a new module', function () {
+
+			assert(fakesome.longWord() === 'supercalifragilisticexpialidocious')
+		})
+
+		it('module should be chainable', function () {
+
+			var value = fakesome.array(2).longWord()
+
+			assert(value[0] === word && value[1] === word)
+		})
+	})
+
+
 	describe('img()', function () {
 
 		it('should return an image', function () {

@@ -1,4 +1,4 @@
-// fakesome 0.3.1 by Adrian Sieber (adriansieber.com)
+// fakesome 0.3.2 by Adrian Sieber (adriansieber.com)
 
 ;(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
@@ -3644,7 +3644,6 @@ var tld = ['com', 'de', 'org', 'net'],
 		"tempor invidunt ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam" +
 		"et justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum" +
 		"dolor sit amet",
-	fn = {},
 	uniqueMap = {},
 	fakesome
 
@@ -3810,8 +3809,14 @@ function findFirst(array, test) {
 	return result
 }
 
+function validMethod(method) {
+	return method != 'maybe' &&
+		method != 'unique' &&
+		method != 'array'
+}
 
-fn = {
+
+fakesome = {
 
 	boolean: function (chanceOfTrue) {
 
@@ -4146,7 +4151,7 @@ fn = {
 
 	object: function (schema) {
 
-		function evaluateObject(object){
+		function evaluateObject(object) {
 
 			for (var key in object) {
 				if (object.hasOwnProperty(key)) {
@@ -4311,117 +4316,110 @@ fn = {
 		quantity = quantity || 10
 
 		for (i = 0; i < quantity; i++)
-			words.push(fn.word(minChars, maxChars))
+			words.push(fakesome.word(minChars, maxChars))
 
 		return words.join(' ')
-	}
-}
+	},
 
-fakesome = {}
+	maybe: function (chanceOfReturn) {
 
-for (var key in fn)
-	if (fn.hasOwnProperty(key))
-		!function (key) {
-			fakesome[key] = fn[key]
-		}(key)
+		var returnObject = {}
 
-fakesome.maybe = function (chanceOfReturn) {
+		typeCheck(chanceOfReturn, 'number')
 
-	var returnObject = {}
+		chanceOfReturn = chanceOfReturn || 0.5
 
-	typeCheck(chanceOfReturn, 'number')
+		for (var key in fakesome) {
+			if (fakesome.hasOwnProperty(key) && validMethod(key)) {
+				!function (key) {
 
-	chanceOfReturn = chanceOfReturn || 0.5
+					returnObject[key] = function () {
 
-	for (var key in fn) {
-		if (fn.hasOwnProperty(key)) {
-			!function (key) {
+						var args = Array.prototype.slice.call(arguments),
+							array = []
 
-				returnObject[key] = function () {
-
-					var args = Array.prototype.slice.call(arguments),
-						array = []
-
-					if (Math.random() < chanceOfReturn)
-						return null
-					else
-						return fn[key].apply(null, args)
-				}
-			}(key)
-		}
-	}
-
-	return returnObject
-}
-
-fakesome.unique = function (reset) {
-
-	var returnObject = {}
-
-	for (var key in fn) {
-		if (fn.hasOwnProperty(key)) {
-			!function (key) {
-
-				returnObject[key] = function () {
-
-					var args = Array.prototype.slice.call(arguments),
-						counter = 0,
-						value
-
-					if (reset === true || uniqueMap[key] === undefined)
-						uniqueMap[key] = []
-
-					do {
-						if (counter >= 1000)
-							throw new Error('Unique value couldn\'t be generated (efficiently). ' +
-								'Please increase the domain.')
-
-						value = fn[key].apply(null, args)
-
-						counter++
+						if (Math.random() < chanceOfReturn)
+							return null
+						else
+							return fakesome[key].apply(null, args)
 					}
-
-					while (uniqueMap[key].indexOf(value) >= 0)
-
-					uniqueMap[key].push(value)
-
-					return value
-				}
-			}(key)
+				}(key)
+			}
 		}
-	}
 
-	return returnObject
-}
+		return returnObject
+	},
 
-fakesome.array = function (number) {
+	unique: function (reset) {
 
-	var returnObject = {}
+		var returnObject = {}
 
-	number = number || 10
+		for (var key in fakesome) {
+			if (fakesome.hasOwnProperty(key) && validMethod(key)) {
+				!function (key) {
 
-	for (var key in fn) {
-		if (fn.hasOwnProperty(key)) {
-			!function (key) {
+					returnObject[key] = function () {
 
-				returnObject[key] = function () {
+						var args = Array.prototype.slice.call(arguments),
+							counter = 0,
+							value
 
-					var array = []
+						if (reset === true || uniqueMap[key] === undefined)
+							uniqueMap[key] = []
 
-					for (var i = 0; i < number; i++) {
-						array.push(fn[key].apply(null, arguments))
+						do {
+							if (counter >= 1000)
+								throw new Error('Unique value couldn\'t be generated (efficiently). ' +
+									'Please increase the domain.')
+
+							value = fakesome[key].apply(null, args)
+
+							counter++
+						}
+
+						while (uniqueMap[key].indexOf(value) >= 0)
+
+						uniqueMap[key].push(value)
+
+						return value
 					}
-
-					return array
-				}
-			}(key)
+				}(key)
+			}
 		}
-	}
 
-	return returnObject
+		return returnObject
+	},
+
+	array: function (number) {
+
+		var returnObject = {}
+
+		number = number || 10
+
+		for (var key in fakesome) {
+			if (fakesome.hasOwnProperty(key) && validMethod(key)) {
+				!function (key) {
+
+					returnObject[key] = function () {
+
+						var array = []
+
+						for (var i = 0; i < number; i++) {
+							array.push(fakesome[key].apply(null, arguments))
+						}
+
+						return array
+					}
+				}(key)
+			}
+		}
+
+		return returnObject
+	}
 }
 
-fakesome.fn = fn
+// Add methods via fn for future compatibility
+fakesome.fn = fakesome
 
 
 if (typeof module === "object" && module && typeof module.exports === "object")

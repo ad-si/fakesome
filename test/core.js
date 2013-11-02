@@ -1,4 +1,5 @@
 var assert = require("assert"),
+	request = require('request'),
 	fakesome = require('../src/fakesome'),
 	repetitions = 100000,
 	fewRepetitions = 1000,
@@ -227,6 +228,46 @@ describe('Fakesome', function () {
 				var value = fakesome.img()
 
 				assert(value.search(/^data:image\/png;base64,[a-zA-Z\d\/\+]+=*$/) === 0, value)
+			})
+		})
+
+	})
+
+
+	describe('imgURL()', function () {
+
+		it('should return a valid url', function () {
+
+			repeat('few', function () {
+
+				var value = fakesome.imgURL({
+						"width": 400,
+						"height": 250,
+						"grayscale": true
+					}),
+					pattern = /http(s)?:\/\/[\w-]+\.[\w\/]+/
+
+				assert(value.search(pattern) === 0, value)
+			})
+		})
+
+
+		it('should return a reachable url', function (done) {
+
+			var value = fakesome.imgURL({
+				"width": 400,
+				"height": 250,
+				"grayscale": true
+			})
+
+
+			request.head(value, function (error, res) {
+
+				if(error) throw error
+
+				assert(res.statusCode === 200, 'GET ' + value + ' ' + res.statusCode)
+
+				done()
 			})
 		})
 

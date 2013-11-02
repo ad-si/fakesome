@@ -78,7 +78,11 @@ describe('Fakesome', function () {
 
 			repeat('often', function () {
 
-				bool = fakesome.boolean(probability)
+				if(probability === 0.5)
+					bool = fakesome.boolean()
+				else
+					bool = fakesome.boolean(probability)
+
 				assert(bool === true || bool === false)
 
 				if (bool) trueCounter++
@@ -290,6 +294,51 @@ describe('Fakesome', function () {
 			})
 		})
 
+	})
+
+
+	describe('maybe()', function () {
+
+
+		function testMaybe(probability) {
+
+			var value,
+				repetitions = 10000,
+				numberCounter = 0,
+				nullCounter = 0,
+				diff
+
+			probability = probability || 0.5
+
+			repeat(repetitions, function () {
+
+				if(probability === 0.5)
+					value = fakesome.maybe().integer(1,9)
+				else
+					value = fakesome.maybe(probability).integer(1,9)
+
+				assert(typeof value === 'number' || value === null)
+
+				if (typeof value === 'number') numberCounter++
+				else nullCounter++
+			})
+
+			diff = Math.abs(probability - nullCounter / repetitions)
+
+			assert.equal(diff.toFixed(1), 0)
+		}
+
+		it('should return a integer or null with a 50:50 chance', function (done) {
+
+			testMaybe()
+			done()
+		})
+
+		it('should return a integer or null with a 20:80 chance', function (done) {
+
+			testMaybe(0.8)
+			done()
+		})
 	})
 
 

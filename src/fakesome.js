@@ -155,7 +155,9 @@ function getType(obj) {
 
 function typeCheck(value, expectedType) {
 
-	if (value !== undefined && getType(value) !== expectedType)
+	var actualType = getType(value)
+
+	if (value !== undefined && actualType !== expectedType)
 		throw new TypeError('The argument must be of type ' + expectedType + ' and not ' + actualType)
 }
 
@@ -703,6 +705,8 @@ fakesome.maybe = function (chanceOfReturn) {
 
 	var returnObject = {}
 
+	typeCheck(chanceOfReturn, 'number')
+
 	chanceOfReturn = chanceOfReturn || 0.5
 
 	for (var key in fn) {
@@ -715,9 +719,9 @@ fakesome.maybe = function (chanceOfReturn) {
 						array = []
 
 					if (Math.random() < chanceOfReturn)
-						return fn[key].apply(null, args)
-					else
 						return null
+					else
+						return fn[key].apply(null, args)
 				}
 			}(key)
 		}

@@ -1,4 +1,4 @@
-// fakesome 0.3.0 by Adrian Sieber (adriansieber.com)
+// fakesome 0.3.1 by Adrian Sieber (adriansieber.com)
 
 ;(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
@@ -3779,7 +3779,9 @@ function getType(obj) {
 
 function typeCheck(value, expectedType) {
 
-	if (value !== undefined && getType(value) !== expectedType)
+	var actualType = getType(value)
+
+	if (value !== undefined && actualType !== expectedType)
 		throw new TypeError('The argument must be of type ' + expectedType + ' and not ' + actualType)
 }
 
@@ -4327,6 +4329,8 @@ fakesome.maybe = function (chanceOfReturn) {
 
 	var returnObject = {}
 
+	typeCheck(chanceOfReturn, 'number')
+
 	chanceOfReturn = chanceOfReturn || 0.5
 
 	for (var key in fn) {
@@ -4339,9 +4343,9 @@ fakesome.maybe = function (chanceOfReturn) {
 						array = []
 
 					if (Math.random() < chanceOfReturn)
-						return fn[key].apply(null, args)
-					else
 						return null
+					else
+						return fn[key].apply(null, args)
 				}
 			}(key)
 		}

@@ -12,7 +12,7 @@ html
 
 body
 	font-size: 14px
-	font-family: "Arial", sans-serif
+	font-family: Arial, sans-serif
 	line-height: 1.4
 	background-color: rgb(205,92,92)
 	color: gray(80)
@@ -28,13 +28,8 @@ h1
 	color: rgb(0,0,0)
 
 h2
-	font-size: 1.6em
-	color: rgb(170, 10, 0)
-	margin-bottom: 0.5em
-	span
-		color: gray(80)
-		&:first-of-type
-			color: rgb(205,92,92)
+	font-size: 1.4em
+	margin: 1em 0 0.5em 0
 
 h3
 	font-size: 1.2em
@@ -42,10 +37,11 @@ h3
 	color: rgb(50,50,50)
 
 h1 + p
-	font-size: 1.2em
-
-h2 + p
-	margin-bottom: 2em
+	font-family: "Finger Paint", sans-serif
+	//font-size: 1.2em
+	font-style: italic
+	font-weight: 100
+	color: rgb(205,92,92)
 
 
 .ribbon
@@ -99,6 +95,7 @@ dd > code
 	border-radius: 3px
 	font-family: Consolas, 'Liberation Mono', Courier, monospace
 	font-size: 0.9em
+	white-space: nowrap
 
 
 #wrapper
@@ -166,6 +163,17 @@ article
 
 section
 	margin-bottom: 4em
+
+	h2
+		font-size: 1.6em
+		color: rgb(170, 10, 0)
+		margin-bottom: 0.5em
+		span
+			color: gray(80)
+			&:first-of-type
+				color: rgb(205,92,92)
+		& + p
+			margin-bottom: 2em
 	dl span,
 	span.returns
 			border-radius: 0.2em
@@ -233,7 +241,11 @@ section
 
 
 header
+	margin-bottom: 3em
+
+#description
 	margin-bottom: 50px
+
 
 .returns
 	margin-bottom: 2em

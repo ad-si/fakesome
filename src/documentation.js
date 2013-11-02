@@ -34,7 +34,7 @@ var documentation = [
 	},
 	{
 		name: 'boolean',
-		desc: 'return randomly true or false.',
+		desc: 'Returns randomly true or false.',
 		args: [
 			{
 				name: 'chanceOfTrue',
@@ -62,23 +62,27 @@ var documentation = [
 	},
 	{
 		name: 'integer',
-		desc: 'Returns a random integer.<br><br>For unlimited large integers (string of digits) use <code>fakesome.string()</code>',
+		desc: 'Returns a random integer.' +
+			'For unlimited large integers (string of digits) use' +
+			'<code>fakesome.string()</code>.',
 		args: [
 			{
 				name: 'minValue',
-				desc: 'Set the lower boundary of the range',
+				desc: 'Set the lower boundary of the range.',
 				type: 'Number',
 				default: '-(2^53/2)+1'
 			},
 			{
 				name: 'maxValue',
-				desc: 'Set the upper boundary of the range',
+				desc: 'Set the upper boundary of the range.',
 				type: 'Number',
 				default: '(2^53/2)-1'
 			},
 			{
 				name: 'filter',
-				desc: 'Function to filter the possible numbers. Receives the number as a parameter and returns true or false. <code>function(number)</code>',
+				desc: 'Function to filter the possible numbers. ' +
+					'Receives the number as a parameter and returns true or false. ' +
+					'<code>function(number)</code>.',
 				type: 'Function',
 				optional: true
 			}
@@ -132,21 +136,22 @@ var documentation = [
 		args: [
 			{
 				name: 'minValue',
-				desc: 'Set the lower boundary of the range',
+				desc: 'Set the lower boundary of the range.',
 				visible: true,
 				type: 'Number',
 				default: '-1e12'
 			},
 			{
 				name: 'maxValue',
-				desc: 'Set the upper boundary of the range',
+				desc: 'Set the upper boundary of the range.',
 				visible: true,
 				type: 'Number',
 				default: '1e12'
 			},
 			{
 				name: 'filter',
-				desc: 'Function to filter the possible numbers. Receives the number as a parameter and returns true or false. <code>function(number)</code>',
+				desc: 'Function to filter the possible numbers. ' +
+					'Receives the number as the first parameter and returns true or false.',
 				visible: true,
 				type: 'Function',
 				optional: true
@@ -180,19 +185,20 @@ var documentation = [
 		args: [
 			{
 				name: 'min',
-				desc: '',
+				desc: 'The minimum unicode-value of the character.',
 				type: 'Number',
 				default: 32
 			},
 			{
 				name: 'max',
-				desc: '',
+				desc: 'The maximum unicode-value of the character.',
 				type: 'Number',
 				default: 1114112
 			},
 			{
 				name: 'filter',
-				desc: '',
+				desc: 'Filters the generated values before return. ' +
+					'Receives the character as the first parameter and returns true or false.',
 				type: 'Function'
 			}
 		],
@@ -240,7 +246,7 @@ var documentation = [
 		},
 		examples: [
 			{
-				desc: 'String of 10 lower case ASCII characters.',
+				desc: 'String of 10 lower case ASCII characters',
 				visible: true,
 				args: null
 			},
@@ -256,11 +262,11 @@ var documentation = [
 	},
 	{
 		name: 'element',
-		desc: 'Returns a random element of an array',
+		desc: 'Returns a random element of an array.',
 		args: [
 			{
 				name: 'array',
-				desc: 'The array to choose the element from',
+				desc: 'The array to choose the element from.',
 				type: 'Array',
 				required: true
 			}
@@ -283,13 +289,13 @@ var documentation = [
 		args: [
 			{
 				name: 'minChars',
-				desc: 'Minimum number of characters in the word',
+				desc: 'Minimum number of characters in the word.',
 				type: 'Number',
 				default: 1
 			},
 			{
 				name: 'maxChars',
-				desc: 'Maximum number of characters in the word',
+				desc: 'Maximum number of characters in the word.',
 				type: 'Number',
 				default: 20
 			}
@@ -313,30 +319,31 @@ var documentation = [
 	},
 	{
 		name: 'words',
-		desc: 'Get the specified number of words with a maximum and minimum number of characters.',
+		desc: 'Get the specified number of words with a maximum and minimum' +
+			'number of characters.',
 		args: [
 			{
 				name: 'quantity',
-				desc: 'Number of words',
+				desc: 'Number of words.',
 				type: 'Number',
 				default: 10
 			},
 			{
 				name: 'minChars',
-				desc: 'The minimum number of characters',
+				desc: 'The minimum number of characters.',
 				type: 'Number',
 				default: 1
 			},
 			{
 				name: 'maxChars',
-				desc: 'The maximum number of characters',
+				desc: 'The maximum number of characters.',
 				type: 'Number',
 				default: 20
 			}
 		],
 		return: {
 			type: 'String',
-			desc: 'Space separated string of the words'
+			desc: 'Space separated string of the words.'
 		},
 		examples: [
 			{
@@ -370,7 +377,7 @@ var documentation = [
 		],
 		return: {
 			type: 'String',
-			desc: 'The text'
+			desc: 'The text.'
 		},
 		examples: [
 			{
@@ -391,20 +398,20 @@ var documentation = [
 		args: [
 			{
 				name: 'min',
-				desc: 'Minimum number of words in the sentence',
+				desc: 'Minimum number of words in the sentence.',
 				type: 'Number',
 				default: 5
 			},
 			{
 				name: 'max',
-				desc: 'Maximum number of words in the sentence',
+				desc: 'Maximum number of words in the sentence.',
 				type: 'Number',
 				default: 25
 			}
 		],
 		return: {
 			type: 'String',
-			desc: 'The sentence'
+			desc: 'The sentence.'
 		},
 		examples: [
 			{
@@ -436,13 +443,13 @@ var documentation = [
 			},
 			{
 				name: 'min',
-				desc: 'Minimum number of words per sentence',
+				desc: 'Minimum number of words per sentence.',
 				type: 'Number',
 				default: 5
 			},
 			{
 				name: 'max',
-				desc: 'Maximum number of words per sentence',
+				desc: 'Maximum number of words per sentence.',
 				type: 'Number',
 				default: 25
 			}
@@ -463,7 +470,7 @@ var documentation = [
 				args: [4]
 			},
 			{
-				desc: 'Get 10 sentences with 1 to 5 words each.',
+				desc: 'Get 10 sentences with 1 to 5 words each',
 				visible: true,
 				args: [5, 1, 5]
 			}
@@ -542,7 +549,8 @@ var documentation = [
 						name: 'tag',
 						type: 'boolean',
 						default: false,
-						desc: '<code>true</code>: Returns an image tag containing a base64 coded image.<br><code>false</code>: Returns just the base64 string.'
+						desc: '<code>true</code>: Returns an image tag containing a base64 coded image.' +
+							'<br><code>false</code>: Returns just the base64 string.'
 					},
 					{
 						name: 'width',
@@ -664,7 +672,8 @@ var documentation = [
 			{
 				name: 'configObject',
 				type: 'Object',
-				desc: 'Configure different parameters to narrow down the set of possible images.',
+				desc: 'Configure different parameters to narrow down ' +
+					'the set of possible images.',
 				properties: [
 					{
 						name: 'width',
@@ -705,10 +714,11 @@ var documentation = [
 						name: 'site',
 						type: 'String',
 						default: 'lorempixel.com',
-						desc: 'Select to site to be used for loading the images. You can choose between following sites:' +
+						desc: 'Select the site to be used for loading the images. ' +
+							'You can choose between following sites: ' +
 							'<a href="http://lorempixel.com">lorempixel.com</a>, ' +
 							'<a href="http://placehold.it">placehold.it</a>, ' +
-							'<a href="http://placekitten.com">placekitten.com</a>, ' +
+							'<a href="http://placekitten.com">placekitten.com</a>  and ' +
 							'<a href="http://flickholdr.com">flickholdr.com</a>'
 					},
 					{
@@ -762,26 +772,26 @@ var documentation = [
 		args: [
 			{
 				name: 'min',
-				desc: 'Set the darkest (and most transparent) possible color',
+				desc: 'Set the darkest (and most transparent) possible color.',
 				type: 'Number',
 				default: 'rgb(0, 0, 0)'
 			},
 			{
 				name: 'max',
-				desc: 'Set the brightest (and least transparent) possible color',
+				desc: 'Set the brightest (and least transparent) possible color.',
 				type: 'Number',
 				default: 'rgb(255, 255, 255)'
 			},
 			{
 				name: 'type',
-				desc: 'Notation type of the returned color',
+				desc: 'Notation type of the returned color.',
 				type: 'String',
 				default: 'rgb'
 			}
 		],
 		return: {
 			type: 'String',
-			desc: 'The color'
+			desc: 'The color.'
 		},
 		examples: [
 			{
@@ -807,7 +817,8 @@ var documentation = [
 	{
 		name: 'object',
 		desc: 'Create a javascript Object with custom key-value pairs. ' +
-			'The values can either be primitives or be generated with other fakesome methods.',
+			'The values can either be primitives or be generated ' +
+			'with other fakesome methods.',
 		args: [
 			{
 				name: 'schema',
@@ -840,7 +851,8 @@ var documentation = [
 		name: 'array',
 		desc: 'This method enables you to return arrays of faked data. ' +
 			'Simply chain one of the other fakesome methods after the array method ' +
-			'to get an array of the method\'s values. E.g. <code>fakesome.array(5).boolean()</code> ' +
+			'to get an array of the method\'s values. E.g. ' +
+			'<code>fakesome.array(5).boolean()</code> ' +
 			'will return an array of 5 random boolean values.',
 		args: [
 			{
@@ -851,7 +863,7 @@ var documentation = [
 			}
 		],
 		return: {
-			desc: 'Array of elements',
+			desc: 'Array of elements.',
 			type: 'Object',
 			properties: [
 				{
@@ -885,7 +897,7 @@ var documentation = [
 			}
 		],
 		return: {
-			desc: 'All registered methods',
+			desc: 'All registered methods.',
 			type: 'Object'
 		}
 	},
@@ -903,7 +915,7 @@ var documentation = [
 			}
 		],
 		return: {
-			desc: 'All registered methods',
+			desc: 'All registered methods.',
 			type: 'Object'
 		}
 	},

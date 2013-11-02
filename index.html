@@ -34,7 +34,7 @@
                     Tweet
                 </a>
             </div>
-            <p>Version 0.3.2 by <a href="http://adriansieber.com">Adrian Sieber</a></p>
+            <p>Version 0.3.3 by <a href="http://adriansieber.com">Adrian Sieber</a></p>
         </nav>
     </aside><article>
 
@@ -43,6 +43,24 @@
 
             <p>For all the fakesome people out there!</p>
         </header>
+
+        <div id="description">
+            <p>Fakesome lets you easily create massive amounts of fake data.
+                Use it to populate databases, build API prototypes or for just any other
+                job where you need random but structured data.
+            </p>
+
+            <h2 id="getting-started">Getting Started</h2>
+
+            <p>Install fakesome with npm:</p>
+            <pre><code>$ npm install fakesome</code></pre>
+
+            <p>Require it in your scripts:</p>
+            <pre><code>var fakesome = require('fakesome')</code></pre>
+
+            <p>Now you can simply call the methods to generate data:</p>
+            <pre><code>var randomInteger = fakesome.integer(0,9)</code></pre>
+        </div>
 
         <div id=documentation></div>
     </article>
@@ -56,6 +74,7 @@
 <script src="modules/example.js"></script>
 <script src="js/index.js"></script>
 <script>
+    // Twitter share button
     !function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
         if (!d.getElementById(id)) {
@@ -67,5 +86,31 @@
     }(document, 'script', 'twitter-wjs');
     document.querySelector('.twitter-share-button').style.display = 'block !important'
 </script>
+<script type="text/javascript">
+    // Piwik
+    var _paq = _paq || []
+    _paq.push(["trackPageView"])
+    _paq.push(["enableLinkTracking"])
+
+    !function () {
+
+        var u = (("https:" == document.location.protocol) ? "https" : "http") +
+                "://piwik.adriansieber.com/"
+
+        _paq.push(["setTrackerUrl", u + "piwik.php"])
+        _paq.push(["setSiteId", "23"])
+
+        var d = document,
+                g = d.createElement("script"),
+                s = d.getElementsByTagName("script")[0]
+
+        g.type = "text/javascript"
+        g.defer = true;
+        g.async = true;
+        g.src = u + "piwik.js";
+        s.parentNode.insertBefore(g, s)
+    }()
+</script>
+
 </body>
 </html>

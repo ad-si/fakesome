@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Fakesome</title>
     <link href='http://fonts.googleapis.com/css?family=Finger+Paint' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/tomorrow-night.css">
+    <link rel="stylesheet" href="css/tomorrow-night-eighties.css">
     <link rel="stylesheet" href="css/screen.css"/>
     <link rel="shortcut icon" href="img/favicon.png">
 </head>
@@ -52,14 +52,18 @@
 
             <h2 id="getting-started">Getting Started</h2>
 
-            <p>Install fakesome with npm:</p>
+            <p>On the server you can install fakesome with npm:</p>
             <pre><code>$ npm install fakesome</code></pre>
 
-            <p>Require it in your scripts:</p>
+            <p>Then require it in your scripts like this:</p>
             <pre><code>var fakesome = require('fakesome')</code></pre>
 
+            <p>In the browser just load the bundled javascript file
+                (<a href="http://github.com/adius/fakesome">get it from github</a>):</p>
+            <pre><code class=html><script src=fakesome.js></script></code></pre>
+
             <p>Now you can simply call the methods to generate data:</p>
-            <pre><code>var randomInteger = fakesome.integer(0,9)</code></pre>
+            <pre><code>var randomInteger = fakesome.integer(0, 9)</code></pre>
         </div>
 
         <div id=documentation></div>
@@ -68,27 +72,35 @@
 
 
 <script src="js/shaven.min.js"></script>
-<script src="js/highlight.min.js"></script>
+<script src="js/highlight.pack.js"></script>
 <script src="src/documentation.js"></script>
 <script src="fakesome.js"></script>
 <script src="modules/example.js"></script>
 <script src="js/index.js"></script>
+
 <script>
     // Twitter share button
     !function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+
+        var fjs = d.getElementsByTagName(s)[0],
+                p = /^http:/.test(d.location) ? 'http' : 'https',
+                js
+
         if (!d.getElementById(id)) {
-            js = d.createElement(s);
-            js.id = id;
-            js.src = p + '://platform.twitter.com/widgets.js';
-            fjs.parentNode.insertBefore(js, fjs);
+            js = d.createElement(s)
+            js.id = id
+            js.src = p + '://platform.twitter.com/widgets.js'
+            fjs.parentNode.insertBefore(js, fjs)
         }
-    }(document, 'script', 'twitter-wjs');
+    }(document, 'script', 'twitter-wjs')
+
     document.querySelector('.twitter-share-button').style.display = 'block !important'
 </script>
+
 <script type="text/javascript">
     // Piwik
     var _paq = _paq || []
+
     _paq.push(["trackPageView"])
     _paq.push(["enableLinkTracking"])
 

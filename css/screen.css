@@ -6,6 +6,7 @@ h1{font-size:3em;font-family:'Finger Paint',cursive;color:#000}
 h2{font-size:1.4em;margin:1em 0 .5em 0}
 h3{font-size:1.2em;margin-bottom:.4em;color:#323232}
 h1 + p{font-family:"Finger Paint",sans-serif;font-style:italic;font-weight:100;color:#cd5c5c}
+a{text-decoration:none;color:#4682b4}
 .ribbon{position:absolute;top:0;right:0}
 table{width:100%;border-collapse:collapse;margin-bottom:1em;}
 table caption{text-align:left;font-family:sans-serif;font-size:1.2em;margin-bottom:.4em;font-weight:900;color:#323232}
@@ -14,7 +15,7 @@ table tr:nth-of-type(2n + 1){background-color:rgba(0,0,0,0)}
 table th{background-color:rgba(0,0,0,0.05);font-family:sans-serif;font-size:.9em;}
 table th:empty{display:none}
 table th,table td{padding:.2em .4em;border:1px solid #b4b4b4}
-table td.code{padding:0;background-color:#323232}
+table td.code{padding:0;background-color:#2d2d2d}
 table pre{margin:0}
 pre{font-size:.8em;margin:1em 0}
 p > code,dd > code{margin:0 .1em;padding:.1em .5em;white-space:wrap;border:1px solid #c8c8c8;background-color:#f0f0f0;-webkit-border-radius:3px;border-radius:3px;font-family:Consolas,'Liberation Mono',Courier,monospace;font-size:.9em;white-space:nowrap}
@@ -22,7 +23,7 @@ p > code,dd > code{margin:0 .1em;padding:.1em .5em;white-space:wrap;border:1px s
 aside{display:inline-block;vertical-align:top;width:160px;height:100%;overflow-y:auto}
 nav{position:fixed;overflow-y:auto;height:100%;width:160px;padding:1em 30px;background-color:rgba(0,0,0,0.1);}
 nav ul{list-style-type:none;margin-bottom:1em;}
-nav ul a{text-decoration:none;color:#323232;font-size:.9em;font-family:Arial,sans-serif}
+nav ul a{text-decoration:none;color:#323232;font-size:.9em}
 nav > p{display:block;color:#8c8c8c;font-size:.8em;}
 nav > p a{text-decoration:none;color:#4682b4}
 nav hr{height:1px;width:120px;position:relative;left:-10px;background-color:rgba(0,0,0,0.1);margin-bottom:1em}

@@ -129,9 +129,11 @@
 
 	documentation.forEach(function (method) {
 
-		var exampleIsVisibile = method.examples && method.examples.some(function(example){
+		var exampleIsVisible = method.examples && method.examples.some(function(example){
 			return example.visible
 		})
+
+		console.log(fakesome)
 
 		if (!fakesome[method.name])
 			return
@@ -190,7 +192,7 @@
 			})
 
 
-		if (exampleIsVisibile)
+		if (exampleIsVisible)
 
 			method.examples.forEach(function (example) {
 

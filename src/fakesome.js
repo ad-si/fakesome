@@ -71,6 +71,20 @@ function randomFloat(min, max, decimalPlaces) {
 		return Math.random() * (max - min) + min
 }
 
+function randomDatetime(startDate, endDate) {
+
+	var randDate
+
+	startDate = startDate || '0'
+	endDate = endDate || new Date()
+
+	startDate = new Date(startDate)
+	endDate = new Date(endDate)
+
+
+	return new Date(startDate.getTime() + (Math.random() * (endDate - startDate)))
+}
+
 function isInt(number) {
 	return Number(number) % 1 === 0
 }
@@ -192,6 +206,16 @@ function validMethod(method) {
 }
 
 
+/*
+ config: function (object) {
+
+ var defaultValues = {
+ outputFormat: "JSON"
+ }
+
+ },
+ */
+
 fakesome = {
 
 	boolean: function (chanceOfTrue) {
@@ -219,23 +243,16 @@ fakesome = {
 		return String.fromCharCode(charCode)
 	},
 
-	/*
-	 config: function (object) {
-
-	 var defaultValues = {
-	 outputFormat: "JSON"
-	 }
-
-	 },
-	 */
-
 	color: randomColor,
 
-	/*
-	 date: function (startDate, endDate) {
+	date: function (startDate, endDate) {
 
-	 },
-	 */
+		var randDate = randomDatetime(startDate, endDate)
+
+		return new Date(randDate.toJSON().substr(0, 10))
+	},
+
+	datetime: randomDatetime,
 
 	element: randomElement,
 

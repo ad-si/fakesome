@@ -180,6 +180,76 @@ var documentation = [
 		]
 	},
 	{
+		name: 'date',
+		desc: 'Returns a random Date.',
+		args: [
+			{
+				name: 'min',
+				desc: 'Set the lower boundary of the date range.',
+				visible: true,
+				type: 'String',
+				default: '1970-01-01'
+			},
+			{
+				name: 'max',
+				desc: 'Set the upper boundary of the date range.',
+				visible: true,
+				type: 'String',
+				default: 'today'
+			}
+		],
+		return: {
+			type: 'Date',
+			desc: 'The randomly generated date.'
+		},
+		examples: [
+			{
+				desc: 'Random date between 1970-01-01 and today',
+				visible: true
+			},
+			{
+				desc: 'Random date between 2000-06-01 and 2001-01-01',
+				visible: true,
+				args: ['2000-06-01', '2001-01-01']
+			},
+		]
+	},
+	{
+		name: 'datetime',
+		desc: 'Returns a random Datetime.',
+		args: [
+			{
+				name: 'min',
+				desc: 'Set the lower boundary of the datetime range.',
+				visible: true,
+				type: 'String',
+				default: '1970-01-01'
+			},
+			{
+				name: 'max',
+				desc: 'Set the upper boundary of the datetime range.',
+				visible: true,
+				type: 'String',
+				default: 'today'
+			}
+		],
+		return: {
+			type: 'Date',
+			desc: 'The randomly generated datetime.'
+		},
+		examples: [
+			{
+				desc: 'Random datetime between 1970-01-01 and today',
+				visible: true
+			},
+			{
+				desc: 'Random datetime between 2000-06-01 and 2001-01-01',
+				visible: true,
+				args: ['2000-06-01', '2001-01-01']
+			},
+		]
+	},
+	{
 		name: 'character',
 		desc: '',
 		args: [

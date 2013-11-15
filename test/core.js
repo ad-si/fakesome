@@ -78,7 +78,7 @@ describe('Fakesome', function () {
 
 			repeat('often', function () {
 
-				if(probability === 0.5)
+				if (probability === 0.5)
 					bool = fakesome.boolean()
 				else
 					bool = fakesome.boolean(probability)
@@ -169,6 +169,61 @@ describe('Fakesome', function () {
 	})
 
 
+	describe('date()', function () {
+
+		it('should return a random date between 1970-01-01 and today', function () {
+
+			repeat('few', function () {
+
+				var date = fakesome.date()
+
+				assert(date >= new Date('1970-01-01') && date <= new Date())
+				assert(date.toJSON().search(/^[-TZ:\.\d]{24}$/) == 0, date.toJSON())
+			})
+		})
+
+
+		it('should return a random date between 2000-07-14 and 2010-12-21', function () {
+
+			repeat('few', function () {
+
+				var date = fakesome.date('2000-07-14', '2010-12-21')
+
+				assert(date >= new Date('2000-07-14') && date <= new Date('2010-12-21'))
+			})
+		})
+	})
+
+
+
+	describe('datetime()', function () {
+
+		it('should return a random datetime between 1970-01-01 and today', function () {
+
+			repeat('few', function () {
+
+				var date = fakesome.date()
+
+				assert(date >= new Date('1970-01-01') && date <= new Date())
+				assert(date.toJSON().search(/^[-TZ:\.\d]{24}$/) == 0, date.toJSON())
+			})
+		})
+
+
+		it('should return a random datetime between 2000-07-14 and 2010-12-21', function () {
+
+			repeat('few', function () {
+
+				var date = fakesome.date('2000-07-14', '2010-12-21')
+
+				assert(date >= new Date('2000-07-14') && date <= new Date('2010-12-21'))
+			})
+		})
+	})
+
+
+
+
 	describe('element()', function () {
 
 		it('should return a random array-element', function () {
@@ -221,7 +276,7 @@ describe('Fakesome', function () {
 
 		var word = 'supercalifragilisticexpialidocious'
 
-		fakesome.fn.longWord = function(){
+		fakesome.fn.longWord = function () {
 			return word
 		}
 
@@ -334,10 +389,10 @@ describe('Fakesome', function () {
 
 			repeat(repetitions, function () {
 
-				if(probability === 0.5)
-					value = fakesome.maybe().integer(1,9)
+				if (probability === 0.5)
+					value = fakesome.maybe().integer(1, 9)
 				else
-					value = fakesome.maybe(probability).integer(1,9)
+					value = fakesome.maybe(probability).integer(1, 9)
 
 				assert(typeof value === 'number' || value === null)
 

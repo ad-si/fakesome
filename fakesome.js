@@ -1,4 +1,4 @@
-// fakesome 0.3.3 by Adrian Sieber (adriansieber.com)
+// fakesome 0.4.0 by Adrian Sieber (adriansieber.com)
 
 ;(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
@@ -3695,6 +3695,20 @@ function randomFloat(min, max, decimalPlaces) {
 		return Math.random() * (max - min) + min
 }
 
+function randomDatetime(startDate, endDate) {
+
+	var randDate
+
+	startDate = startDate || '0'
+	endDate = endDate || new Date()
+
+	startDate = new Date(startDate)
+	endDate = new Date(endDate)
+
+
+	return new Date(startDate.getTime() + (Math.random() * (endDate - startDate)))
+}
+
 function isInt(number) {
 	return Number(number) % 1 === 0
 }
@@ -3816,6 +3830,16 @@ function validMethod(method) {
 }
 
 
+/*
+ config: function (object) {
+
+ var defaultValues = {
+ outputFormat: "JSON"
+ }
+
+ },
+ */
+
 fakesome = {
 
 	boolean: function (chanceOfTrue) {
@@ -3843,23 +3867,16 @@ fakesome = {
 		return String.fromCharCode(charCode)
 	},
 
-	/*
-	 config: function (object) {
-
-	 var defaultValues = {
-	 outputFormat: "JSON"
-	 }
-
-	 },
-	 */
-
 	color: randomColor,
 
-	/*
-	 date: function (startDate, endDate) {
+	date: function (startDate, endDate) {
 
-	 },
-	 */
+		var randDate = randomDatetime(startDate, endDate)
+
+		return new Date(randDate.toJSON().substr(0, 10))
+	},
+
+	datetime: randomDatetime,
 
 	element: randomElement,
 

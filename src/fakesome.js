@@ -562,6 +562,9 @@ fakesome = {
 								console.log('Couldn\'t evaluate fakesome.' + value)
 							}
 						}
+						else if(typeof value === 'function'){
+							object[key] = value()
+						}
 						else if (getType(value) === "object")
 							evaluateObject(value)
 					}()

@@ -195,7 +195,6 @@ describe('Fakesome', function () {
 	})
 
 
-
 	describe('datetime()', function () {
 
 		it('should return a random datetime between 1970-01-01 and today', function () {
@@ -220,8 +219,6 @@ describe('Fakesome', function () {
 			})
 		})
 	})
-
-
 
 
 	describe('element()', function () {
@@ -459,6 +456,30 @@ describe('Fakesome', function () {
 				assert(value.father.name.search(/^\w+$/) === 0, value.father.name + ' is not a valid name')
 				assert(value.father.age >= 1 && value.father.age <= 100, value.father.age + ' is not a valid age')
 			})
+		})
+
+
+		it('should work with callback functions', function () {
+
+			var value = fakesome.object({
+				name: 'John',
+				lastName: fakesome.word,
+				age: function () {
+					return 100
+				},
+				size: function(){
+					return fakesome.float(1.5,1.9)
+				}
+			})
+
+			assert(value.name)
+			assert(value.lastName)
+			assert(value.age)
+			assert(value.size)
+
+			assert(value.lastName.search(/^\w+$/) == 0, value.lastName)
+			assert.equal(value.age, 100, value.age)
+			assert(value.size >= 1.5 && value.size <= 1.9, value.size)
 		})
 	})
 

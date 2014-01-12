@@ -183,6 +183,23 @@ describe('Fakesome', function () {
 		})
 
 
+		it('should generate dates before 2000-01-01 as well', function () {
+
+			var dates  = [],
+				hasDateBefore2000
+
+			repeat('few', function () {
+				dates.push(fakesome.date())
+			})
+
+			hasDateBefore2000 = dates.some(function(date){
+				return date >= new Date('1970-01-01') && date <= new Date('2000-01-01')
+			})
+
+			assert(hasDateBefore2000)
+		})
+
+
 		it('should return a random date between 2000-07-14 and 2010-12-21', function () {
 
 			repeat('few', function () {
@@ -192,6 +209,9 @@ describe('Fakesome', function () {
 				assert(date >= new Date('2000-07-14') && date <= new Date('2010-12-21'))
 			})
 		})
+
+
+
 	})
 
 

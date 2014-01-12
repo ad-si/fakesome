@@ -75,12 +75,11 @@ function randomDatetime(startDate, endDate) {
 
 	var randDate
 
-	startDate = startDate || '0'
+	startDate = startDate || 0
 	endDate = endDate || new Date()
 
 	startDate = new Date(startDate)
 	endDate = new Date(endDate)
-
 
 	return new Date(startDate.getTime() + (Math.random() * (endDate - startDate)))
 }

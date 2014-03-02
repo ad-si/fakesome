@@ -18,7 +18,7 @@ table th,table td{padding:.2em .4em;border:1px solid #b4b4b4}
 table td.code{padding:0;background-color:#2d2d2d}
 table pre{margin:0}
 pre{font-size:.8em;margin:1em 0}
-p > code,dd > code{margin:0 .1em;padding:.1em .5em;white-space:wrap;border:1px solid #c8c8c8;background-color:#f0f0f0;-webkit-border-radius:3px;border-radius:3px;font-family:Consolas,'Liberation Mono',Courier,monospace;font-size:.9em;white-space:nowrap}
+p > code,dd > code{margin:0 .1em;padding:.1em .5em;border:1px solid #c8c8c8;background-color:#f0f0f0;-webkit-border-radius:3px;border-radius:3px;font-family:Consolas,'Liberation Mono',Courier,monospace;font-size:.9em;white-space:nowrap}
 #wrapper{width:960px;margin:0 auto;background-color:#e6e6e6}
 aside{display:inline-block;vertical-align:top;width:160px;height:100%;overflow-y:auto}
 nav{position:fixed;overflow-y:auto;height:100%;width:160px;padding:1em 30px;background-color:rgba(0,0,0,0.1);}

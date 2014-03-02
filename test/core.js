@@ -3,6 +3,7 @@ var assert = require("assert"),
 	fakesome = require('../src/fakesome'),
 	repetitions = 100000,
 	fewRepetitions = 1000,
+	imgIsAvailable,
 	i
 
 function repeat(number, func) {
@@ -185,14 +186,14 @@ describe('Fakesome', function () {
 
 		it('should generate dates before 2000-01-01 as well', function () {
 
-			var dates  = [],
+			var dates = [],
 				hasDateBefore2000
 
 			repeat('few', function () {
 				dates.push(fakesome.date())
 			})
 
-			hasDateBefore2000 = dates.some(function(date){
+			hasDateBefore2000 = dates.some(function (date) {
 				return date >= new Date('1970-01-01') && date <= new Date('2000-01-01')
 			})
 
@@ -209,7 +210,6 @@ describe('Fakesome', function () {
 				assert(date >= new Date('2000-07-14') && date <= new Date('2010-12-21'))
 			})
 		})
-
 
 
 	})
@@ -317,12 +317,23 @@ describe('Fakesome', function () {
 
 			repeat(10, function () {
 
-				var value = fakesome.img()
+				if (fakesome.img) {
 
-				assert(value.search(/^data:image\/png;base64,[a-zA-Z\d\/\+]+=*$/) === 0, value)
+					var value = fakesome.img()
+
+					assert(value.search(/^data:image\/png;base64,[a-zA-Z\d\/\+]+=*$/) === 0, value)
+				}
+				else
+					imgIsAvailable = false
 			})
-		})
 
+			console.warn(
+				'\n',
+				'\033[33m',
+				'fakesome.img() will not be available.',
+				'\033[0m'
+			)
+		})
 	})
 
 
@@ -487,8 +498,8 @@ describe('Fakesome', function () {
 				age: function () {
 					return 100
 				},
-				size: function(){
-					return fakesome.float(1.5,1.9)
+				size: function () {
+					return fakesome.float(1.5, 1.9)
 				}
 			})
 

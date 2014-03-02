@@ -3625,7 +3625,24 @@ function hexDouble(num) {
 "use strict";
 
 var color = require('color'),
-	clone = require('clone')
+	clone = require('clone'),
+	canvasIsAvailable = true,
+	Canvas,
+	canvas
+
+
+if (typeof window === "object" && typeof window.document === "object")
+	canvas = document.createElement('canvas')
+
+else {
+	try {
+		Canvas = require('canvas')
+		canvas = new Canvas()
+	}
+	catch (error) {
+		canvasIsAvailable = false
+	}
+}
 
 
 var tld = ['com', 'de', 'org', 'net'],
@@ -3899,175 +3916,6 @@ fakesome = {
 		return randomFloat(minValue, maxValue)
 	},
 
-	img: function (conf) {
-
-		var Canvas,
-			canvas,
-			ctx,
-			defaults = {
-				tag: false,
-				width: 100,
-				size: false,
-				height: 100,
-				elements: 100,
-				bgColor: 'white',
-				elementSize: 50,
-				minColor: 'rgba(0,0,0,0)',
-				maxColor: 'rgba(255,255,255,1)'
-			},
-			imgData,
-			data,
-			a,
-			i
-
-		if (typeof window === "object" && typeof window.document === "object")
-			canvas = document.createElement('canvas')
-
-		else {
-			Canvas = require('canvas')
-			canvas = new Canvas()
-		}
-
-		ctx = canvas.getContext('2d')
-
-		conf = conf || {}
-
-		conf = mergeObjects(conf, defaults)
-
-		canvas.width = conf.width
-		canvas.height = conf.height
-
-		ctx.fillStyle = conf.bgColor
-		ctx.fillRect(0, 0, conf.width, conf.height)
-
-		for (a = 0; a < conf.elements; a++) {
-
-			ctx.fillStyle = randomColor(conf.minColor, conf.maxColor)
-			ctx.fillRect(
-				randomInt(-conf.elementSize, conf.width),
-				randomInt(-conf.elementSize, conf.height),
-				randomInt(0, conf.elementSize),
-				randomInt(0, conf.elementSize)
-			)
-		}
-
-		function grayscale(imageData) {
-
-			var d = imageData.data, r, g, b, v
-
-			for (i = 0; i < d.length; i += 4) {
-
-				r = d[i]
-				g = d[i + 1]
-				b = d[i + 2]
-
-				d[i] = d[i + 1] = d[i + 2] = (0.2126 * r) + (0.7152 * g) + (0.0722 * b)
-			}
-
-			return imageData
-		}
-
-		function blackWhite(imageData) {
-
-			var d = imageData.data,
-				threshold = 0.7,
-				max = 0,
-				min = 255,
-				values = [],
-				r, g, b, v
-
-			for (i = 0; i < d.length; i += 4) {
-
-				v = (0.2126 * d[i]) + (0.7152 * d[i + 1]) + (0.0722 * d[i + 2])
-
-				if (v > max) max = v
-				if (v < min) min = v
-
-				values[i] = v
-			}
-
-			threshold = ((min + max) / 2)
-
-			for (i = 0; i < d.length; i += 4) {
-
-				d[i] = d[i + 1] = d[i + 2] = (values[i] >= threshold) ? 255 : 0
-			}
-
-			return imageData
-		}
-
-		// TODO: Check background color (histogram) and choose text color accordingly
-
-		function setText() {
-
-			var textString = conf.text,
-				fontSize = Math.min((conf.width / textString.length) * 1.4, conf.height * 0.3),
-				textWidth,
-				x,
-				y
-
-			ctx.fillStyle = 'rgba(0,0,0,0.7)'
-			ctx.font = fontSize + "px Arial"
-
-			textWidth = ctx.measureText(textString).width
-
-			x = (conf.width - textWidth) / 2
-			if (conf.size)
-				y = conf.height / 2 + fontSize / 2
-			else
-				y = conf.height / 2
-
-			ctx.textBaseline = "middle"
-			ctx.fillText(textString, x, y)
-		}
-
-		function setSize() {
-
-			var string = conf.width + '×' + conf.height,
-				fontSize = Math.min((conf.width / string.length), conf.height * 0.3),
-				textWidth,
-				x,
-				y
-
-			ctx.fillStyle = 'rgba(0,0,0,0.7)'
-			ctx.font = 'bold ' + fontSize + "px Arial"
-
-			textWidth = ctx.measureText(string).width
-
-			x = (conf.width - textWidth) / 2
-
-			if (conf.text)
-				y = conf.height / 2 - fontSize / 2
-			else
-				y = conf.height / 2
-
-			ctx.textBaseline = "middle"
-			ctx.fillText(string, x, y)
-		}
-
-
-		imgData = ctx.getImageData(0, 0, conf.width, conf.height)
-
-		if (conf.filter) {
-
-			if (conf.filter === 'grayscale')
-				ctx.putImageData(grayscale(imgData), 0, 0)
-
-			else if (conf.filter === 'bw')
-				ctx.putImageData(blackWhite(imgData), 0, 0)
-		}
-
-		if (conf.text) setText()
-		if (conf.size) setSize()
-
-		data = canvas.toDataURL()
-
-		if (conf.tag)
-			return '<img src="' + data + '" alt="Placeholder Image" title="Placeholder Image">'
-		else
-			return data
-	},
-
 	imgURL: function (conf) {
 
 		var defaults = {
@@ -4185,7 +4033,7 @@ fakesome = {
 								console.log('Couldn\'t evaluate fakesome.' + value)
 							}
 						}
-						else if(typeof value === 'function'){
+						else if (typeof value === 'function') {
 							object[key] = value()
 						}
 						else if (getType(value) === "object")
@@ -4436,6 +4284,167 @@ fakesome = {
 		return returnObject
 	}
 }
+
+if (canvasIsAvailable)
+	fakesome.img = function (conf) {
+
+		var defaults = {
+				tag: false,
+				width: 100,
+				size: false,
+				height: 100,
+				elements: 100,
+				bgColor: 'white',
+				elementSize: 50,
+				minColor: 'rgba(0,0,0,0)',
+				maxColor: 'rgba(255,255,255,1)'
+			},
+			ctx,
+			imgData,
+			data,
+			a,
+			i
+
+		ctx = canvas.getContext('2d')
+
+		conf = conf || {}
+
+		conf = mergeObjects(conf, defaults)
+
+		canvas.width = conf.width
+		canvas.height = conf.height
+
+		ctx.fillStyle = conf.bgColor
+		ctx.fillRect(0, 0, conf.width, conf.height)
+
+		for (a = 0; a < conf.elements; a++) {
+
+			ctx.fillStyle = randomColor(conf.minColor, conf.maxColor)
+			ctx.fillRect(
+				randomInt(-conf.elementSize, conf.width),
+				randomInt(-conf.elementSize, conf.height),
+				randomInt(0, conf.elementSize),
+				randomInt(0, conf.elementSize)
+			)
+		}
+
+		function grayscale(imageData) {
+
+			var d = imageData.data, r, g, b, v
+
+			for (i = 0; i < d.length; i += 4) {
+
+				r = d[i]
+				g = d[i + 1]
+				b = d[i + 2]
+
+				d[i] = d[i + 1] = d[i + 2] = (0.2126 * r) + (0.7152 * g) + (0.0722 * b)
+			}
+
+			return imageData
+		}
+
+		function blackWhite(imageData) {
+
+			var d = imageData.data,
+				threshold = 0.7,
+				max = 0,
+				min = 255,
+				values = [],
+				r, g, b, v
+
+			for (i = 0; i < d.length; i += 4) {
+
+				v = (0.2126 * d[i]) + (0.7152 * d[i + 1]) + (0.0722 * d[i + 2])
+
+				if (v > max) max = v
+				if (v < min) min = v
+
+				values[i] = v
+			}
+
+			threshold = ((min + max) / 2)
+
+			for (i = 0; i < d.length; i += 4) {
+
+				d[i] = d[i + 1] = d[i + 2] = (values[i] >= threshold) ? 255 : 0
+			}
+
+			return imageData
+		}
+
+		// TODO: Check background color (histogram) and choose text color accordingly
+
+		function setText() {
+
+			var textString = conf.text,
+				fontSize = Math.min((conf.width / textString.length) * 1.4, conf.height * 0.3),
+				textWidth,
+				x,
+				y
+
+			ctx.fillStyle = 'rgba(0,0,0,0.7)'
+			ctx.font = fontSize + "px Arial"
+
+			textWidth = ctx.measureText(textString).width
+
+			x = (conf.width - textWidth) / 2
+			if (conf.size)
+				y = conf.height / 2 + fontSize / 2
+			else
+				y = conf.height / 2
+
+			ctx.textBaseline = "middle"
+			ctx.fillText(textString, x, y)
+		}
+
+		function setSize() {
+
+			var string = conf.width + '×' + conf.height,
+				fontSize = Math.min((conf.width / string.length), conf.height * 0.3),
+				textWidth,
+				x,
+				y
+
+			ctx.fillStyle = 'rgba(0,0,0,0.7)'
+			ctx.font = 'bold ' + fontSize + "px Arial"
+
+			textWidth = ctx.measureText(string).width
+
+			x = (conf.width - textWidth) / 2
+
+			if (conf.text)
+				y = conf.height / 2 - fontSize / 2
+			else
+				y = conf.height / 2
+
+			ctx.textBaseline = "middle"
+			ctx.fillText(string, x, y)
+		}
+
+
+		imgData = ctx.getImageData(0, 0, conf.width, conf.height)
+
+		if (conf.filter) {
+
+			if (conf.filter === 'grayscale')
+				ctx.putImageData(grayscale(imgData), 0, 0)
+
+			else if (conf.filter === 'bw')
+				ctx.putImageData(blackWhite(imgData), 0, 0)
+		}
+
+		if (conf.text) setText()
+		if (conf.size) setSize()
+
+		data = canvas.toDataURL()
+
+		if (conf.tag)
+			return '<img src="' + data + '" alt="Placeholder Image" title="Placeholder Image">'
+		else
+			return data
+	}
+
 
 // Add methods via fn for future compatibility
 fakesome.fn = fakesome

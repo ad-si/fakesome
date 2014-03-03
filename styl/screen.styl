@@ -76,11 +76,10 @@ table
 			display: none
 	th,
 	td
-		padding: 0.2em 0.4em
-		border: 1px solid rgb(180,180,180)
-	td.code
-		padding: 0
-		background-color: rgb(45,45,45)
+		padding 0.2em 0.4em
+		border 1px solid rgb(180,180,180)
+		&.code
+			background rgb(45, 45, 45)
 	pre
 		margin: 0
 
@@ -98,6 +97,7 @@ dd > code
 	font-family: Consolas, 'Liberation Mono', Courier, monospace
 	font-size: 0.9em
 	white-space: nowrap
+
 
 
 #wrapper
@@ -246,7 +246,8 @@ header
 
 #description
 	margin-bottom: 50px
-
+	pre > code
+		padding: 0.8em 1em
 
 .returns
 	margin-bottom: 2em

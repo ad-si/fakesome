@@ -218,7 +218,7 @@
 						['tr',
 							['td.code',
 								['pre',
-									['code', 'fakesome.' + method.name + '(' + exampleArgs.join(', ') + ')']
+									['code.js.hljs', 'fakesome.' + method.name + '(' + exampleArgs.join(', ') + ')']
 								],
 							],
 							['td', example.desc],
@@ -235,10 +235,6 @@
 		shaven(templates.toc($('nav ul'), method))
 	})
 
-
-	var codeSnippets = document.querySelectorAll('pre code')
-
-	for (var a = 0; a < codeSnippets.length; a++)
-		codeSnippets[a].innerHTML = hljs.highlight('javascript', codeSnippets[a].innerHTML).value
+	hljs.initHighlighting()
 
 }(window, document)

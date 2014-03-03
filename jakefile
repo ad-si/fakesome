@@ -157,7 +157,7 @@ file('bower.json', ['package.json'], {async: true}, function () {
 	})
 
 	fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2))
-	fs.writeFileSync(this.name, JSON.stringify(bowerJson, null, 2))
+	fs.writeFileSync(this.name, JSON.stringify(bowerJson, null, '\t'))
 
 	console.log('Building ' + this.name + ' succeeded')
 

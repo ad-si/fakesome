@@ -71,8 +71,9 @@
 </div>
 
 
-<script src="js/shaven.min.js"></script>
-<script src="js/highlight.pack.js"></script>
+<script src="bower_components/shaven/shaven.min.js"></script>
+
+<script src="js/highlight.pack.js"></script><!--TODO: Use bower installation-->
 <script src="src/documentation.js"></script>
 <script src="fakesome.js"></script>
 <script src="modules/example.js"></script>
@@ -97,7 +98,7 @@
     document.querySelector('.twitter-share-button').style.display = 'block !important'
 </script>
 
-<script type="text/javascript">
+<script>
     // Piwik
     var _paq = _paq || []
 
@@ -117,9 +118,9 @@
                 s = d.getElementsByTagName("script")[0]
 
         g.type = "text/javascript"
-        g.defer = true;
-        g.async = true;
-        g.src = u + "piwik.js";
+        g.defer = true
+        g.async = true
+        g.src = u + "piwik.js"
         s.parentNode.insertBefore(g, s)
     }()
 </script>

@@ -1,0 +1,43 @@
+{
+  "name": "shaven",
+  "version": "0.3.2",
+  "description": "Shaven is a simple DOM building utility and template engine based upon JsonML",
+  "homepage": "http://adriansieber.com/shaven",
+  "keywords": [
+    "template",
+    "DOM building"
+  ],
+  "author": {
+    "name": "adius",
+    "email": "mail@adriansieber.com",
+    "url": "http://adriansieber.com"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "examples",
+    "test",
+    "src",
+    "styl",
+    "img",
+    "js",
+    "index.html"
+  ],
+  "main": "src/shaven.js",
+  "devDependencies": {
+    "jquery": "~2.1.0",
+    "codemirror": "~3.21.0",
+    "assert": "~0.0.2"
+  },
+  "_release": "0.3.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.3.2",
+    "commit": "30cffedbe31896b38fea37d83f418fda469e7879"
+  },
+  "_source": "git://github.com/adius/shaven.git",
+  "_target": "~0.3.2",
+  "_originalSource": "shaven",
+  "_direct": true
+}

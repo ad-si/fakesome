@@ -1,0 +1,28 @@
+{
+  "name": "fakesome",
+  "version": "0.5.1",
+  "description": "Easily create colossal amounts of fake data",
+  "homepage": "http://adriansieber.com/fakesome",
+  "keywords": [
+    "fake",
+    "fake data",
+    "data generator",
+    "mockup"
+  ],
+  "author": {
+    "name": "Adrian Sieber",
+    "email": "mail@adriansieber.com",
+    "url": "http://adriansieber.com"
+  },
+  "ignore": [
+    "./!(fakesome.js)",
+    "./!(fakesome.min.js)",
+    "./!(LICENSE)",
+    "./!(README)"
+  ],
+  "main": "./fakesome.js",
+  "devDependencies": {
+    "shaven": "~0.3.2",
+    "highlight": "~7.0.1"
+  }
+}

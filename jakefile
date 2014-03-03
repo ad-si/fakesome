@@ -1,14 +1,18 @@
 var fs = require('fs'),
 	uglify = require('uglify-js'),
 	browserify = require('browserify'),
-	version = require('./package.json').version,
 	stylus = require('stylus'),
 	nib = require('nib'),
+
+	packageJson = require('./package.json'),
+	bowerJson = require('./bower.json'),
+	version = packageJson.version,
 	buildFiles = [
 		'fakesome.js',
 		'fakesome.min.js',
 		'css/screen.css',
-		'index.html'
+		'index.html',
+		'bower.json'
 	]
 
 
@@ -48,6 +52,7 @@ function bundleModules(callback) {
 desc('Default build process')
 task('default', buildFiles)
 
+
 watchTask(['default'], function () {
 	this.watchFiles.include([
 		'./**/*.styl'
@@ -55,8 +60,24 @@ watchTask(['default'], function () {
 })
 
 
+desc('Compile fakesome.js')
+file('fakesome.js', ['src/fakesome.js', 'package.json'], {async: true}, function () {
+
+	var fileName = this.name,
+		file = fs.openSync(fileName, 'w+')
+
+	bundleModules(function (jsString) {
+
+		fs.writeSync(file, jsString)
+
+		console.log('Building ' + fileName + ' succeeded')
+		complete()
+	})
+})
+
+
 desc('Compile fakesome.min.js')
-file('fakesome.min.js', ['src/fakesome.js', 'package.json'], function () {
+file('fakesome.min.js', ['src/fakesome.js', 'package.json'], {async: true}, function () {
 
 	var fileName = this.name,
 		file = fs.openSync(fileName, 'w+')
@@ -67,28 +88,14 @@ file('fakesome.min.js', ['src/fakesome.js', 'package.json'], function () {
 		fs.writeSync(file, buildMinifiedJs(jsString))
 
 		console.log('Building ' + fileName + ' succeeded')
+		complete()
 	})
 
-})
-
-
-desc('Compile fakesome.js')
-file('fakesome.js', ['src/fakesome.js', 'package.json'], function () {
-
-	var fileName = this.name,
-		file = fs.openSync(fileName, 'w+')
-
-	bundleModules(function (jsString) {
-
-		fs.writeSync(file, jsString)
-
-		console.log('Building ' + fileName + ' succeeded')
-	})
 })
 
 
 desc('Build minified CSS file for production.')
-file('css/screen.css', ['styl/screen.styl'], function () {
+file('css/screen.css', ['styl/screen.styl'], {async: true}, function () {
 
 	var all = '',
 		files = ['styl/screen.styl'],
@@ -111,12 +118,13 @@ file('css/screen.css', ['styl/screen.styl'], function () {
 			fs.writeFileSync(fileName, css)
 
 			console.log('Building ' + fileName + ' succeeded')
+			complete()
 		})
 })
 
 
 desc('Compile index.html')
-file('index.html', ['src/fakesome.js', 'package.json'], function () {
+file('index.html', ['package.json'], {async: true}, function () {
 
 	var fileName = this.name,
 		data
@@ -128,6 +136,32 @@ file('index.html', ['src/fakesome.js', 'package.json'], function () {
 	fs.writeFileSync(fileName, data)
 
 	console.log('Building ' + fileName + ' succeeded')
+	complete()
+})
+
+
+desc('Sync package.json to bower.json')
+file('bower.json', ['package.json'], {async: true}, function () {
+
+	var syncAttributes = [
+		'name',
+		'version',
+		'description',
+		'homepage',
+		'keywords',
+		'author'
+	]
+
+	syncAttributes.forEach(function(attribute){
+		bowerJson[attribute] = packageJson[attribute]
+	})
+
+	fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2))
+	fs.writeFileSync(this.name, JSON.stringify(bowerJson, null, 2))
+
+	console.log('Building ' + this.name + ' succeeded')
+
+	complete()
 })
 
 

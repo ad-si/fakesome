@@ -2383,12 +2383,14 @@ function hasOwnProperty(obj, prop) {
 ;;module.exports=require("buffer-browserify")
 
 },{}],3:[function(require,module,exports){
-var Buffer=require("__browserify_Buffer").Buffer;"use strict";
+var Buffer=require("__browserify_Buffer").Buffer;'use strict';
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 
+// shim for Node's 'util' package
+// DO NOT REMOVE THIS! It is required for compatibility with EnderJS (http://enderjs.com/).
 var util = {
   isArray: function (ar) {
     return Array.isArray(ar) || (typeof ar === 'object' && objectToString(ar) === '[object Array]');
@@ -2408,6 +2410,7 @@ var util = {
   }
 };
 
+
 if (typeof module === 'object')
   module.exports = clone;
 
@@ -2424,107 +2427,74 @@ if (typeof module === 'object')
  * @param `parent` - the object to be cloned
  * @param `circular` - set to true if the object to be cloned may contain
  *    circular references. (optional - true by default)
+ * @param `depth` - set to a number if the object is only to be cloned to
+ *    a particular depth. (optional - defaults to Infinity)
+ * @param `prototype` - sets the prototype to be used when cloning an object.
+ *    (optional - defaults to parent prototype).
 */
-function clone(parent, circular) {
-  if (typeof circular == 'undefined')
-    circular = true;
+
+function clone(parent, circular, depth, prototype) {
+  // maintain two arrays for circular references, where corresponding parents
+  // and children have the same index
+  var allParents = [];
+  var allChildren = [];
 
   var useBuffer = typeof Buffer != 'undefined';
 
-  var circularParent = {};
-  var circularResolved = {};
-  var circularReplace = [];
+  if (typeof circular == 'undefined')
+    circular = true;
 
-  function _clone(parent, context, child, cIndex) {
-    var i; // Use local context within this function
-    // Deep clone all properties of parent into child
-    if (typeof parent == 'object') {
-      if (parent == null)
-        return parent;
-      // Check for circular references
-      for(i in circularParent)
-        if (circularParent[i] === parent) {
-          // We found a circular reference
-          circularReplace.push({'resolveTo': i, 'child': child, 'i': cIndex});
-          return null; //Just return null for now...
-          // we will resolve circular references later
-        }
+  if (typeof depth == 'undefined')
+    depth = Infinity;
 
-      // Add to list of all parent objects
-      circularParent[context] = parent;
-      // Now continue cloning...
-      if (util.isArray(parent)) {
-        child = [];
-        for(i in parent)
-          child[i] = _clone(parent[i], context + '[' + i + ']', child, i);
-      }
-      else if (util.isDate(parent))
-        child = new Date(parent.getTime());
-      else if (util.isRegExp(parent)) {
-        child = new RegExp(parent.source, util.getRegExpFlags(parent));
-        if (parent.lastIndex) child.lastIndex = parent.lastIndex;
-      } else if (useBuffer && Buffer.isBuffer(parent))
-      {
-        child = new Buffer(parent.length);
-        parent.copy(child);
-      }
-      else {
-        child = {};
+  // recurse this function so we don't reset allParents and allChildren
+  function _clone(parent, depth) {
+    // cloning null always returns null
+    if (parent === null)
+      return null;
 
-        // Also copy prototype over to new cloned object
-        child.__proto__ = parent.__proto__;
-        for(i in parent)
-          child[i] = _clone(parent[i], context + '[' + i + ']', child, i);
-      }
+    if (depth == 0)
+      return parent;
 
-      // Add to list of all cloned objects
-      circularResolved[context] = child;
-    }
-    else
-      child = parent; //Just a simple shallow copy will do
-    return child;
-  }
-
-  var i;
-  if (circular) {
-    var cloned = _clone(parent, '*');
-
-    // Now this object has been cloned. Let's check to see if there are any
-    // circular references for it
-    for(i in circularReplace) {
-      var c = circularReplace[i];
-      if (c && c.child && c.i in c.child) {
-        c.child[c.i] = circularResolved[c.resolveTo];
-      }
-    }
-    return cloned;
-  } else {
-    // Deep clone all properties of parent into child
     var child;
-    if (typeof parent == 'object') {
-      if (parent == null)
-        return parent;
-      if (parent.constructor.name === 'Array') {
-        child = [];
-        for(i in parent)
-          child[i] = clone(parent[i], circular);
-      }
-      else if (util.isDate(parent))
-        child = new Date(parent.getTime() );
-      else if (util.isRegExp(parent)) {
-        child = new RegExp(parent.source, util.getRegExpFlags(parent));
-        if (parent.lastIndex) child.lastIndex = parent.lastIndex;
-      } else {
-        child = {};
-        child.__proto__ = parent.__proto__;
-        for(i in parent)
-          child[i] = clone(parent[i], circular);
-      }
+    if (typeof parent != 'object') {
+      return parent;
     }
-    else
-      child = parent; // Just a simple shallow clone will do
+
+    if (util.isArray(parent)) {
+      child = [];
+    } else if (util.isRegExp(parent)) {
+      child = new RegExp(parent.source, util.getRegExpFlags(parent));
+      if (parent.lastIndex) child.lastIndex = parent.lastIndex;
+    } else if (util.isDate(parent)) {
+      child = new Date(parent.getTime());
+    } else if (useBuffer && Buffer.isBuffer(parent)) {
+      child = new Buffer(parent.length);
+      parent.copy(child);
+      return child;
+    } else {
+      if (typeof prototype == 'undefined') child = Object.create(Object.getPrototypeOf(parent));
+      else child = Object.create(prototype);
+    }
+
+    if (circular) {
+      var index = allParents.indexOf(parent);
+
+      if (index != -1) {
+        return allChildren[index];
+      }
+      allParents.push(parent);
+      allChildren.push(child);
+    }
+
+    for (var i in parent) {
+      child[i] = _clone(parent[i], depth - 1);
+    }
+
     return child;
   }
+
+  return _clone(parent, depth);
 }
 
 /**
@@ -3570,7 +3540,7 @@ function rgbString(rgba, alpha) {
 }
 
 function rgbaString(rgba, alpha) {
-   if (alpha===undefined) {
+   if (alpha === undefined) {
       alpha = (rgba[3] !== undefined ? rgba[3] : 1);
    }
    return "rgba(" + rgba[0] + ", " + rgba[1] + ", " + rgba[2]
@@ -3603,8 +3573,11 @@ function hslString(hsla, alpha) {
 }
 
 function hslaString(hsla, alpha) {
+   if (alpha === undefined) {
+      alpha = (hsla[3] !== undefined ? hsla[3] : 1);
+   }
    return "hsla(" + hsla[0] + ", " + hsla[1] + "%, " + hsla[2] + "%, "
-           + (alpha || hsla[3] || 1) + ")";
+           + alpha + ")";
 }
 
 function keyword(rgb) {
@@ -3644,6 +3617,48 @@ else {
 	}
 }
 
+var createObject = function (o) {
+	function F() {}
+	F.prototype = o;
+	return new F();
+}
+
+var NumberFS = function (value) {
+    var that = createObject(Number.prototype);
+    that.value = value;
+
+    that.toString = function () {
+      return that.value
+    };
+
+    that.format = function (f) {
+        var p,d,
+            fRs = /([^0]*)(0{1,})(\.?)(0{0,})(.*)/.exec(f),
+            vRs = /(\d{0,})\.?(\d{0,})/.exec(this.value),
+            lp = fRs[2].length - vRs[1].length,
+            dp = fRs[4].length - vRs[2].length
+
+        if (lp > 0)
+            p = [new Array(lp + 1).join(0), vRs[1]].join("")
+        else
+            p = vRs[1]
+        
+        if (dp > 0)
+            d = [vRs[2], new Array(dp + 1).join(0)].join("")
+        else
+            d = new String(vRs[2]).substr(0, fRs[4].length)
+        
+        return [
+            fRs[1],
+            p,
+            d.length ? ".":"",
+            d,
+            fRs[5]
+        ].join("")
+    };    
+    
+    return that;
+}
 
 var tld = ['com', 'de', 'org', 'net'],
 	syllables = [
@@ -3910,10 +3925,10 @@ fakesome = {
 
 			} while (!filter(randInt))
 
-			return randInt
+			return new NumberFS(randInt)
 		}
 
-		return randomFloat(minValue, maxValue)
+		return new NumberFS(randomFloat(minValue, maxValue))
 	},
 
 	imgURL: function (conf) {
@@ -3995,10 +4010,10 @@ fakesome = {
 
 			} while (!filter(randInt))
 
-			return randInt
+			return new NumberFS(randInt)
 		}
 
-		return randomInt(minValue, maxValue)
+		return new NumberFS(randomInt(minValue, maxValue))
 	},
 
 	/*

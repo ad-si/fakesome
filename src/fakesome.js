@@ -20,6 +20,48 @@ else {
 	}
 }
 
+var createObject = function (o) {
+	function F() {}
+	F.prototype = o;
+	return new F();
+}
+
+var NumberFS = function (value) {
+    var that = createObject(Number.prototype);
+    that.value = value;
+
+    that.toString = function () {
+      return that.value
+    };
+
+    that.format = function (f) {
+        var p,d,
+            fRs = /([^0]*)(0{1,})(\.?)(0{0,})(.*)/.exec(f),
+            vRs = /(\d{0,})\.?(\d{0,})/.exec(this.value),
+            lp = fRs[2].length - vRs[1].length,
+            dp = fRs[4].length - vRs[2].length
+
+        if (lp > 0)
+            p = [new Array(lp + 1).join(0), vRs[1]].join("")
+        else
+            p = vRs[1]
+        
+        if (dp > 0)
+            d = [vRs[2], new Array(dp + 1).join(0)].join("")
+        else
+            d = new String(vRs[2]).substr(0, fRs[4].length)
+        
+        return [
+            fRs[1],
+            p,
+            d.length ? ".":"",
+            d,
+            fRs[5]
+        ].join("")
+    };    
+    
+    return that;
+}
 
 var tld = ['com', 'de', 'org', 'net'],
 	syllables = [
@@ -286,10 +328,10 @@ fakesome = {
 
 			} while (!filter(randInt))
 
-			return randInt
+			return new NumberFS(randInt)
 		}
 
-		return randomFloat(minValue, maxValue)
+		return new NumberFS(randomFloat(minValue, maxValue))
 	},
 
 	imgURL: function (conf) {
@@ -371,10 +413,10 @@ fakesome = {
 
 			} while (!filter(randInt))
 
-			return randInt
+			return new NumberFS(randInt)
 		}
 
-		return randomInt(minValue, maxValue)
+		return new NumberFS(randomInt(minValue, maxValue))
 	},
 
 	/*

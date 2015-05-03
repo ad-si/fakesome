@@ -5,14 +5,12 @@ var fs = require('fs'),
 	nib = require('nib'),
 
 	packageJson = require('./package.json'),
-	bowerJson = require('./bower.json'),
 	version = packageJson.version,
 	buildFiles = [
 		'fakesome.js',
 		'fakesome.min.js',
 		'css/screen.css',
-		'index.html',
-		'bower.json'
+		'index.html'
 	]
 
 
@@ -136,31 +134,6 @@ file('index.html', ['package.json'], {async: true}, function () {
 	fs.writeFileSync(fileName, data)
 
 	console.log('Building ' + fileName + ' succeeded')
-	complete()
-})
-
-
-desc('Sync package.json to bower.json')
-file('bower.json', ['package.json'], {async: true}, function () {
-
-	var syncAttributes = [
-		'name',
-		'version',
-		'description',
-		'homepage',
-		'keywords',
-		'author'
-	]
-
-	syncAttributes.forEach(function(attribute){
-		bowerJson[attribute] = packageJson[attribute]
-	})
-
-	fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2))
-	fs.writeFileSync(this.name, JSON.stringify(bowerJson, null, '\t'))
-
-	console.log('Building ' + this.name + ' succeeded')
-
 	complete()
 })
 

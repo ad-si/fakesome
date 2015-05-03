@@ -9,7 +9,6 @@ var fs = require('fs'),
 	buildFiles = [
 		'fakesome.js',
 		'fakesome.min.js',
-		'css/screen.css',
 		'index.html'
 	]
 
@@ -89,35 +88,6 @@ file('fakesome.min.js', ['src/fakesome.js', 'package.json'], {async: true}, func
 		complete()
 	})
 
-})
-
-
-desc('Build minified CSS file for production.')
-file('css/screen.css', ['styl/screen.styl'], {async: true}, function () {
-
-	var all = '',
-		files = ['styl/screen.styl'],
-		fileName = this.name
-
-	files.forEach(function (file) {
-		all += fs.readFileSync(file, 'utf8').toString()
-		all += '\n'
-	})
-
-	stylus(all)
-		.set('filename', 'css/' + fileName)
-		.set('compress', true)
-		.use(nib())
-		.import('nib')
-		.render(function (err, css) {
-
-			if (err) throw err
-
-			fs.writeFileSync(fileName, css)
-
-			console.log('Building ' + fileName + ' succeeded')
-			complete()
-		})
 })
 
 

@@ -22,8 +22,10 @@
     "url": "https://github.com/adius/fakesome.git"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha -b --inline-diffs",
-    "prepublish": "jake -B && npm test"
+    "start": "stylus --watch --out ./css styl",
+    "test": "mocha -b --inline-diffs",
+    "build": "stylus --compress --out ./css styl && jake -B",
+    "prepublish": "npm run build && npm test"
   },
   "dependencies": {
     "color": "~0.4.4",

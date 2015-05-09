@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Fakesome</title>
+	<meta name=viewport content="width=device-width">
+
+	<link rel="shortcut icon" href="img/favicon.png">
+
+	<link rel=stylesheet href='//fonts.googleapis.com/css?family=Finger+Paint'>
+	<link rel=stylesheet href="css/railscasts.css">
+	<link rel=stylesheet href="css/screen.css"/>
+</head>
+<body>
+
+<a href="//github.com/adius/fakesome">
+	<img class=ribbon
+	     src="//s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
+	     alt="Fork me on GitHub">
+</a>
+
+<div id="wrapper">
+
+	<aside>
+		<nav>
+		{{tableOfContents}}
+			<hr>
+			<div id=buttons>
+				<iframe class=github
+				        src="//ghbtns.com/github-btn.html?user=adius&amp;repo=fakesome&amp;type=watch&amp;count=true&amp;size=small">
+				</iframe>
+				<a href="https://twitter.com/share"
+				   class="twitter-share-button"
+				   data-via="AdrianSieber"
+				   data-text="Fakesome - The fake data generator"
+				   style=display:none>
+					Tweet
+				</a>
+			</div>
+			<p>Version 0.5.3 by <a href="http://adriansieber.com">Adrian Sieber</a>
+			</p>
+		</nav>
+	</aside>
+	<article>
+
+		<header>
+			<h1>Fakesome</h1>
+
+			<p>For all the fakesome people out there!</p>
+		</header>
+
+		<div id="description">
+			<p>Fakesome lets you easily create massive amounts of fake data.
+				Use it to populate databases,
+				build API prototypes or for just any other
+				job where you need random but structured data.
+			</p>
+
+			<h2 id="getting-started">Getting Started</h2>
+
+			<p>On the server you can install fakesome with npm:</p>
+			<pre><code class="hljs bash">$ npm install fakesome</code></pre>
+
+			<p>Then require it in your scripts like this:</p>
+			<pre><code class="hljs js">var fakesome = require('fakesome')</code></pre>
+
+			<p>In the browser just load the bundled javascript file
+				(<a href="http://github.com/adius/fakesome">
+					get it from GitHub
+				</a>):
+			</p>
+			<pre><code class="hljs xml">&lt;script src=fakesome.js&gt;&lt;/script&gt;</code></pre>
+
+			<p>Now you can simply call the methods to generate data:</p>
+			<pre><code class="hljs js">var randomInteger = fakesome.integer(0,9)</code></pre>
+		</div>
+
+		<div id=documentation>
+		{{documentation}}
+		</div>
+	</article>
+</div>
+
+
+<script src="js/highlight.pack.js"></script>
+
+<script>
+    // Syntax highlight code
+    hljs.initHighlightingOnLoad()
+
+	// Twitter share button
+	!function (d, s, id) {
+
+		var fjs = d.getElementsByTagName(s)[0],
+				p = /^http:/.test(d.location) ? 'http' : 'https',
+				js
+
+		if (!d.getElementById(id)) {
+			js = d.createElement(s)
+			js.id = id
+			js.src = p + '://platform.twitter.com/widgets.js'
+			fjs.parentNode.insertBefore(js, fjs)
+		}
+	}(document, 'script', 'twitter-wjs')
+
+	document
+			.querySelector('.twitter-share-button')
+			.style
+			.display = 'block !important'
+
+	// Piwik
+	var _paq = _paq || []
+
+	_paq.push(["trackPageView"])
+	_paq.push(["enableLinkTracking"])
+
+	!function () {
+
+		var u = (("https:" == document.location.protocol) ? "https" : "http") +
+				"://piwik.adriansieber.com/"
+
+		_paq.push(["setTrackerUrl", u + "piwik.php"])
+		_paq.push(["setSiteId", "23"])
+
+		var d = document,
+				g = d.createElement("script"),
+				s = d.getElementsByTagName("script")[0]
+
+		g.type = "text/javascript"
+		g.defer = true
+		g.async = true
+		g.src = u + "piwik.js"
+		s.parentNode.insertBefore(g, s)
+	}()
+</script>
+
+</body>
+</html>

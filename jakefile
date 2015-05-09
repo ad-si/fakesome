@@ -3,8 +3,11 @@ var fs = require('fs'),
 	browserify = require('browserify'),
 	stylus = require('stylus'),
 	nib = require('nib'),
+	htmlMinifier = require('html-minifier'),
 
 	packageJson = require('./package.json'),
+	documentation = require('./src/documentation'),
+	htmlGenerator = require('./src/htmlGenerator'),
 	version = packageJson.version,
 	buildFiles = [
 		'fakesome.js',
@@ -13,7 +16,7 @@ var fs = require('fs'),
 	]
 
 
-function buildMinifiedJs(string) {
+function buildMinifiedJs (string) {
 
 	var compressor = uglify.Compressor(),
 		ast
@@ -25,10 +28,10 @@ function buildMinifiedJs(string) {
 	ast.compute_char_frequency()
 	ast.mangle_names()
 
-	return ast.print_to_string({"comments": /fakesome/ })
+	return ast.print_to_string({"comments": /fakesome/})
 }
 
-function bundleModules(callback) {
+function bundleModules (callback) {
 
 	var jsString = '// fakesome ' + version + ' by Adrian Sieber (adriansieber.com)\n\n',
 		b = browserify()
@@ -58,54 +61,93 @@ watchTask(['default'], function () {
 
 
 desc('Compile fakesome.js')
-file('fakesome.js', ['src/fakesome.js', 'package.json'], {async: true}, function () {
+file(
+	'fakesome.js',
+	[
+		'src/fakesome.js',
+		'package.json'
+	],
+	{async: true},
+	function () {
 
-	var fileName = this.name,
-		file = fs.openSync(fileName, 'w+')
+		var fileName = this.name,
+			file = fs.openSync(fileName, 'w+')
 
-	bundleModules(function (jsString) {
+		bundleModules(function (jsString) {
 
-		fs.writeSync(file, jsString)
+			fs.writeSync(file, jsString)
 
-		console.log('Building ' + fileName + ' succeeded')
-		complete()
+			console.log('Building ' + fileName + ' succeeded')
+			complete()
+		})
 	})
-})
 
 
 desc('Compile fakesome.min.js')
-file('fakesome.min.js', ['src/fakesome.js', 'package.json'], {async: true}, function () {
+file(
+	'fakesome.min.js',
+	[
+		'src/fakesome.js',
+		'package.json'
+	],
+	{async: true},
+	function () {
 
-	var fileName = this.name,
-		file = fs.openSync(fileName, 'w+')
+		var fileName = this.name,
+			file = fs.openSync(fileName, 'w+')
 
 
-	bundleModules(function (jsString) {
+		bundleModules(function (jsString) {
 
-		fs.writeSync(file, buildMinifiedJs(jsString))
+			fs.writeSync(file, buildMinifiedJs(jsString))
 
-		console.log('Building ' + fileName + ' succeeded')
-		complete()
+			console.log('Building ' + fileName + ' succeeded')
+			complete()
+		})
+
 	})
-
-})
 
 
 desc('Compile index.html')
-file('index.html', ['package.json'], {async: true}, function () {
+file(
+	'index.html',
+	[
+		'src/index.hbs',
+		'src/htmlGenerator.js',
+		'src/documentation.js',
+		'src/fakesome.js',
+		'package.json'
+	],
+	{async: true},
+	function () {
 
-	var fileName = this.name,
-		data
+		var fileName = this.name,
+			html = htmlGenerator(),
+			data = fs.readFileSync('src/index.hbs', {encoding: 'utf8'})
+				.replace('{{documentation}}', html.documentation)
+				.replace('{{tableOfContents}}', html.tableOfContents)
+				.replace(/Version [\.0-9]+/g, 'Version ' + version),
+			lint = new htmlMinifier.HTMLLint()
 
-	data = fs.readFileSync(fileName, {encoding: 'utf8'})
 
-	data = data.replace(/Version [\.0-9]+/g, 'Version ' + version)
+		fs.writeFileSync(
+			fileName,
+			htmlMinifier.minify(data, {
+				removeComments: true,
+				collapseWhitespace: true,
+				removeAttributeQuotes: true,
+				removeRedundantAttributes: true,
+				minifyJS: true,
+				lint: lint
+			})
+		)
 
-	fs.writeFileSync(fileName, data)
+		lint.populate()
 
-	console.log('Building ' + fileName + ' succeeded')
-	complete()
-})
+		console.log('Building ' + fileName + ' succeeded')
+		complete()
+	}
+)
 
 
 desc('Remove compiled files')

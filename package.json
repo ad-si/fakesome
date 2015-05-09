@@ -24,16 +24,18 @@
   "scripts": {
     "start": "stylus --watch --out ./css styl",
     "test": "mocha -b --inline-diffs",
-    "build": "stylus --compress --out ./css styl && jake -B",
+    "build": "stylus --compress --out ./css styl && jake --trace -B",
     "prepublish": "npm run build && npm test"
   },
   "dependencies": {
+    "clone": "~0.1.11",
     "color": "~0.4.4",
-    "clone": "~0.1.11"
+    "shaven": "^0.7.3"
   },
   "devDependencies": {
     "browserify": "^2.35.0",
-    "jake": "^0.7.3",
+    "html-minifier": "^0.7.2",
+    "jake": "^8.0.12",
     "mocha": "^2.2.4",
     "nib": "^1.0.1",
     "request": "^2.27.0",

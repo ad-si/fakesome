@@ -1,37 +1,4 @@
-var documentation = [
-	{
-		name: 'config',
-		desc: 'Change settings.',
-		args: [
-			{
-				desc: 'Contains values to configure fakesome.',
-				name: 'configObject',
-				properties: [
-					{
-						name: 'outputFormat',
-						type: ['JSON', 'XML', 'YAML'],
-						desc: 'Set the format of data generation.',
-						default: 'JSON'
-					},
-					{
-						name: 'generator',
-						type: 'function',
-						desc: 'Change the random number generator. (Is is also used to generate most of the other values).',
-						default: 'Math.rand()'
-					}
-				],
-				required: true,
-				type: 'Object'
-			}
-		],
-		examples: [
-			{
-				desc: 'true or false',
-				visible: true,
-				args: null
-			}
-		]
-	},
+module.exports = [
 	{
 		name: 'boolean',
 		desc: 'Returns randomly true or false.',
@@ -63,8 +30,8 @@ var documentation = [
 	{
 		name: 'integer',
 		desc: 'Returns a random integer.' +
-			'For unlimited large integers (string of digits) use' +
-			'<code>fakesome.string()</code>.',
+		'For unlimited large integers (string of digits) use' +
+		'<code>fakesome.string()</code>.',
 		args: [
 			{
 				name: 'minValue',
@@ -81,8 +48,8 @@ var documentation = [
 			{
 				name: 'filter',
 				desc: 'Function to filter the possible numbers. ' +
-					'Receives the number as a parameter and returns true or false. ' +
-					'<code>function(number)</code>.',
+				'Receives the number as a parameter and returns true or false. ' +
+				'<code>function(number)</code>.',
 				type: 'Function',
 				optional: true
 			}
@@ -93,7 +60,8 @@ var documentation = [
 		},
 		examples: [
 			{
-				desc: 'Integers between inclusive -4503599627370495 and 4503599627370495',
+				desc: 'Integers between inclusive ' +
+				'-4503599627370495 and 4503599627370495',
 				visible: true,
 				args: []
 			},
@@ -151,7 +119,8 @@ var documentation = [
 			{
 				name: 'filter',
 				desc: 'Function to filter the possible numbers. ' +
-					'Receives the number as the first parameter and returns true or false.',
+				'Receives the number as the first parameter and ' +
+				'returns true or false.',
 				visible: true,
 				type: 'Function',
 				optional: true
@@ -211,7 +180,7 @@ var documentation = [
 				desc: 'Random date between 2000-06-01 and 2001-01-01',
 				visible: true,
 				args: ['2000-06-01', '2001-01-01']
-			},
+			}
 		]
 	},
 	{
@@ -246,7 +215,7 @@ var documentation = [
 				desc: 'Random datetime between 2000-06-01 and 2001-01-01',
 				visible: true,
 				args: ['2000-06-01', '2001-01-01']
-			},
+			}
 		]
 	},
 	{
@@ -268,7 +237,8 @@ var documentation = [
 			{
 				name: 'filter',
 				desc: 'Filters the generated values before return. ' +
-					'Receives the character as the first parameter and returns true or false.',
+				'Receives the character as the first parameter and ' +
+				'returns true or false.',
 				type: 'Function'
 			}
 		],
@@ -324,7 +294,7 @@ var documentation = [
 				desc: 'String of 15 weird characters',
 				visible: true,
 				args: [
-					['●', '☃', ''],
+					['●', '☃', '😀'],
 					15
 				]
 			}
@@ -355,7 +325,8 @@ var documentation = [
 	},
 	{
 		name: 'word',
-		desc: 'Returns a random word with a minimum and maximum number of characters.',
+		desc: 'Returns a random word with a minimum and maximum number ' +
+		'of characters.',
 		args: [
 			{
 				name: 'minChars',
@@ -390,7 +361,7 @@ var documentation = [
 	{
 		name: 'words',
 		desc: 'Get the specified number of words with a maximum and minimum' +
-			'number of characters.',
+		'number of characters.',
 		args: [
 			{
 				name: 'quantity',
@@ -417,12 +388,14 @@ var documentation = [
 		},
 		examples: [
 			{
-				desc: 'String of 10 space separated words with between 1 and 20 characters',
+				desc: 'String of 10 space separated words ' +
+				'with between 1 and 20 characters',
 				visible: true,
 				args: null
 			},
 			{
-				desc: 'String of 5 space separated words with between 2 and 3 characters',
+				desc: 'String of 5 space separated words ' +
+				'with between 2 and 3 characters',
 				visible: true,
 				args: [5, 2, 3]
 			}
@@ -503,7 +476,8 @@ var documentation = [
 	},
 	{
 		name: 'sentences',
-		desc: 'Get the specified number of sentences with a maximum and minimum number of words.',
+		desc: 'Get the specified number of sentences ' +
+		'with a maximum and minimum number of words.',
 		args: [
 			{
 				name: 'number',
@@ -619,8 +593,11 @@ var documentation = [
 						name: 'tag',
 						type: 'boolean',
 						default: false,
-						desc: '<code>true</code>: Returns an image tag containing a base64 coded image.' +
-							'<br><code>false</code>: Returns just the base64 string.'
+						desc: '<code>true</code>: ' +
+						'Returns an image tag containing ' +
+						'a base64 coded image.' +
+						'<br><code>false</code>: ' +
+						'Returns just the base64 string.'
 					},
 					{
 						name: 'width',
@@ -650,13 +627,15 @@ var documentation = [
 						name: 'minColor',
 						type: 'Color',
 						default: 'rgba(0,0,0,0)',
-						desc: 'Sets the minimum color of the elements in the image.'
+						desc: 'Sets the minimum color ' +
+						'of the elements in the image.'
 					},
 					{
 						name: 'maxColor',
 						type: 'Color',
 						default: 'rgba(255,255,255,1)',
-						desc: 'Sets the maximum color of the elements in the image.'
+						desc: 'Sets the maximum color ' +
+						'of the elements in the image.'
 					}
 				]
 
@@ -743,7 +722,7 @@ var documentation = [
 				name: 'configObject',
 				type: 'Object',
 				desc: 'Configure different parameters to narrow down ' +
-					'the set of possible images.',
+				'the set of possible images.',
 				properties: [
 					{
 						name: 'width',
@@ -785,11 +764,12 @@ var documentation = [
 						type: 'String',
 						default: 'lorempixel.com',
 						desc: 'Select the site to be used for loading the images. ' +
-							'You can choose between following sites: ' +
-							'<a href="http://lorempixel.com">lorempixel.com</a>, ' +
-							'<a href="http://placehold.it">placehold.it</a>, ' +
-							'<a href="http://placekitten.com">placekitten.com</a>  and ' +
-							'<a href="http://flickholdr.com">flickholdr.com</a>'
+						'You can choose between following sites: ' +
+						'<a href="http://lorempixel.com">lorempixel.com</a>, ' +
+						'<a href="http://placehold.it">placehold.it</a>, ' +
+						'<a href="http://placekitten.com">placekitten.com</a> ' +
+						'and ' +
+						'<a href="http://flickholdr.com">flickholdr.com</a>'
 					},
 					{
 						name: 'number',
@@ -887,8 +867,8 @@ var documentation = [
 	{
 		name: 'object',
 		desc: 'Create a javascript Object with custom key-value pairs. ' +
-			'The values can either be primitives or be generated ' +
-			'with other fakesome methods.',
+		'The values can either be primitives or be generated ' +
+		'with other fakesome methods.',
 		args: [
 			{
 				name: 'schema',
@@ -920,10 +900,10 @@ var documentation = [
 	{
 		name: 'array',
 		desc: 'This method enables you to return arrays of faked data. ' +
-			'Simply chain one of the other fakesome methods after the array method ' +
-			'to get an array of the method\'s values. E.g. ' +
-			'<code>fakesome.array(5).boolean()</code> ' +
-			'will return an array of 5 random boolean values.',
+		'Simply chain one of the other fakesome methods after the array method ' +
+		'to get an array of the method\'s values. E.g. ' +
+		'<code>fakesome.array(5).boolean()</code> ' +
+		'will return an array of 5 random boolean values.',
 		args: [
 			{
 				name: 'number',
@@ -945,7 +925,8 @@ var documentation = [
 				{
 					name: 'generator',
 					type: 'function',
-					desc: 'Change the random number generator. (Is is also used to generate most of the other values).',
+					desc: 'Change the random number generator. ' +
+					'(Is is also used to generate most of the other values).',
 					default: 'Math.rand()'
 				}
 			]
@@ -954,14 +935,14 @@ var documentation = [
 	{
 		name: 'maybe',
 		desc: 'Chain other faksome methods after <code>maybe()</code> ' +
-			'to make the return of values optional. ' +
-			'E.g. <code>fakesome.maybe().integer(0,9)</code> ' +
-			'will return an integer or null with a 50:50 chance.',
+		'to make the return of values optional. ' +
+		'E.g. <code>fakesome.maybe().integer(0,9)</code> ' +
+		'will return an integer or null with a 50:50 chance.',
 		args: [
 			{
 				name: 'chanceOfReturn',
 				desc: 'Probability that the chained function returns a value. ' +
-					'Otherwise it will return <code>null</code>.',
+				'Otherwise it will return <code>null</code>.',
 				type: 'Number',
 				default: 0.5
 			}
@@ -974,8 +955,8 @@ var documentation = [
 	{
 		name: 'unique',
 		desc: 'Chain other faksome methods after <code>unique()</code> ' +
-			'to prevent them from returning the same value twice. ' +
-			'There is a scope of uniqueness for each method.',
+		'to prevent them from returning the same value twice. ' +
+		'There is a scope of uniqueness for each method.',
 		args: [
 			{
 				name: 'reset',
@@ -992,13 +973,13 @@ var documentation = [
 	{
 		name: 'fn',
 		desc: 'Extend fakesome with your own modules. ' +
-			'E.g. To create the module <code>fakesome.longWord()</code> simply extend ' +
-			'<code>fakesome.fn</code> with the corresponding function: ' +
-			'<pre><code>' +
-			'fakesome.fn.longWord = function(){\n' +
-			'    return "supercalifragilisticexpialidocious"\n' +
-			'}' +
-			'</code></pre>',
+		'E.g. To create the module <code>fakesome.longWord()</code> simply extend ' +
+		'<code>fakesome.fn</code> with the corresponding function: ' +
+		'<pre><code>' +
+		'fakesome.fn.longWord = function(){\n' +
+		'    return "supercalifragilisticexpialidocious"\n' +
+		'}' +
+		'</code></pre>',
 		type: 'property'
 	}
 ]

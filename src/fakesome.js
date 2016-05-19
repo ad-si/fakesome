@@ -272,9 +272,14 @@ fakesome = {
 
 	element: randomElement,
 
-	float: function (minValue, maxValue, filter) {
+	float: function (minValue, maxValue, decimalPlaces, filter) {
 
 		var randInt
+
+	    if (typeof decimalPlaces === "function") {
+			filter = decimalPlaces
+			decimalPlaces = null
+	    }
 
 		if (filter) {
 
@@ -282,14 +287,14 @@ fakesome = {
 				throw new TypeError('Filter must be a function.')
 
 			do {
-				randInt = randomFloat(minValue, maxValue)
+				randInt = randomFloat(minValue, maxValue, decimalPlaces)
 
 			} while (!filter(randInt))
 
 			return randInt
 		}
 
-		return randomFloat(minValue, maxValue)
+		return randomFloat(minValue, maxValue, decimalPlaces)
 	},
 
 	imgURL: function (conf) {

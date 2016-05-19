@@ -3653,6 +3653,14 @@ var tld = ['com', 'de', 'org', 'net'],
 	fakesome
 
 
+function randomDecimal(places, min, max) {
+  var i = randomDecimal(min, max)
+  var n = Math.pow(10,places+1) - 1
+  var d = randomDecimal(0, n)
+
+  return [i,".",d].join()
+}
+
 function randomInt(min, max) {
 
 	var tmp
@@ -3884,25 +3892,30 @@ fakesome = {
 
 	element: randomElement,
 
-	float: function (minValue, maxValue, filter) {
+  float: function (minValue, maxValue, decimalPlaces, filter) {
 
-		var randInt
+    var randInt
 
-		if (filter) {
+    if (typeof decimalPlaces === "function") {
+      filter = decimalPlaces
+      decimalPlaces = null
+    }
 
-			if (typeof(filter) != 'function')
-				throw new TypeError('Filter must be a function.')
+    if (filter) {
 
-			do {
-				randInt = randomFloat(minValue, maxValue)
+      if (typeof(filter) != 'function')
+        throw new TypeError('Filter must be a function.')
 
-			} while (!filter(randInt))
+      do {
+        randInt = randomFloat(minValue, maxValue, decimalPlaces)
 
-			return randInt
-		}
+      } while (!filter(randInt))
 
-		return randomFloat(minValue, maxValue)
-	},
+      return randInt
+    }
+
+    return randomFloat(minValue, maxValue, decimalPlaces)
+  },
 
 	imgURL: function (conf) {
 
@@ -3969,25 +3982,45 @@ fakesome = {
 		return url
 	},
 
-	integer: function (minValue, maxValue, filter) {
+  decimal: function (places, minValue, maxValue, filter) {
 
-		var randInt
+    var randDec
 
-		if (filter) {
+    if (filter) {
 
-			if (typeof(filter) != 'function')
-				throw new TypeError('Filter must be a function.')
+      if (typeof(filter) != 'function')
+        throw new TypeError('Filter must be a function.')
 
-			do {
-				randInt = randomInt(minValue, maxValue)
+      do {
+        randDec = randomDecimal(places, minValue, maxValue)
 
-			} while (!filter(randInt))
+      } while (!filter(randInt))
 
-			return randInt
-		}
+      return randDec
+    }
 
-		return randomInt(minValue, maxValue)
-	},
+    return randomDecimal(places, minValue, maxValue)
+  },
+
+  integer: function (minValue, maxValue, filter) {
+
+    var randInt
+
+    if (filter) {
+
+      if (typeof(filter) != 'function')
+        throw new TypeError('Filter must be a function.')
+
+      do {
+        randInt = randomInt(minValue, maxValue)
+
+      } while (!filter(randInt))
+
+      return randInt
+    }
+
+    return randomInt(minValue, maxValue)
+  },
 
 	/*
 	 name: function () {

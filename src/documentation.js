@@ -124,6 +124,13 @@ module.exports = [
 				visible: true,
 				type: 'Function',
 				optional: true
+			},
+			{
+				name: 'decimalPlaces',
+				desc: 'Set the max number of decimal places,
+				visible: true,
+				type: 'Number',
+				optional: true
 			}
 		],
 		return: {
@@ -145,6 +152,11 @@ module.exports = [
 				desc: 'Floats between -1000 and 0',
 				visible: true,
 				args: [-1000, 0]
+			},
+			{
+				desc: 'Floats between 10.00 and 100.00',
+				visible: true,
+				args: [10, 100, 2]
 			}
 		]
 	},

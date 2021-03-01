@@ -2669,6 +2669,8 @@ Color.prototype = {
       return string.hslString(this.values.hsl, this.values.alpha);
    },
    hslaString: function() {
+	   
+	   
       return string.hslaString(this.values.hsl, this.values.alpha);
    },
    keyword: function() {
@@ -3935,8 +3937,8 @@ fakesome = {
 				url += conf.text ? '/' + conf.text : ''
 				break
 
-			case 'placehold.it':
-				url += 'placehold.it'
+			case 'placeholder.com':
+				url += 'placeholder.com'
 				url += conf.width ? '/' + conf.width : ''
 				url += conf.height ? 'x' + conf.height : ''
 				url += conf.bgColor ? '/' + color(conf.bgColor).rgbString() : ''

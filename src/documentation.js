@@ -1,4 +1,4 @@
-module.exports = [
+export default [
 	{
 		name: 'boolean',
 		desc: 'Returns randomly true or false.',

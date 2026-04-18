@@ -16,7 +16,12 @@
     "email": "mail@adriansieber.com",
     "url": "http://adriansieber.com"
   },
+  "type": "module",
   "main": "src/fakesome.js",
+  "exports": {
+    ".": "./src/fakesome.js",
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/ad-si/fakesome.git"
@@ -24,8 +29,8 @@
   "scripts": {
     "start": "stylus --watch --out ./css styl",
     "test": "mocha -b --inline-diffs",
-    "build": "stylus --compress --out ./css styl && jake --trace -B",
-    "prepublish": "npm run build && npm test"
+    "build": "stylus --compress --out ./css styl && node scripts/build.js",
+    "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {
     "clone": "~2.1.2",
@@ -33,14 +38,11 @@
     "shaven": "^2.1.0"
   },
   "devDependencies": {
-    "browserify": "^17.0.1",
-    "html-minifier": "^4.0.0",
-    "jake": "^12.9.7",
+    "esbuild": "^0.24.0",
+    "html-minifier-terser": "^7.2.0",
     "mocha": "^11.7.5",
     "nib": "^1.2.0",
-    "request": "^2.88.2",
-    "stylus": "^0.64.0",
-    "uglify-js": "^3.19.3"
+    "stylus": "^0.64.0"
   },
   "optionalDependencies": {
     "canvas": "~3.2.3"

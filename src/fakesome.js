@@ -1,9 +1,8 @@
-"use strict";
+import color from 'color'
+import clone from 'clone'
+import {createRequire} from 'node:module'
 
-var color = require('color'),
-	clone = require('clone'),
-	canvasIsAvailable = true,
-	Canvas,
+var canvasIsAvailable = true,
 	canvas
 
 
@@ -12,8 +11,9 @@ if (typeof window === "object" && typeof window.document === "object")
 
 else {
 	try {
-		Canvas = require('canvas')
-		canvas = new Canvas()
+		var require = createRequire(import.meta.url)
+		var nodeCanvas = require('canvas')
+		canvas = nodeCanvas.createCanvas(100, 100)
 	}
 	catch (error) {
 		canvasIsAvailable = false
@@ -229,16 +229,6 @@ function validMethod(method) {
 }
 
 
-/*
- config: function (object) {
-
- var defaultValues = {
- outputFormat: "JSON"
- }
-
- },
- */
-
 fakesome = {
 
 	boolean: function (chanceOfTrue) {
@@ -361,18 +351,6 @@ fakesome = {
 		return randomInt(minValue, maxValue)
 	},
 
-	/*
-	 name: function () {
-	 var name = ''
-
-	 syllables.forEach(function (syl) {
-	 name += syl[randomNumber(syl.length)]
-	 })
-
-	 return name
-	 },
-	 */
-
 	object: function (schema) {
 
 		function evaluateObject(object) {
@@ -387,7 +365,7 @@ fakesome = {
 						if (typeof value === 'string' && fakesome[value.match(/^\w+/)[0]]) {
 
 							try {
-								object[key] = eval('fakesome.' + value)
+								object[key] = new Function('fakesome', 'return fakesome.' + value)(fakesome)
 							}
 							catch (e) {
 								console.log('Couldn\'t evaluate fakesome.' + value)
@@ -407,27 +385,6 @@ fakesome = {
 
 		return evaluateObject(clone(schema))
 	},
-
-	/*
-	 matrix: function (width, height, valueSet) {
-
-	 var a,
-	 i,
-	 matrix = []
-
-	 valueSet = valueSet || [0, 1]
-
-	 for (i = 1; i <= height; i++) {
-	 for (a = 1; a <= width; a++) {
-
-	 matrix.push(valueSet[randomNumber(valueSet.length - 1)])
-	 }
-	 }
-
-	 return matrix
-
-	 },
-	 */
 
 	sentence: function (min, max) {
 
@@ -499,12 +456,6 @@ fakesome = {
 
 		return lorem.substr(0, randomInt(min, max))
 	},
-
-	/*
-	 url: function () {
-	 return this.name() + '.com'
-	 },
-	 */
 
 	word: function (minChars, maxChars) {
 
@@ -809,15 +760,8 @@ if (canvasIsAvailable)
 // Add methods via fn for future compatibility
 fakesome.fn = fakesome
 
-
-if (typeof module === "object" && module && typeof module.exports === "object")
-	module.exports = fakesome
-
-else if (typeof define === "function" && define.amd)
-	define("fakesome", [], function () {
-		return fakesome
-	})
-
 if (typeof window === "object" && typeof window.document === "object") {
 	window.fakesome = fakesome
 }
+
+export default fakesome

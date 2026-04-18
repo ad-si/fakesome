@@ -1,7 +1,7 @@
-var assert = require("assert"),
-	request = require('request'),
-	fakesome = require('../src/fakesome'),
-	repetitions = 100000,
+import assert from 'node:assert'
+import fakesome from '../src/fakesome.js'
+
+var repetitions = 100000,
 	fewRepetitions = 1000,
 	imgIsAvailable,
 	i
@@ -329,9 +329,9 @@ describe('Fakesome', function () {
 
 			console.warn(
 				'\n',
-				'\033[33m',
+				'\x1b[33m',
 				'fakesome.img() will not be available.',
-				'\033[0m'
+				'\x1b[0m'
 			)
 		})
 	})
@@ -355,7 +355,7 @@ describe('Fakesome', function () {
 		})
 
 
-		it('should return a reachable url', function (done) {
+		it('should return a reachable url', async function () {
 
 			var value = fakesome.imgURL({
 				"width": 400,
@@ -363,15 +363,9 @@ describe('Fakesome', function () {
 				"grayscale": true
 			})
 
+			var res = await fetch(value, {redirect: 'follow'})
 
-			request.get({url: value, followAllRedirects: true}, function (error, res) {
-
-				if (error) throw error
-
-				assert(res.statusCode === 200, 'GET ' + value + ' ' + res.statusCode)
-
-				done()
-			})
+			assert(res.status === 200, 'GET ' + value + ' ' + res.status)
 		})
 
 	})

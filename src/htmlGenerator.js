@@ -1,9 +1,9 @@
-var shaven = require('shaven').default,
-	documentationData = require('./documentation'),
-	fakesome = require('./fakesome')
+import shaven from 'shaven'
+import documentationData from './documentation.js'
+import fakesome from './fakesome.js'
 
 
-module.exports = function () {
+export default function () {
 
 	var templates = {
 			argument: function (arg) {
@@ -255,11 +255,6 @@ module.exports = function () {
 	// TODO: Catch exceptions globally
 	// TODO: Include https://github.com/fent/randexp.js
 
-
-	console.dir(
-		templates.tableOfContents(documentationData),
-		{depth: null, colors: true}
-	)
 
 	html.tableOfContents = shaven(
 		templates.tableOfContents(documentationData)

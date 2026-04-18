@@ -28,21 +28,21 @@
     "prepublish": "npm run build && npm test"
   },
   "dependencies": {
-    "clone": "~0.1.11",
-    "color": "~0.4.4",
-    "shaven": "^0.7.3"
+    "clone": "~2.1.2",
+    "color": "~4.2.3",
+    "shaven": "^2.1.0"
   },
   "devDependencies": {
-    "browserify": "^2.35.0",
-    "html-minifier": "^0.7.2",
-    "jake": "^8.0.12",
-    "mocha": "^2.2.4",
-    "nib": "^1.0.1",
-    "request": "^2.27.0",
-    "stylus": "^0.51.1",
-    "uglify-js": "^2.3.2"
+    "browserify": "^17.0.1",
+    "html-minifier": "^4.0.0",
+    "jake": "^12.9.7",
+    "mocha": "^11.7.5",
+    "nib": "^1.2.0",
+    "request": "^2.88.2",
+    "stylus": "^0.64.0",
+    "uglify-js": "^3.19.3"
   },
   "optionalDependencies": {
-    "canvas": "~1.1.2"
+    "canvas": "~3.2.3"
   }
 }

@@ -18,17 +18,13 @@ var fs = require('fs'),
 
 function buildMinifiedJs (string) {
 
-	var compressor = uglify.Compressor(),
-		ast
+	var result = uglify.minify(string, {
+		output: {comments: /fakesome/}
+	})
 
-	ast = uglify.parse(string)
-	ast.figure_out_scope()
-	ast.transform(compressor)
-	ast.figure_out_scope()
-	ast.compute_char_frequency()
-	ast.mangle_names()
+	if (result.error) throw result.error
 
-	return ast.print_to_string({"comments": /fakesome/})
+	return result.code
 }
 
 function bundleModules (callback) {
@@ -51,13 +47,6 @@ function bundleModules (callback) {
 
 desc('Default build process')
 task('default', buildFiles)
-
-
-watchTask(['default'], function () {
-	this.watchFiles.include([
-		'./**/*.styl'
-	])
-})
 
 
 desc('Compile fakesome.js')
@@ -126,8 +115,7 @@ file(
 			data = fs.readFileSync('src/index.hbs', {encoding: 'utf8'})
 				.replace('{{documentation}}', html.documentation)
 				.replace('{{tableOfContents}}', html.tableOfContents)
-				.replace(/Version [\.0-9]+/g, 'Version ' + version),
-			lint = new htmlMinifier.HTMLLint()
+				.replace(/Version [\.0-9]+/g, 'Version ' + version)
 
 
 		fs.writeFileSync(
@@ -137,12 +125,9 @@ file(
 				collapseWhitespace: true,
 				removeAttributeQuotes: true,
 				removeRedundantAttributes: true,
-				minifyJS: true,
-				lint: lint
+				minifyJS: true
 			})
 		)
-
-		lint.populate()
 
 		console.log('Building ' + fileName + ' succeeded')
 		complete()

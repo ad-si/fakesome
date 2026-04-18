@@ -119,7 +119,9 @@ function decimalPlaces(number) {
 
 function randomColor(min, max, type) {
 
-	var value
+	var value,
+		alpha,
+		hsl
 
 	min = min || 'rgb(0,0,0)'
 	max = max || 'rgb(255,255,255)'
@@ -128,20 +130,25 @@ function randomColor(min, max, type) {
 	min = color(min)
 	max = color(max)
 
-	value = color()
-		.rgb([
-			randomInt(min.red(), max.red()),
-			randomInt(min.green(), max.green()),
-			randomInt(min.blue(), max.blue())
-		])
-		.alpha(randomFloat(min.alpha(), max.alpha()))
+	alpha = randomFloat(min.alpha(), max.alpha())
+
+	value = color.rgb([
+		randomInt(min.red(), max.red()),
+		randomInt(min.green(), max.green()),
+		randomInt(min.blue(), max.blue())
+	]).alpha(alpha)
 
 
-	if (type == 'rgb') return value.rgbString()
-	if (type == 'rgba') return value.rgbaString()
-	if (type == 'hsl') return value.hslString()
-	if (type == 'hsla') return value.hslaString()
-	if (type == 'hex') return value.hexString()
+	if (type == 'rgb') return value.rgb().string()
+	if (type == 'rgba')
+		return 'rgba(' + value.red() + ', ' + value.green() + ', ' +
+			value.blue() + ', ' + alpha + ')'
+	if (type == 'hsl') return value.hsl().string()
+	if (type == 'hsla') {
+		hsl = value.hsl().round().object()
+		return 'hsla(' + hsl.h + ', ' + hsl.s + '%, ' + hsl.l + '%, ' + alpha + ')'
+	}
+	if (type == 'hex') return value.hex()
 	if (type == 'percent') return value.percentString()
 	else
 		throw new TypeError(type + 'is not allowed as a type value.')

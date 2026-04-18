@@ -1,4 +1,4 @@
-var shaven = require('shaven'),
+var shaven = require('shaven').default,
 	documentationData = require('./documentation'),
 	fakesome = require('./fakesome')
 
@@ -166,11 +166,13 @@ module.exports = function () {
 								['tr',
 									['td.code',
 										['pre',
-											['code.js.hljs',
-												'fakesome.' + method.name +
-												'(' +
-												exampleArgs.join(', ') +
-												')'
+											['code.js.hljs&',
+												escapeHtml(
+													'fakesome.' + method.name +
+													'(' +
+													exampleArgs.join(', ') +
+													')'
+												)
 											]
 										]
 									],
@@ -188,6 +190,14 @@ module.exports = function () {
 			tableOfContents: [],
 			documentation: []
 		}
+
+	function escapeHtml (str) {
+
+		return String(str)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+	}
 
 	function truncate (str) {
 

@@ -298,11 +298,10 @@ fakesome = {
 				width: 100,
 				height: 100,
 				grayscale: false,
-				site: 'lorempixel.com',
-				number: false,
-				format: 'png'
+				site: 'picsum.photos',
+				number: false
 			},
-			url = 'http://'
+			url = 'https://'
 
 		conf = conf || {}
 
@@ -313,34 +312,12 @@ fakesome = {
 
 		switch (conf.site) {
 
-			case 'lorempixel.com':
-				url += 'lorempixel.com'
-				url += conf.grayscale ? '/g' : ''
+			case 'picsum.photos':
+				url += 'picsum.photos'
+				url += conf.number ? '/seed/' + conf.number : ''
 				url += conf.width ? '/' + conf.width : ''
 				url += conf.height ? '/' + conf.height : ''
-				url += conf.tag ? '/' + conf.tag : ''
-				url += conf.number ? '/' + conf.number : ''
-				url += conf.text ? '/' + conf.text : ''
-				break
-
-			case 'placehold.it':
-				url += 'placehold.it'
-				url += conf.width ? '/' + conf.width : ''
-				url += conf.height ? 'x' + conf.height : ''
-				url += conf.bgColor ? '/' + color(conf.bgColor).rgbString() : ''
-				url += conf.textColor ? '/' + color(conf.textColor).rgbString() : ''
-				url += conf.format ? '.' + conf.format : ''
-				url += conf.text ? '&text=' + encodeURIComponent(conf.text) : ''
-				break
-
-			case 'flickholdr.com':
-				url += 'flickholdr.com'
-				url += conf.width ? '/' + conf.width : ''
-				url += conf.height ? '/' + conf.height : ''
-				url += conf.tag ? '/' + conf.tag : ''
-				url += conf.number ? '/' + conf.number : ''
-				url += conf.text ? '/' + conf.text : ''
-				url += conf.grayscale ? '/bw' : ''
+				url += conf.grayscale ? '?grayscale' : ''
 				break
 
 			case 'placekitten.com':

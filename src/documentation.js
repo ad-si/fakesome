@@ -735,26 +735,6 @@ module.exports = [
 						default: 100
 					},
 					{
-						name: 'tag',
-						type: 'String',
-						default: ''
-					},
-					{
-						name: 'text',
-						type: 'String',
-						default: ''
-					},
-					{
-						name: 'bgColor',
-						type: 'Color',
-						default: ''
-					},
-					{
-						name: 'textColor',
-						type: 'Color',
-						default: ''
-					},
-					{
 						name: 'grayscale',
 						type: 'Boolean',
 						default: false
@@ -762,24 +742,17 @@ module.exports = [
 					{
 						name: 'site',
 						type: 'String',
-						default: 'lorempixel.com',
+						default: 'picsum.photos',
 						desc: 'Select the site to be used for loading the images. ' +
 						'You can choose between following sites: ' +
-						'<a href="http://lorempixel.com">lorempixel.com</a>, ' +
-						'<a href="http://placehold.it">placehold.it</a>, ' +
-						'<a href="http://placekitten.com">placekitten.com</a> ' +
+						'<a href="https://picsum.photos">picsum.photos</a> ' +
 						'and ' +
-						'<a href="http://flickholdr.com">flickholdr.com</a>'
+						'<a href="http://placekitten.com">placekitten.com</a>'
 					},
 					{
 						name: 'number',
 						type: 'Number',
 						default: false
-					},
-					{
-						name: 'format',
-						type: 'png | gif | jpg',
-						default: 'png'
 					}
 				]
 			}
@@ -790,7 +763,7 @@ module.exports = [
 		},
 		examples: [
 			{
-				desc: 'URL to a random image on lorempixel.com',
+				desc: 'URL to a random image on picsum.photos',
 				visible: true,
 				args: null
 			},

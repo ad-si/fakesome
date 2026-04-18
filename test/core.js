@@ -364,7 +364,7 @@ describe('Fakesome', function () {
 			})
 
 
-			request.head(value, function (error, res) {
+			request.get({url: value, followAllRedirects: true}, function (error, res) {
 
 				if (error) throw error
 

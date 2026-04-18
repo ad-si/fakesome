@@ -9,7 +9,7 @@
     "data generator",
     "mockup"
   ],
-  "bugs": "http://github.com/adius/fakesome/issues",
+  "bugs": "http://github.com/ad-si/fakesome/issues",
   "license": "MIT",
   "author": {
     "name": "Adrian Sieber",
@@ -19,7 +19,7 @@
   "main": "src/fakesome.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adius/fakesome.git"
+    "url": "https://github.com/ad-si/fakesome.git"
   },
   "scripts": {
     "start": "stylus --watch --out ./css styl",

@@ -796,18 +796,20 @@ export default [
 			{
 				name: 'min',
 				desc: 'Set the darkest (and most transparent) possible color.',
-				type: 'Number',
-				default: 'rgb(0, 0, 0)'
+				type: 'String',
+				default: 'rgba(0, 0, 0, 0)'
 			},
 			{
 				name: 'max',
 				desc: 'Set the brightest (and least transparent) possible color.',
-				type: 'Number',
-				default: 'rgb(255, 255, 255)'
+				type: 'String',
+				default: 'rgba(255, 255, 255, 1)'
 			},
 			{
 				name: 'type',
-				desc: 'Notation type of the returned color.',
+				desc: 'Notation type of the returned color ' +
+					'(rgb, rgba, hsl, hsla, hex or percent). ' +
+					'If omitted, it is inferred from the notation of min and max.',
 				type: 'String',
 				default: 'rgb'
 			}
@@ -826,6 +828,11 @@ export default [
 				desc: 'Random hsl color',
 				visible: true,
 				args: [null, null, 'hsl']
+			},
+			{
+				desc: 'Random semi-transparent dark color (type inferred)',
+				visible: true,
+				args: ['rgba(0, 0, 0, 0.3)', 'rgba(100, 100, 100, 0.7)']
 			}
 		]
 	},

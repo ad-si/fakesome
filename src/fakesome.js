@@ -30,13 +30,15 @@ var tld = ['com', 'de', 'org', 'net'],
 		['nu', 'ri', 'mi'],
 		['an', 'el', 'us', 'mas']
 	],
-	lorem = "lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor" +
-		"invidunt ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam et" +
-		"justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum" +
-		"dolor sit amet lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod" +
-		"tempor invidunt ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam" +
-		"et justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum" +
-		"dolor sit amet",
+	lorem = [
+		'lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor',
+		'invidunt ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam et',
+		'justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum',
+		'dolor sit amet lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod',
+		'tempor invidunt ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam',
+		'et justo duo dolores et ea rebum stet clita kasd gubergren no sea takimata sanctus est lorem ipsum',
+		'dolor sit amet'
+	].join(' '),
 	uniqueMap = {},
 	fakesome
 
@@ -123,8 +125,16 @@ function randomColor(min, max, type) {
 		alpha,
 		hsl
 
-	min = min || 'rgb(0,0,0)'
-	max = max || 'rgb(255,255,255)'
+	// Infer the type from the format of the bounds if none is set
+	if (!type && typeof min === 'string' && typeof max === 'string') {
+		if (min.includes('rgb') || max.includes('rgb'))
+			type = (min.includes('rgba') || max.includes('rgba')) ? 'rgba' : 'rgb'
+		else if (min.includes('hsl') || max.includes('hsl'))
+			type = (min.includes('hsla') || max.includes('hsla')) ? 'hsla' : 'hsl'
+	}
+
+	min = min || 'rgba(0,0,0,0)'
+	max = max || 'rgba(255,255,255,1)'
 	type = type || 'rgb'
 
 	min = color(min)
@@ -139,11 +149,11 @@ function randomColor(min, max, type) {
 	]).alpha(alpha)
 
 
-	if (type == 'rgb') return value.rgb().string()
+	if (type == 'rgb') return value.alpha(1).rgb().string()
 	if (type == 'rgba')
 		return 'rgba(' + value.red() + ', ' + value.green() + ', ' +
 			value.blue() + ', ' + alpha + ')'
-	if (type == 'hsl') return value.hsl().string()
+	if (type == 'hsl') return value.alpha(1).hsl().round().string()
 	if (type == 'hsla') {
 		hsl = value.hsl().round().object()
 		return 'hsla(' + hsl.h + ', ' + hsl.s + '%, ' + hsl.l + '%, ' + alpha + ')'

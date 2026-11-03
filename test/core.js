@@ -143,15 +143,48 @@ describe('Fakesome', function () {
 		})
 
 
-		it('should return a valid hsla color without transparency', function () {
+		it('should return a valid hsl color without transparency', function () {
 
-			var pattern = /^hsla\([0-3]?[0-9]?[0-9], ([0-1]?[0-9]?[0-9]%, ){2}1\)$/
+			var pattern = /^hsl\([0-3]?[0-9]?[0-9], ([0-1]?[0-9]?[0-9]%, )[0-1]?[0-9]?[0-9]%\)$/
+
+			repeat('few', function () {
+
+				var color = fakesome.color(null, null, 'hsl')
+
+				assert.equal(color.search(pattern), 0, color)
+			})
+		})
+
+
+		it('should return a valid hsla color with transparency', function () {
+
+			var pattern = /^hsla\([0-3]?[0-9]?[0-9], ([0-1]?[0-9]?[0-9]%, ){2}0\.[0-9]+\)$/
 
 			repeat('few', function () {
 
 				var color = fakesome.color(null, null, 'hsla')
 
 				assert.equal(color.search(pattern), 0, color)
+			})
+		})
+
+
+		it('should infer the type from the bounds', function () {
+
+			repeat('few', function () {
+
+				assert.equal(
+					fakesome.color('hsl(0, 0%, 0%)', 'hsl(0, 0%, 100%)').indexOf('hsl('),
+					0
+				)
+				assert.equal(
+					fakesome.color('hsla(0, 0%, 0%, 0.5)', 'hsl(0, 0%, 100%)').indexOf('hsla('),
+					0
+				)
+				assert.equal(
+					fakesome.color('rgb(0, 0, 0)', 'rgba(9, 9, 9, 0.5)').indexOf('rgba('),
+					0
+				)
 			})
 		})
 
@@ -743,6 +776,14 @@ describe('Fakesome', function () {
 				assert(length === 5, 'Not 5 words but ' + length)
 				assert(value.search(/^[\w ]+$/) === 0, value + ' contains not just letters')
 			})
+		})
+
+		it('should not contain accidentally concatenated words', function () {
+
+			// Longest words in the lorem text have 10 characters
+			assert.throws(function () {
+				fakesome.word(11, 30)
+			}, RangeError)
 		})
 
 	})

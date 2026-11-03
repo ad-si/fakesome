@@ -13,7 +13,7 @@ export interface ImgURLConfig {
 	width?: number
 	height?: number
 	grayscale?: boolean
-	site?: 'picsum.photos' | 'placekitten.com'
+	site?: 'picsum.photos'
 	/** Seed to get the same image for the same number */
 	number?: number | string | false
 }
@@ -126,7 +126,9 @@ const lorem = [
 	'dolor sit amet',
 ].join(' ')
 
-const uniqueMap: Record<string, unknown[]> = {}
+const uniqueMap: Record<string, Set<unknown>> = {}
+
+const msPerDay = 24 * 60 * 60 * 1000
 
 
 function isInt(number: number): boolean {
@@ -150,6 +152,35 @@ function randomInt(min?: number | null, max?: number | null): number {
 		throw new TypeError('Max must be an Integer. Not ' + upper)
 
 	return Math.floor(Math.random() * (upper - lower + 1) + lower)
+}
+
+const surrogatesStart = 0xD800
+const surrogatesEnd = 0xDFFF
+const maxCodePoint = 0x10FFFF
+
+/** Random unicode code point in [min, max] excluding surrogates */
+function randomCodePoint(min: number, max: number): number {
+	const lower = Math.max(0, Math.min(min, max))
+	const upper = Math.min(maxCodePoint, Math.max(min, max))
+
+	const overlap = Math.max(
+		0,
+		Math.min(upper, surrogatesEnd) - Math.max(lower, surrogatesStart) + 1,
+	)
+	const count = upper - lower + 1 - overlap
+
+	if (count <= 0) {
+		throw new RangeError(
+			'No valid code points between ' + min + ' and ' + max + '.',
+		)
+	}
+
+	const codePoint = lower + randomInt(0, count - 1)
+
+	// Skip the surrogates
+	return overlap > 0 && codePoint >= Math.max(lower, surrogatesStart)
+		? codePoint + overlap
+		: codePoint
 }
 
 function randomFloat(min?: number | null, max?: number | null): number {
@@ -284,6 +315,15 @@ function randomSentence(min: number, max: number): string {
 	)
 }
 
+/** Key to compare values by content instead of by reference */
+function uniqueKey(value: unknown): unknown {
+	if (value instanceof Date) return 'date:' + value.getTime()
+	if (typeof value === 'object' && value !== null)
+		return 'json:' + JSON.stringify(value)
+
+	return value
+}
+
 /** Methods which are no generators and therefore don't get wrapped */
 function isWrappable(method: string): boolean {
 	return method !== 'maybe' &&
@@ -329,15 +369,25 @@ const fakesome = {
 	},
 
 	character(min?: number, max?: number): string {
-		return String.fromCharCode(randomInt(min ?? 32, max ?? 1114112))
+		return String.fromCodePoint(randomCodePoint(min ?? 32, max ?? maxCodePoint))
 	},
 
 	color: randomColor,
 
 	date(startDate?: DateInput | null, endDate?: DateInput | null): Date {
-		const randDate = randomDatetime(startDate, endDate)
+		const start = new Date(startDate ?? 0).getTime()
+		const end = new Date(endDate ?? new Date()).getTime()
+		const firstDay = Math.ceil(Math.min(start, end) / msPerDay)
+		const lastDay = Math.floor(Math.max(start, end) / msPerDay)
 
-		return new Date(randDate.toJSON().slice(0, 10))
+		if (firstDay > lastDay) {
+			throw new RangeError(
+				'There is no date (midnight UTC) between ' + startDate +
+				' and ' + endDate + '.',
+			)
+		}
+
+		return new Date(randomInt(firstDay, lastDay) * msPerDay)
 	},
 
 	datetime: randomDatetime,
@@ -382,17 +432,12 @@ const fakesome = {
 
 			case 'picsum.photos':
 				url += 'picsum.photos'
-				url += config.number ? '/seed/' + config.number : ''
+				url += (config.number !== false && config.number !== '')
+					? '/seed/' + encodeURIComponent(config.number)
+					: ''
 				url += config.width ? '/' + config.width : ''
 				url += config.height ? '/' + config.height : ''
 				url += config.grayscale ? '?grayscale' : ''
-				break
-
-			case 'placekitten.com':
-				url += 'placekitten.com'
-				url += config.grayscale ? '/g' : ''
-				url += config.width ? '/' + config.width : ''
-				url += config.height ? '/' + config.height : ''
 				break
 
 			default:
@@ -431,17 +476,22 @@ const fakesome = {
 
 			for (const key of Object.keys(object)) {
 				const value = object[key]
+				// Only evaluate method calls like "integer(1, 9)" or "maybe().word()"
 				const methodName = typeof value === 'string'
-					? value.match(/^\w+/)?.[0]
+					? value.trim().match(/^(\w+)\(.*\)$/s)?.[1]
 					: undefined
 
-				// If method exists evaluate
-				if (typeof value === 'string' && methodName && methods[methodName]) {
+				if (
+					typeof value === 'string' &&
+					methodName &&
+					Object.hasOwn(methods, methodName) &&
+					typeof methods[methodName] === 'function'
+				) {
 					try {
 						object[key] = new Function('fakesome', 'return fakesome.' + value)(fakesome)
 					}
 					catch {
-						console.log('Couldn\'t evaluate fakesome.' + value)
+						console.warn('Couldn\'t evaluate fakesome.' + value)
 					}
 				}
 				else if (typeof value === 'function') {
@@ -504,7 +554,10 @@ const fakesome = {
 		typeCheck(min, 'number')
 		typeCheck(max, 'number')
 
-		return lorem.slice(0, randomInt(min ?? 50, max ?? 100))
+		const length = randomInt(min ?? 50, max ?? 100)
+		const repetitions = Math.ceil(length / (lorem.length + 1))
+
+		return Array(repetitions).fill(lorem).join(' ').slice(0, length)
 	},
 
 	word(minChars?: number, maxChars?: number): string {
@@ -556,15 +609,20 @@ const fakesome = {
 
 	unique(reset?: boolean): UniqueGenerators {
 
+		// Only reset on the first call of each method of this wrapper
+		const alreadyReset = new Set<string>()
+
 		return wrapGenerators<UniqueGenerators>((generator, name) =>
 			(...args) => {
 				let counter = 0
 				let value: unknown
 
-				if (reset === true || uniqueMap[name] === undefined)
-					uniqueMap[name] = []
+				if (reset === true && !alreadyReset.has(name)) {
+					uniqueMap[name] = new Set()
+					alreadyReset.add(name)
+				}
 
-				const usedValues = uniqueMap[name]
+				const usedValues = uniqueMap[name] ??= new Set()
 
 				do {
 					if (counter >= 1000) {
@@ -577,9 +635,9 @@ const fakesome = {
 					value = generator(...args)
 					counter++
 				}
-				while (usedValues.includes(value))
+				while (usedValues.has(uniqueKey(value)))
 
-				usedValues.push(value)
+				usedValues.add(uniqueKey(value))
 
 				return value
 			},

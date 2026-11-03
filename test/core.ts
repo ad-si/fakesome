@@ -106,11 +106,26 @@ describe('Fakesome', () => {
 		it('should return a random unicode character', () => {
 			repeat('often', () => {
 				const value = fakesome.character()
-				const charCode = value.charCodeAt(0)
+				const codePoint = value.codePointAt(0) ?? -1
 
-				// TODO: Handle non-Basic-Multilingual-Plane characters
-				assert(charCode >= 0 && charCode <= 65536, value)
+				assert.equal([...value].length, 1)
+				assert(codePoint >= 32 && codePoint <= 0x10FFFF, value)
 			})
+		})
+
+		it('should support characters outside the basic multilingual plane', () => {
+			repeat('few', () => {
+				const codePoint = fakesome.character(0x1F600, 0x1F64F).codePointAt(0) ?? -1
+
+				assert(codePoint >= 0x1F600 && codePoint <= 0x1F64F, codePoint.toString(16))
+			})
+		})
+
+		it('should never return lone surrogates', () => {
+			repeat('often', () => {
+				assert.doesNotMatch(fakesome.character(0xD7FE, 0xE001), /[\uD800-\uDFFF]/)
+			})
+			assert.throws(() => fakesome.character(0xD800, 0xDFFF), RangeError)
 		})
 
 		it('should return a random uppercase character', () => {
@@ -222,6 +237,18 @@ describe('Fakesome', () => {
 
 				assert(date >= new Date('2000-07-14') && date <= new Date('2010-12-21'))
 			})
+		})
+
+		it('should not return a date before a start date with a time', () => {
+			repeat('few', () => {
+				const date = fakesome.date('2000-01-01T12:00:00Z', '2000-01-03T00:00:00Z')
+
+				assert(date >= new Date('2000-01-01T12:00:00Z'), date.toJSON())
+			})
+			assert.throws(
+				() => fakesome.date('2000-01-01T01:00:00Z', '2000-01-01T23:00:00Z'),
+				RangeError,
+			)
 		})
 	})
 
@@ -346,6 +373,13 @@ describe('Fakesome', () => {
 			})
 		})
 
+		it('should support 0 as seed', () => {
+			assert.equal(
+				fakesome.imgURL({number: 0}),
+				'https://picsum.photos/seed/0/100/100',
+			)
+		})
+
 		it('should return a reachable url', async () => {
 			const value = fakesome.imgURL(conf)
 			const res = await fetch(value, {redirect: 'follow'})
@@ -462,6 +496,20 @@ describe('Fakesome', () => {
 			assert(value.size >= 1.5 && value.size <= 1.9, String(value.size))
 		})
 
+		it('should only evaluate method calls', () => {
+			const value = fakesome.object({
+				type: 'text',
+				note: 'word salad',
+				ctor: 'constructor()',
+				optional: 'maybe(0).integer(1, 9)',
+			})
+
+			assert.equal(value.type, 'text')
+			assert.equal(value.note, 'word salad')
+			assert.equal(value.ctor, 'constructor()')
+			assert.equal(typeof value.optional, 'number')
+		})
+
 		it('should not modify the schema', () => {
 			const schema = {name: 'word()'}
 
@@ -566,6 +614,13 @@ describe('Fakesome', () => {
 			})
 		})
 
+		it('should return texts longer than the lorem ipsum source', () => {
+			const value = fakesome.text(2000, 2000)
+
+			assert.equal(value.length, 2000)
+			assert.match(value, /^[\w ]+$/)
+		})
+
 		it('should return a text with 20-40 characters', () => {
 			repeat('few', () => {
 				const value = fakesome.text(20, 40)
@@ -613,6 +668,26 @@ describe('Fakesome', () => {
 			const elements = domain.map(() => fakesome.unique().element(domain))
 
 			assert(!hasDuplicates(elements), String(elements))
+		})
+
+		it('should only reset once per wrapper', () => {
+			const unique = fakesome.unique(true)
+			const values = [0, 1, 2].map(() => unique.integer(0, 2))
+
+			assert(!hasDuplicates(values), String(values))
+			assert.throws(() => unique.integer(0, 2), /Unique value/)
+		})
+
+		it('should compare dates by value', () => {
+			const unique = fakesome.unique(true)
+
+			unique.date('2000-01-01', '2000-01-02')
+			unique.date('2000-01-01', '2000-01-02')
+
+			assert.throws(
+				() => unique.date('2000-01-01', '2000-01-02'),
+				/Unique value/,
+			)
 		})
 
 		it('should throw Error if unique value can\'t be generated', () => {

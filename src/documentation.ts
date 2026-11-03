@@ -268,14 +268,7 @@ const documentation: DocEntry[] = [
 				name: 'max',
 				desc: 'The maximum unicode-value of the character.',
 				type: 'Number',
-				default: 1114112
-			},
-			{
-				name: 'filter',
-				desc: 'Filters the generated values before return. ' +
-				'Receives the character as the first parameter and ' +
-				'returns true or false.',
-				type: 'Function'
+				default: 1114111
 			}
 		],
 		return: {
@@ -780,15 +773,15 @@ const documentation: DocEntry[] = [
 						type: 'String',
 						default: 'picsum.photos',
 						desc: 'Select the site to be used for loading the images. ' +
-						'You can choose between following sites: ' +
+						'Currently only ' +
 						'<a href="https://picsum.photos">picsum.photos</a> ' +
-						'and ' +
-						'<a href="http://placekitten.com">placekitten.com</a>'
+						'is supported.'
 					},
 					{
 						name: 'number',
 						type: 'Number',
-						default: false
+						default: false,
+						desc: 'Seed to always get the same image for the same number.'
 					}
 				]
 			}
@@ -804,14 +797,14 @@ const documentation: DocEntry[] = [
 				args: null
 			},
 			{
-				desc: 'URL to a random image on placekitten.com',
+				desc: 'URL to a fixed grayscale image on picsum.photos',
 				visible: true,
 				args: [
 					{
-						site: 'placekitten.com',
 						width: 400,
 						height: 250,
-						grayscale: true
+						grayscale: true,
+						number: 42
 					}
 				]
 			}
@@ -956,9 +949,9 @@ const documentation: DocEntry[] = [
 		'will return an integer or null with a 50:50 chance.',
 		args: [
 			{
-				name: 'chanceOfReturn',
-				desc: 'Probability that the chained function returns a value. ' +
-				'Otherwise it will return <code>null</code>.',
+				name: 'chanceOfNull',
+				desc: 'Probability that the chained function returns ' +
+				'<code>null</code> instead of a value.',
 				type: 'Number',
 				default: 0.5
 			}
@@ -976,7 +969,8 @@ const documentation: DocEntry[] = [
 		args: [
 			{
 				name: 'reset',
-				desc: 'Resets the unique values array. ',
+				desc: 'Forget the values which were already returned ' +
+				'by the chained method.',
 				type: 'Boolean',
 				default: 'false'
 			}

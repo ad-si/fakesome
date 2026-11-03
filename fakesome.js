@@ -1840,6 +1840,7 @@ var fakesome = (() => {
     "dolor sit amet"
   ].join(" ");
   var uniqueMap = {};
+  var msPerDay = 24 * 60 * 60 * 1e3;
   function isInt(number) {
     return Number(number) % 1 === 0;
   }
@@ -1854,6 +1855,25 @@ var fakesome = (() => {
     if (!isInt(upper))
       throw new TypeError("Max must be an Integer. Not " + upper);
     return Math.floor(Math.random() * (upper - lower + 1) + lower);
+  }
+  var surrogatesStart = 55296;
+  var surrogatesEnd = 57343;
+  var maxCodePoint = 1114111;
+  function randomCodePoint(min, max) {
+    const lower = Math.max(0, Math.min(min, max));
+    const upper = Math.min(maxCodePoint, Math.max(min, max));
+    const overlap = Math.max(
+      0,
+      Math.min(upper, surrogatesEnd) - Math.max(lower, surrogatesStart) + 1
+    );
+    const count = upper - lower + 1 - overlap;
+    if (count <= 0) {
+      throw new RangeError(
+        "No valid code points between " + min + " and " + max + "."
+      );
+    }
+    const codePoint = lower + randomInt(0, count - 1);
+    return overlap > 0 && codePoint >= Math.max(lower, surrogatesStart) ? codePoint + overlap : codePoint;
   }
   function randomFloat(min, max) {
     const lower = min != null ? min : -1e12;
@@ -1944,6 +1964,12 @@ var fakesome = (() => {
       shuffle(lorem.split(" ")).slice(0, randomInt(min, max)).join(" ")
     );
   }
+  function uniqueKey(value) {
+    if (value instanceof Date) return "date:" + value.getTime();
+    if (typeof value === "object" && value !== null)
+      return "json:" + JSON.stringify(value);
+    return value;
+  }
   function isWrappable(method) {
     return method !== "maybe" && method !== "unique" && method !== "array" && method !== "fn";
   }
@@ -1971,12 +1997,20 @@ var fakesome = (() => {
         throw new RangeError("Must be a number between 0 and 1");
     },
     character(min, max) {
-      return String.fromCharCode(randomInt(min != null ? min : 32, max != null ? max : 1114112));
+      return String.fromCodePoint(randomCodePoint(min != null ? min : 32, max != null ? max : maxCodePoint));
     },
     color: randomColor,
     date(startDate, endDate) {
-      const randDate = randomDatetime(startDate, endDate);
-      return new Date(randDate.toJSON().slice(0, 10));
+      const start = new Date(startDate != null ? startDate : 0).getTime();
+      const end = new Date(endDate != null ? endDate : /* @__PURE__ */ new Date()).getTime();
+      const firstDay = Math.ceil(Math.min(start, end) / msPerDay);
+      const lastDay = Math.floor(Math.max(start, end) / msPerDay);
+      if (firstDay > lastDay) {
+        throw new RangeError(
+          "There is no date (midnight UTC) between " + startDate + " and " + endDate + "."
+        );
+      }
+      return new Date(randomInt(firstDay, lastDay) * msPerDay);
     },
     datetime: randomDatetime,
     element: randomElement,
@@ -2003,16 +2037,10 @@ var fakesome = (() => {
       switch (config.site) {
         case "picsum.photos":
           url += "picsum.photos";
-          url += config.number ? "/seed/" + config.number : "";
+          url += config.number !== false && config.number !== "" ? "/seed/" + encodeURIComponent(config.number) : "";
           url += config.width ? "/" + config.width : "";
           url += config.height ? "/" + config.height : "";
           url += config.grayscale ? "?grayscale" : "";
-          break;
-        case "placekitten.com":
-          url += "placekitten.com";
-          url += config.grayscale ? "/g" : "";
-          url += config.width ? "/" + config.width : "";
-          url += config.height ? "/" + config.height : "";
           break;
         default:
           throw new Error(config.site + " is no valid image hoster.");
@@ -2036,12 +2064,12 @@ var fakesome = (() => {
         var _a;
         for (const key of Object.keys(object)) {
           const value = object[key];
-          const methodName = typeof value === "string" ? (_a = value.match(/^\w+/)) == null ? void 0 : _a[0] : void 0;
-          if (typeof value === "string" && methodName && methods[methodName]) {
+          const methodName = typeof value === "string" ? (_a = value.trim().match(/^(\w+)\(.*\)$/s)) == null ? void 0 : _a[1] : void 0;
+          if (typeof value === "string" && methodName && Object.hasOwn(methods, methodName) && typeof methods[methodName] === "function") {
             try {
               object[key] = new Function("fakesome", "return fakesome." + value)(fakesome);
             } catch {
-              console.log("Couldn't evaluate fakesome." + value);
+              console.warn("Couldn't evaluate fakesome." + value);
             }
           } else if (typeof value === "function") {
             object[key] = value();
@@ -2082,7 +2110,9 @@ var fakesome = (() => {
     text(min, max) {
       typeCheck(min, "number");
       typeCheck(max, "number");
-      return lorem.slice(0, randomInt(min != null ? min : 50, max != null ? max : 100));
+      const length = randomInt(min != null ? min : 50, max != null ? max : 100);
+      const repetitions = Math.ceil(length / (lorem.length + 1));
+      return Array(repetitions).fill(lorem).join(" ").slice(0, length);
     },
     word(minChars, maxChars) {
       typeCheck(minChars, "number");
@@ -2116,13 +2146,17 @@ var fakesome = (() => {
       );
     },
     unique(reset) {
+      const alreadyReset = /* @__PURE__ */ new Set();
       return wrapGenerators(
         (generator, name) => (...args) => {
+          var _a;
           let counter = 0;
           let value;
-          if (reset === true || uniqueMap[name] === void 0)
-            uniqueMap[name] = [];
-          const usedValues = uniqueMap[name];
+          if (reset === true && !alreadyReset.has(name)) {
+            uniqueMap[name] = /* @__PURE__ */ new Set();
+            alreadyReset.add(name);
+          }
+          const usedValues = (_a = uniqueMap[name]) != null ? _a : uniqueMap[name] = /* @__PURE__ */ new Set();
           do {
             if (counter >= 1e3) {
               throw new Error(
@@ -2131,8 +2165,8 @@ var fakesome = (() => {
             }
             value = generator(...args);
             counter++;
-          } while (usedValues.includes(value));
-          usedValues.push(value);
+          } while (usedValues.has(uniqueKey(value)));
+          usedValues.add(uniqueKey(value));
           return value;
         }
       );

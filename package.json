@@ -17,32 +17,49 @@
     "url": "http://adriansieber.com"
   },
   "type": "module",
-  "main": "src/fakesome.js",
+  "main": "./dist/fakesome.js",
+  "types": "./dist/fakesome.d.ts",
   "exports": {
-    ".": "./src/fakesome.js",
+    ".": {
+      "types": "./dist/fakesome.d.ts",
+      "default": "./dist/fakesome.js"
+    },
     "./package.json": "./package.json"
   },
+  "files": [
+    "dist",
+    "src/fakesome.ts"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ad-si/fakesome.git"
   },
   "scripts": {
     "start": "stylus --watch --out ./css styl",
-    "test": "mocha -b --inline-diffs",
-    "build": "stylus --compress --out ./css styl && node scripts/build.js",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "npm run typecheck && mocha -b --inline-diffs --extension ts 'test/**/*.ts'",
+    "build": "npm run build:lib && npm run build:site",
+    "build:lib": "rm -rf dist && tsc -p tsconfig.build.json",
+    "build:site": "stylus --compress --out ./css styl && node scripts/build.ts",
     "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {
     "clone": "~2.1.2",
-    "color": "~4.2.3",
-    "shaven": "^2.1.0"
+    "color": "~4.2.3"
   },
   "devDependencies": {
+    "@types/clone": "^2.1.4",
+    "@types/color": "^4.2.1",
+    "@types/html-minifier-terser": "^7.0.2",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^26.6.6",
     "esbuild": "^0.24.0",
     "html-minifier-terser": "^7.2.0",
     "mocha": "^11.7.5",
     "nib": "^1.2.0",
-    "stylus": "^0.64.0"
+    "shaven": "^2.1.0",
+    "stylus": "^0.64.0",
+    "typescript": "^7.0.2"
   },
   "optionalDependencies": {
     "canvas": "~3.2.3"

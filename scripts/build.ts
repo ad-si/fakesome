@@ -1,20 +1,19 @@
 import {readFile, writeFile, unlink} from 'node:fs/promises'
-import {fileURLToPath} from 'node:url'
-import {dirname, resolve} from 'node:path'
+import {resolve} from 'node:path'
 import {build} from 'esbuild'
+import type {Plugin} from 'esbuild'
 import {minify as minifyHtml} from 'html-minifier-terser'
-import htmlGenerator from '../src/htmlGenerator.js'
+import htmlGenerator from '../src/htmlGenerator.ts'
 import pkg from '../package.json' with {type: 'json'}
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const rootDir = resolve(__dirname, '..')
+const rootDir = resolve(import.meta.dirname, '..')
 const version = pkg.version
 const banner = `// fakesome ${version} by Adrian Sieber (adriansieber.com)\n\n`
 
-const browserStubPlugin = {
+const browserStubPlugin: Plugin = {
 	name: 'browser-stubs',
 	setup(build) {
-		const stubPath = resolve(rootDir, 'src/browserStubs/nodeModule.js')
+		const stubPath = resolve(rootDir, 'src/browserStubs/nodeModule.ts')
 
 		build.onResolve({filter: /^node:module$/}, () => ({path: stubPath}))
 
@@ -30,9 +29,9 @@ const browserStubPlugin = {
 	},
 }
 
-async function bundleBrowserJs({minify}) {
+async function bundleBrowserJs({minify}: {minify: boolean}): Promise<string> {
 	const result = await build({
-		entryPoints: [resolve(rootDir, 'src/fakesome.js')],
+		entryPoints: [resolve(rootDir, 'src/fakesome.ts')],
 		bundle: true,
 		write: false,
 		format: 'iife',
@@ -41,11 +40,17 @@ async function bundleBrowserJs({minify}) {
 		target: ['es2019'],
 		minify,
 		banner: {js: banner},
+		// Expose the default export directly instead of the module namespace
+		footer: {js: 'fakesome = fakesome.default;'},
 		plugins: [browserStubPlugin],
 		logLevel: 'warning',
 	})
 
-	return result.outputFiles[0].text
+	const output = result.outputFiles[0]
+
+	if (!output) throw new Error('esbuild produced no output')
+
+	return output.text
 }
 
 async function buildJs() {
@@ -86,8 +91,8 @@ async function clean() {
 			await unlink(resolve(rootDir, name))
 			console.log('Deleted ' + name)
 		}
-		catch (err) {
-			if (err.code !== 'ENOENT') throw err
+		catch (error) {
+			if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
 		}
 	}
 }

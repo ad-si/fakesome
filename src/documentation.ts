@@ -1,4 +1,46 @@
-export default [
+import type {NumberFilter} from './fakesome.ts'
+
+
+export interface DocProperty {
+	name: string
+	type: string | string[]
+	default?: unknown
+	desc?: string
+}
+
+export interface DocArgument {
+	name: string
+	desc?: string
+	type: string
+	default?: unknown
+	required?: boolean
+	optional?: boolean
+	properties?: DocProperty[]
+}
+
+export interface DocExample {
+	desc: string
+	visible?: boolean
+	args?: unknown[] | null
+}
+
+export interface DocReturn {
+	type: string
+	desc: string
+	properties?: DocProperty[]
+}
+
+export interface DocEntry {
+	name: string
+	desc: string
+	type?: 'property'
+	args?: DocArgument[]
+	return?: DocReturn
+	examples?: DocExample[]
+}
+
+
+const documentation: DocEntry[] = [
 	{
 		name: 'boolean',
 		desc: 'Returns randomly true or false.',
@@ -79,7 +121,8 @@ export default [
 				desc: 'Prime Numbers between inclusive 2 and inclusive 1000',
 				visible: true,
 				args: [2, 1000,
-					function (n) {
+					// Typed via `satisfies` to keep the printed source free of annotations
+					(function (n) {
 
 						if (isNaN(n) || !isFinite(n) || n % 1 || n < 2)
 							return false
@@ -93,7 +136,7 @@ export default [
 						}
 
 						return true
-					}
+					}) satisfies NumberFilter
 				]
 			}
 		]
@@ -105,14 +148,12 @@ export default [
 			{
 				name: 'minValue',
 				desc: 'Set the lower boundary of the range.',
-				visible: true,
 				type: 'Number',
 				default: '-1e12'
 			},
 			{
 				name: 'maxValue',
 				desc: 'Set the upper boundary of the range.',
-				visible: true,
 				type: 'Number',
 				default: '1e12'
 			},
@@ -121,7 +162,6 @@ export default [
 				desc: 'Function to filter the possible numbers. ' +
 				'Receives the number as the first parameter and ' +
 				'returns true or false.',
-				visible: true,
 				type: 'Function',
 				optional: true
 			}
@@ -155,14 +195,12 @@ export default [
 			{
 				name: 'min',
 				desc: 'Set the lower boundary of the date range.',
-				visible: true,
 				type: 'String',
 				default: '1970-01-01'
 			},
 			{
 				name: 'max',
 				desc: 'Set the upper boundary of the date range.',
-				visible: true,
 				type: 'String',
 				default: 'today'
 			}
@@ -190,14 +228,12 @@ export default [
 			{
 				name: 'min',
 				desc: 'Set the lower boundary of the datetime range.',
-				visible: true,
 				type: 'String',
 				default: '1970-01-01'
 			},
 			{
 				name: 'max',
 				desc: 'Set the upper boundary of the datetime range.',
-				visible: true,
 				type: 'String',
 				default: 'today'
 			}
@@ -963,3 +999,5 @@ export default [
 		type: 'property'
 	}
 ]
+
+export default documentation

@@ -1,6 +1,7 @@
 // fakesome 0.5.5 by Adrian Sieber (adriansieber.com)
 
 
+"use strict";
 var fakesome = (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -1799,7 +1800,7 @@ var fakesome = (() => {
     }
   });
 
-  // src/fakesome.js
+  // src/fakesome.ts
   var fakesome_exports = {};
   __export(fakesome_exports, {
     default: () => fakesome_default
@@ -1807,30 +1808,28 @@ var fakesome = (() => {
   var import_color = __toESM(require_color(), 1);
   var import_clone = __toESM(require_clone(), 1);
 
-  // src/browserStubs/nodeModule.js
+  // src/browserStubs/nodeModule.ts
   function createRequire() {
     return function() {
       throw new Error("node:module is not available in the browser");
     };
   }
 
-  // src/fakesome.js
+  // src/fakesome.ts
   var import_meta = {};
-  var canvasIsAvailable = true;
+  var isBrowser = typeof window === "object" && typeof window.document === "object";
   var canvas;
-  if (typeof window === "object" && typeof window.document === "object")
+  if (isBrowser) {
     canvas = document.createElement("canvas");
-  else {
+  } else {
     try {
-      require2 = createRequire(import_meta.url);
-      nodeCanvas = require2("canvas");
+      const require2 = createRequire(import_meta.url);
+      const nodeCanvas = require2("canvas");
       canvas = nodeCanvas.createCanvas(100, 100);
-    } catch (error) {
-      canvasIsAvailable = false;
+    } catch {
+      canvas = void 0;
     }
   }
-  var require2;
-  var nodeCanvas;
   var lorem = [
     "lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor",
     "invidunt ut labore et dolore magna aliquyam erat sed diam voluptua at vero eos et accusam et",
@@ -1841,476 +1840,415 @@ var fakesome = (() => {
     "dolor sit amet"
   ].join(" ");
   var uniqueMap = {};
-  var fakesome;
-  function randomInt(min, max) {
-    var tmp;
-    if (min === void 0 || min === null) min = -4503599627370495;
-    if (max === void 0 || max === null) max = 4503599627370495;
-    min = Number(min);
-    max = Number(max);
-    if (max < min) {
-      tmp = max;
-      max = min;
-      min = tmp;
-    }
-    if (typeof min !== "number")
-      throw new TypeError("Min must be a number.");
-    if (typeof max !== "number")
-      throw new TypeError("Max must be a number.");
-    if (!isInt(min))
-      throw new TypeError("Min must be an Integer. Not " + min);
-    if (!isInt(max))
-      throw new TypeError("Max must be an Integer. Not " + max);
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-  function randomFloat(min, max, decimalPlaces) {
-    if (min === void 0 || min === null) min = -1e12;
-    if (max === void 0 || max === null) max = 1e12;
-    if (decimalPlaces)
-      return (Math.random() * (max - min) + min).toFixed(decimalPlaces);
-    else
-      return Math.random() * (max - min) + min;
-  }
-  function randomDatetime(startDate, endDate) {
-    var randDate;
-    startDate = startDate || 0;
-    endDate = endDate || /* @__PURE__ */ new Date();
-    startDate = new Date(startDate);
-    endDate = new Date(endDate);
-    return new Date(startDate.getTime() + Math.random() * (endDate - startDate));
-  }
   function isInt(number) {
     return Number(number) % 1 === 0;
   }
-  function randomColor(min, max, type) {
-    var value, alpha, hsl;
-    if (!type && typeof min === "string" && typeof max === "string") {
-      if (min.includes("rgb") || max.includes("rgb"))
-        type = min.includes("rgba") || max.includes("rgba") ? "rgba" : "rgb";
-      else if (min.includes("hsl") || max.includes("hsl"))
-        type = min.includes("hsla") || max.includes("hsla") ? "hsla" : "hsl";
+  function randomInt(min, max) {
+    let lower = Number(min != null ? min : -4503599627370495);
+    let upper = Number(max != null ? max : 4503599627370495);
+    if (upper < lower) {
+      [lower, upper] = [upper, lower];
     }
-    min = min || "rgba(0,0,0,0)";
-    max = max || "rgba(255,255,255,1)";
-    type = type || "rgb";
-    min = (0, import_color.default)(min);
-    max = (0, import_color.default)(max);
-    alpha = randomFloat(min.alpha(), max.alpha());
-    value = import_color.default.rgb([
-      randomInt(min.red(), max.red()),
-      randomInt(min.green(), max.green()),
-      randomInt(min.blue(), max.blue())
-    ]).alpha(alpha);
-    if (type == "rgb") return value.alpha(1).rgb().string();
-    if (type == "rgba")
-      return "rgba(" + value.red() + ", " + value.green() + ", " + value.blue() + ", " + alpha + ")";
-    if (type == "hsl") return value.alpha(1).hsl().round().string();
-    if (type == "hsla") {
-      hsl = value.hsl().round().object();
-      return "hsla(" + hsl.h + ", " + hsl.s + "%, " + hsl.l + "%, " + alpha + ")";
-    }
-    if (type == "hex") return value.hex();
-    if (type == "percent") return value.percentString();
-    else
-      throw new TypeError(type + "is not allowed as a type value.");
+    if (!isInt(lower))
+      throw new TypeError("Min must be an Integer. Not " + lower);
+    if (!isInt(upper))
+      throw new TypeError("Max must be an Integer. Not " + upper);
+    return Math.floor(Math.random() * (upper - lower + 1) + lower);
   }
-  function mergeObjects(obj1, obj2) {
-    for (var key in obj2)
-      if (obj2.hasOwnProperty(key))
-        obj1[key] = obj1[key] !== void 0 ? obj1[key] : obj2[key];
-    return obj1;
+  function randomFloat(min, max) {
+    const lower = min != null ? min : -1e12;
+    const upper = max != null ? max : 1e12;
+    return Math.random() * (upper - lower) + lower;
+  }
+  function randomDatetime(startDate, endDate) {
+    const start = new Date(startDate || 0).getTime();
+    const end = new Date(endDate || /* @__PURE__ */ new Date()).getTime();
+    return new Date(start + Math.random() * (end - start));
+  }
+  function inferColorType(min, max) {
+    if (min.includes("rgb") || max.includes("rgb"))
+      return min.includes("rgba") || max.includes("rgba") ? "rgba" : "rgb";
+    if (min.includes("hsl") || max.includes("hsl"))
+      return min.includes("hsla") || max.includes("hsla") ? "hsla" : "hsl";
+    return void 0;
+  }
+  function randomColor(min, max, type) {
+    if (!type && typeof min === "string" && typeof max === "string")
+      type = inferColorType(min, max);
+    const minColor = (0, import_color.default)(min || "rgba(0,0,0,0)");
+    const maxColor = (0, import_color.default)(max || "rgba(255,255,255,1)");
+    const alpha = randomFloat(minColor.alpha(), maxColor.alpha());
+    const value = import_color.default.rgb([
+      randomInt(Math.round(minColor.red()), Math.round(maxColor.red())),
+      randomInt(Math.round(minColor.green()), Math.round(maxColor.green())),
+      randomInt(Math.round(minColor.blue()), Math.round(maxColor.blue()))
+    ]).alpha(alpha);
+    switch (type || "rgb") {
+      case "rgb":
+        return value.alpha(1).rgb().string();
+      case "rgba":
+        return "rgba(" + value.red() + ", " + value.green() + ", " + value.blue() + ", " + alpha + ")";
+      case "hsl":
+        return value.alpha(1).hsl().round().string();
+      case "hsla": {
+        const hsl = value.hsl().round().object();
+        return "hsla(" + hsl.h + ", " + hsl.s + "%, " + hsl.l + "%, " + alpha + ")";
+      }
+      case "hex":
+        return value.hex();
+      case "percent":
+        return value.percentString();
+      default:
+        throw new TypeError(type + " is not allowed as a type value.");
+    }
+  }
+  function withDefaults(conf, defaults) {
+    const result = { ...defaults };
+    for (const key of Object.keys(conf)) {
+      if (conf[key] !== void 0) result[key] = conf[key];
+    }
+    return result;
   }
   function shuffle(array) {
-    var i, j, temp;
-    for (i = array.length - 1; i > 0; i--) {
-      j = Math.floor(Math.random() * (i + 1));
-      temp = array[i];
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = array[i];
       array[i] = array[j];
       array[j] = temp;
     }
     return array;
   }
   function getType(obj) {
-    return {}.toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+    return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
   }
   function typeCheck(value, expectedType) {
-    var actualType = getType(value);
-    if (value !== void 0 && actualType !== expectedType)
-      throw new TypeError("The argument must be of type " + expectedType + " and not " + actualType);
+    const actualType = getType(value);
+    if (value !== void 0 && actualType !== expectedType) {
+      throw new TypeError(
+        "The argument must be of type " + expectedType + " and not " + actualType
+      );
+    }
   }
   function capitalize(text) {
-    return text.charAt(0).toUpperCase() + text.substr(1);
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
   function randomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
   }
-  function findFirst(array, test) {
-    var result = null;
-    array.some(function(element, index) {
-      var testResult = test(element);
-      if (testResult)
-        result = element;
-      return testResult;
-    });
+  function checkFilter(filter) {
+    if (typeof filter !== "function")
+      throw new TypeError("Filter must be a function.");
+  }
+  function randomSentence(min, max) {
+    return capitalize(
+      shuffle(lorem.split(" ")).slice(0, randomInt(min, max)).join(" ")
+    );
+  }
+  function isWrappable(method) {
+    return method !== "maybe" && method !== "unique" && method !== "array" && method !== "fn";
+  }
+  function wrapGenerators(wrap) {
+    const methods = fakesome;
+    const result = {};
+    for (const name of Object.keys(methods)) {
+      const method = methods[name];
+      if (isWrappable(name) && typeof method === "function")
+        result[name] = wrap(method, name);
+    }
     return result;
   }
-  function validMethod(method) {
-    return method != "maybe" && method != "unique" && method != "array";
-  }
-  fakesome = {
-    boolean: function(chanceOfTrue) {
+  var fakesome = {
+    boolean(chanceOfTrue) {
       chanceOfTrue = chanceOfTrue || 0.5;
-      if (typeof chanceOfTrue !== "number")
-        throw new TypeError("ChanceOfTrue must be a number and not a " + typeof chanceOfTrue);
+      if (typeof chanceOfTrue !== "number") {
+        throw new TypeError(
+          "ChanceOfTrue must be a number and not a " + typeof chanceOfTrue
+        );
+      }
       if (chanceOfTrue >= 0 && chanceOfTrue <= 1)
-        return Boolean(Math.random() < chanceOfTrue);
+        return Math.random() < chanceOfTrue;
       else
         throw new RangeError("Must be a number between 0 and 1");
     },
-    character: function(min, max) {
-      var charCode;
-      min = min || 32;
-      max = max || 1114112;
-      charCode = randomInt(min, max);
-      return String.fromCharCode(charCode);
+    character(min, max) {
+      return String.fromCharCode(randomInt(min || 32, max || 1114112));
     },
     color: randomColor,
-    date: function(startDate, endDate) {
-      var randDate = randomDatetime(startDate, endDate);
-      return new Date(randDate.toJSON().substr(0, 10));
+    date(startDate, endDate) {
+      const randDate = randomDatetime(startDate, endDate);
+      return new Date(randDate.toJSON().slice(0, 10));
     },
     datetime: randomDatetime,
     element: randomElement,
-    float: function(minValue, maxValue, filter) {
-      var randInt;
+    float(min, max, filter) {
       if (filter) {
-        if (typeof filter != "function")
-          throw new TypeError("Filter must be a function.");
+        checkFilter(filter);
+        let value;
         do {
-          randInt = randomFloat(minValue, maxValue);
-        } while (!filter(randInt));
-        return randInt;
+          value = randomFloat(min, max);
+        } while (!filter(value));
+        return value;
       }
-      return randomFloat(minValue, maxValue);
+      return randomFloat(min, max);
     },
-    imgURL: function(conf) {
-      var defaults = {
+    imgURL(conf = {}) {
+      const config = withDefaults(conf, {
         width: 100,
         height: 100,
         grayscale: false,
         site: "picsum.photos",
         number: false
-      }, url = "https://";
-      conf = conf || {};
-      conf = mergeObjects(conf, defaults);
-      switch (conf.site) {
+      });
+      let url = "https://";
+      switch (config.site) {
         case "picsum.photos":
           url += "picsum.photos";
-          url += conf.number ? "/seed/" + conf.number : "";
-          url += conf.width ? "/" + conf.width : "";
-          url += conf.height ? "/" + conf.height : "";
-          url += conf.grayscale ? "?grayscale" : "";
+          url += config.number ? "/seed/" + config.number : "";
+          url += config.width ? "/" + config.width : "";
+          url += config.height ? "/" + config.height : "";
+          url += config.grayscale ? "?grayscale" : "";
           break;
         case "placekitten.com":
           url += "placekitten.com";
-          url += conf.grayscale ? "/g" : "";
-          url += conf.width ? "/" + conf.width : "";
-          url += conf.height ? "/" + conf.height : "";
+          url += config.grayscale ? "/g" : "";
+          url += config.width ? "/" + config.width : "";
+          url += config.height ? "/" + config.height : "";
           break;
         default:
-          throw new Error(conf.site + " is no valid image hoster.");
+          throw new Error(config.site + " is no valid image hoster.");
       }
       return url;
     },
-    integer: function(minValue, maxValue, filter) {
-      var randInt;
+    integer(min, max, filter) {
       if (filter) {
-        if (typeof filter != "function")
-          throw new TypeError("Filter must be a function.");
+        checkFilter(filter);
+        let value;
         do {
-          randInt = randomInt(minValue, maxValue);
-        } while (!filter(randInt));
-        return randInt;
+          value = randomInt(min, max);
+        } while (!filter(value));
+        return value;
       }
-      return randomInt(minValue, maxValue);
+      return randomInt(min, max);
     },
-    object: function(schema) {
+    object(schema) {
+      const methods = fakesome;
       function evaluateObject(object) {
-        for (var key in object) {
-          if (object.hasOwnProperty(key)) {
-            !function() {
-              var value = object[key];
-              if (typeof value === "string" && fakesome[value.match(/^\w+/)[0]]) {
-                try {
-                  object[key] = new Function("fakesome", "return fakesome." + value)(fakesome);
-                } catch (e) {
-                  console.log("Couldn't evaluate fakesome." + value);
-                }
-              } else if (typeof value === "function") {
-                object[key] = value();
-              } else if (getType(value) === "object")
-                evaluateObject(value);
-            }();
+        var _a;
+        for (const key of Object.keys(object)) {
+          const value = object[key];
+          const methodName = typeof value === "string" ? (_a = value.match(/^\w+/)) == null ? void 0 : _a[0] : void 0;
+          if (typeof value === "string" && methodName && methods[methodName]) {
+            try {
+              object[key] = new Function("fakesome", "return fakesome." + value)(fakesome);
+            } catch {
+              console.log("Couldn't evaluate fakesome." + value);
+            }
+          } else if (typeof value === "function") {
+            object[key] = value();
+          } else if (getType(value) === "object") {
+            evaluateObject(value);
           }
         }
         return object;
       }
       return evaluateObject((0, import_clone.default)(schema));
     },
-    sentence: function(min, max) {
+    sentence(min, max) {
       typeCheck(min, "number");
       typeCheck(max, "number");
-      min = min || 5;
-      max = max || 25;
-      return capitalize(
-        shuffle(lorem.split(" ")).slice(0, randomInt(min, max)).join(" ")
-      ) + ".";
+      return randomSentence(min || 5, max || 25) + ".";
     },
-    sentences: function(quantity, min, max) {
-      var sentences = [], i;
+    sentences(quantity, min, max) {
       typeCheck(quantity, "number");
       typeCheck(min, "number");
       typeCheck(max, "number");
-      quantity = quantity || 1;
-      min = min || 5;
-      max = max || 25;
-      for (i = 0; i < quantity; i++) {
-        sentences.push(
-          capitalize(
-            shuffle(lorem.split(" ")).slice(0, randomInt(min, max)).join(" ")
-          )
-        );
-      }
+      const sentences = [];
+      for (let i = 0; i < (quantity || 1); i++)
+        sentences.push(randomSentence(min || 5, max || 25));
       return sentences.join(". ") + ".";
     },
-    string: function(alphabet, length) {
-      var string = [], i;
+    string(alphabet, length) {
       typeCheck(alphabet, "array");
       typeCheck(length, "number");
-      alphabet = alphabet || [
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-        "k",
-        "l",
-        "m",
-        "n",
-        "o",
-        "p",
-        "q",
-        "r",
-        "s",
-        "t",
-        "u",
-        "v",
-        "w",
-        "x",
-        "y",
-        "z"
-      ];
-      length = length || 10;
-      for (i = 0; i < length; i++)
-        string.push(randomElement(alphabet));
+      const characters = alphabet || "abcdefghijklmnopqrstuvwxyz".split("");
+      const string = [];
+      for (let i = 0; i < (length || 10); i++)
+        string.push(randomElement(characters));
       return string.join("");
     },
-    text: function(min, max) {
+    text(min, max) {
       typeCheck(min, "number");
       typeCheck(max, "number");
-      min = min || 50;
-      max = max || 100;
-      return lorem.substr(0, randomInt(min, max));
+      return lorem.slice(0, randomInt(min || 50, max || 100));
     },
-    word: function(minChars, maxChars) {
-      var word, test;
+    word(minChars, maxChars) {
       typeCheck(minChars, "number");
       typeCheck(maxChars, "number");
-      minChars = minChars || 1;
-      maxChars = maxChars || 20;
-      test = function(element) {
-        return element.length >= minChars && element.length <= maxChars;
-      };
-      word = findFirst(shuffle(lorem.split(" ")), test);
+      const minimum = minChars || 1;
+      const maximum = maxChars || 20;
+      const word = shuffle(lorem.split(" ")).find(
+        (element) => element.length >= minimum && element.length <= maximum
+      );
       if (word)
         return word;
       else
-        throw new RangeError("No word with between " + minChars + " and " + maxChars + " characters available.");
+        throw new RangeError(
+          "No word with between " + minimum + " and " + maximum + " characters available."
+        );
     },
-    words: function(quantity, minChars, maxChars) {
-      var words = [], i;
+    words(quantity, minChars, maxChars) {
       typeCheck(quantity, "number");
       typeCheck(minChars, "number");
       typeCheck(maxChars, "number");
-      quantity = quantity || 10;
-      for (i = 0; i < quantity; i++)
+      const words = [];
+      for (let i = 0; i < (quantity || 10); i++)
         words.push(fakesome.word(minChars, maxChars));
       return words.join(" ");
     },
-    maybe: function(chanceOfReturn) {
-      var returnObject = {};
-      typeCheck(chanceOfReturn, "number");
-      chanceOfReturn = chanceOfReturn || 0.5;
-      for (var key in fakesome) {
-        if (fakesome.hasOwnProperty(key) && validMethod(key)) {
-          !function(key2) {
-            returnObject[key2] = function() {
-              var args = Array.prototype.slice.call(arguments), array = [];
-              if (Math.random() < chanceOfReturn)
-                return null;
-              else
-                return fakesome[key2].apply(null, args);
-            };
-          }(key);
-        }
-      }
-      return returnObject;
+    maybe(chanceOfNull) {
+      typeCheck(chanceOfNull, "number");
+      const chance = chanceOfNull || 0.5;
+      return wrapGenerators(
+        (generator) => (...args) => Math.random() < chance ? null : generator(...args)
+      );
     },
-    unique: function(reset) {
-      var returnObject = {};
-      for (var key in fakesome) {
-        if (fakesome.hasOwnProperty(key) && validMethod(key)) {
-          !function(key2) {
-            returnObject[key2] = function() {
-              var args = Array.prototype.slice.call(arguments), counter = 0, value;
-              if (reset === true || uniqueMap[key2] === void 0)
-                uniqueMap[key2] = [];
-              do {
-                if (counter >= 1e3)
-                  throw new Error("Unique value couldn't be generated (efficiently). Please increase the domain.");
-                value = fakesome[key2].apply(null, args);
-                counter++;
-              } while (uniqueMap[key2].indexOf(value) >= 0);
-              uniqueMap[key2].push(value);
-              return value;
-            };
-          }(key);
+    unique(reset) {
+      return wrapGenerators(
+        (generator, name) => (...args) => {
+          let counter = 0;
+          let value;
+          if (reset === true || uniqueMap[name] === void 0)
+            uniqueMap[name] = [];
+          const usedValues = uniqueMap[name];
+          do {
+            if (counter >= 1e3) {
+              throw new Error(
+                "Unique value couldn't be generated (efficiently). Please increase the domain."
+              );
+            }
+            value = generator(...args);
+            counter++;
+          } while (usedValues.includes(value));
+          usedValues.push(value);
+          return value;
         }
-      }
-      return returnObject;
+      );
     },
-    array: function(number) {
-      var returnObject = {};
-      number = number || 10;
-      for (var key in fakesome) {
-        if (fakesome.hasOwnProperty(key) && validMethod(key)) {
-          !function(key2) {
-            returnObject[key2] = function() {
-              var array = [];
-              for (var i = 0; i < number; i++) {
-                array.push(fakesome[key2].apply(null, arguments));
-              }
-              return array;
-            };
-          }(key);
+    array(length) {
+      const count = length || 10;
+      return wrapGenerators(
+        (generator) => (...args) => {
+          const array = [];
+          for (let i = 0; i < count; i++)
+            array.push(generator(...args));
+          return array;
         }
-      }
-      return returnObject;
+      );
     }
   };
-  if (canvasIsAvailable)
-    fakesome.img = function(conf) {
-      var defaults = {
-        tag: false,
-        width: 100,
-        size: false,
-        height: 100,
-        elements: 100,
-        bgColor: "white",
-        elementSize: 50,
-        minColor: "rgba(0,0,0,0)",
-        maxColor: "rgba(255,255,255,1)"
-      }, ctx, imgData, data, a, i;
-      ctx = canvas.getContext("2d");
-      conf = conf || {};
-      conf = mergeObjects(conf, defaults);
-      canvas.width = conf.width;
-      canvas.height = conf.height;
-      ctx.fillStyle = conf.bgColor;
-      ctx.fillRect(0, 0, conf.width, conf.height);
-      for (a = 0; a < conf.elements; a++) {
-        ctx.fillStyle = randomColor(conf.minColor, conf.maxColor);
+  function createImg(canvas2) {
+    return function img(conf = {}) {
+      const config = withDefaults(
+        conf,
+        {
+          tag: false,
+          width: 100,
+          size: false,
+          height: 100,
+          elements: 100,
+          bgColor: "white",
+          elementSize: 50,
+          minColor: "rgba(0,0,0,0)",
+          maxColor: "rgba(255,255,255,1)"
+        }
+      );
+      const ctx = canvas2.getContext("2d");
+      if (!ctx) throw new Error("Could not get a 2d context of the canvas");
+      canvas2.width = config.width;
+      canvas2.height = config.height;
+      ctx.fillStyle = config.bgColor;
+      ctx.fillRect(0, 0, config.width, config.height);
+      for (let i = 0; i < config.elements; i++) {
+        ctx.fillStyle = randomColor(config.minColor, config.maxColor);
         ctx.fillRect(
-          randomInt(-conf.elementSize, conf.width),
-          randomInt(-conf.elementSize, conf.height),
-          randomInt(0, conf.elementSize),
-          randomInt(0, conf.elementSize)
+          randomInt(-config.elementSize, config.width),
+          randomInt(-config.elementSize, config.height),
+          randomInt(0, config.elementSize),
+          randomInt(0, config.elementSize)
         );
       }
+      function luminance(data2, index) {
+        var _a, _b, _c;
+        return 0.2126 * ((_a = data2[index]) != null ? _a : 0) + 0.7152 * ((_b = data2[index + 1]) != null ? _b : 0) + 0.0722 * ((_c = data2[index + 2]) != null ? _c : 0);
+      }
       function grayscale(imageData) {
-        var d = imageData.data, r, g, b, v;
-        for (i = 0; i < d.length; i += 4) {
-          r = d[i];
-          g = d[i + 1];
-          b = d[i + 2];
-          d[i] = d[i + 1] = d[i + 2] = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-        }
+        const data2 = imageData.data;
+        for (let i = 0; i < data2.length; i += 4)
+          data2[i] = data2[i + 1] = data2[i + 2] = luminance(data2, i);
         return imageData;
       }
       function blackWhite(imageData) {
-        var d = imageData.data, threshold = 0.7, max = 0, min = 255, values = [], r, g, b, v;
-        for (i = 0; i < d.length; i += 4) {
-          v = 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
-          if (v > max) max = v;
-          if (v < min) min = v;
-          values[i] = v;
+        var _a;
+        const data2 = imageData.data;
+        const values = [];
+        let max = 0;
+        let min = 255;
+        for (let i = 0; i < data2.length; i += 4) {
+          const value = luminance(data2, i);
+          if (value > max) max = value;
+          if (value < min) min = value;
+          values[i] = value;
         }
-        threshold = (min + max) / 2;
-        for (i = 0; i < d.length; i += 4) {
-          d[i] = d[i + 1] = d[i + 2] = values[i] >= threshold ? 255 : 0;
+        const threshold = (min + max) / 2;
+        for (let i = 0; i < data2.length; i += 4) {
+          data2[i] = data2[i + 1] = data2[i + 2] = ((_a = values[i]) != null ? _a : 0) >= threshold ? 255 : 0;
         }
         return imageData;
       }
-      function setText() {
-        var textString = conf.text, fontSize = Math.min(conf.width / textString.length * 1.4, conf.height * 0.3), textWidth, x, y;
-        ctx.fillStyle = "rgba(0,0,0,0.7)";
-        ctx.font = fontSize + "px Arial";
-        textWidth = ctx.measureText(textString).width;
-        x = (conf.width - textWidth) / 2;
-        if (conf.size)
-          y = conf.height / 2 + fontSize / 2;
-        else
-          y = conf.height / 2;
-        ctx.textBaseline = "middle";
-        ctx.fillText(textString, x, y);
+      function drawText(context, text) {
+        const fontSize = Math.min(
+          config.width / text.length * 1.4,
+          config.height * 0.3
+        );
+        context.fillStyle = "rgba(0,0,0,0.7)";
+        context.font = fontSize + "px Arial";
+        const textWidth = context.measureText(text).width;
+        const x = (config.width - textWidth) / 2;
+        const y = config.size ? config.height / 2 + fontSize / 2 : config.height / 2;
+        context.textBaseline = "middle";
+        context.fillText(text, x, y);
       }
-      function setSize() {
-        var string = conf.width + "\xD7" + conf.height, fontSize = Math.min(conf.width / string.length, conf.height * 0.3), textWidth, x, y;
-        ctx.fillStyle = "rgba(0,0,0,0.7)";
-        ctx.font = "bold " + fontSize + "px Arial";
-        textWidth = ctx.measureText(string).width;
-        x = (conf.width - textWidth) / 2;
-        if (conf.text)
-          y = conf.height / 2 - fontSize / 2;
-        else
-          y = conf.height / 2;
-        ctx.textBaseline = "middle";
-        ctx.fillText(string, x, y);
+      function drawSize(context) {
+        const string = config.width + "\xD7" + config.height;
+        const fontSize = Math.min(
+          config.width / string.length,
+          config.height * 0.3
+        );
+        context.fillStyle = "rgba(0,0,0,0.7)";
+        context.font = "bold " + fontSize + "px Arial";
+        const textWidth = context.measureText(string).width;
+        const x = (config.width - textWidth) / 2;
+        const y = config.text ? config.height / 2 - fontSize / 2 : config.height / 2;
+        context.textBaseline = "middle";
+        context.fillText(string, x, y);
       }
-      imgData = ctx.getImageData(0, 0, conf.width, conf.height);
-      if (conf.filter) {
-        if (conf.filter === "grayscale")
-          ctx.putImageData(grayscale(imgData), 0, 0);
-        else if (conf.filter === "bw")
-          ctx.putImageData(blackWhite(imgData), 0, 0);
-      }
-      if (conf.text) setText();
-      if (conf.size) setSize();
-      data = canvas.toDataURL();
-      if (conf.tag)
-        return '<img src="' + data + '" alt="Placeholder Image" title="Placeholder Image">';
-      else
-        return data;
+      const imgData = ctx.getImageData(0, 0, config.width, config.height);
+      if (config.filter === "grayscale")
+        ctx.putImageData(grayscale(imgData), 0, 0);
+      else if (config.filter === "bw")
+        ctx.putImageData(blackWhite(imgData), 0, 0);
+      if (config.text) drawText(ctx, config.text);
+      if (config.size) drawSize(ctx);
+      const data = canvas2.toDataURL();
+      return config.tag ? '<img src="' + data + '" alt="Placeholder Image" title="Placeholder Image">' : data;
     };
+  }
+  if (canvas) fakesome.img = createImg(canvas);
   fakesome.fn = fakesome;
-  if (typeof window === "object" && typeof window.document === "object") {
+  if (isBrowser) {
     window.fakesome = fakesome;
   }
   var fakesome_default = fakesome;
   return __toCommonJS(fakesome_exports);
 })();
+fakesome = fakesome.default;

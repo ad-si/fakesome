@@ -1,4 +1,4 @@
-// fakesome 0.5.5 by Adrian Sieber (adriansieber.com)
+// fakesome 0.7.0 by Adrian Sieber (adriansieber.com)
 
 
 "use strict";

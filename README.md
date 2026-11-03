@@ -8,4 +8,8 @@ Checkout [adriansieber.com/fakesome](http://adriansieber.com) for an extensive A
 
 ## Related
 
-- https://github.com/adleroliveira/dreamjs
+- [dreamjs]
+- [mkjson] - CLI tool to generate static or random JSON records.
+
+[dreamjs]: https://github.com/adleroliveira/dreamjs
+[mkjson]: https://codeberg.org/mfussenegger/mkjson

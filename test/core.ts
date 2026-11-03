@@ -170,7 +170,7 @@ describe('Fakesome', () => {
 			repeat('few', () => {
 				assert.match(
 					fakesome.color(null, null, 'hsla'),
-					/^hsla\([0-3]?[0-9]?[0-9], ([0-1]?[0-9]?[0-9]%, ){2}0\.[0-9]+\)$/,
+					/^hsla\([0-3]?[0-9]?[0-9], ([0-1]?[0-9]?[0-9]%, ){2}(0|1|0\.[0-9]{1,2})\)$/,
 				)
 			})
 		})
@@ -197,11 +197,26 @@ describe('Fakesome', () => {
 			})
 		})
 
+		it('should round alpha to 2 decimal places within the bounds', () => {
+			repeat('few', () => {
+				const color = fakesome.color('rgba(0, 0, 0, 0.333)', 'rgba(0, 0, 0, 0.57)')
+				const alpha = Number(color.match(/, ([\d.]+)\)$/)?.[1])
+
+				assert.match(color, /, 0\.\d{1,2}\)$/)
+				assert(alpha >= 0.34 && alpha <= 0.57, color)
+			})
+
+			// No value with 2 decimal places between the bounds
+			const color = fakesome.color('rgba(0, 0, 0, 0.331)', 'rgba(0, 0, 0, 0.339)')
+			const alpha = Number(color.match(/, ([\d.]+)\)$/)?.[1])
+			assert(alpha >= 0.331 && alpha <= 0.339, color)
+		})
+
 		it('should return a slightly transparent medium dark rgba color', () => {
 			repeat('few', () => {
 				assert.match(
 					fakesome.color('rgba(50, 50, 50, 0.5)', 'rgb(99, 99, 99)'),
-					/^rgba\(([5-9]?[0-9], ){3}(0|1)\.[5-9][0-9]*\)$/,
+					/^rgba\(([5-9]?[0-9], ){3}(1|0\.[5-9][0-9]?)\)$/,
 				)
 			})
 		})
@@ -385,6 +400,29 @@ describe('Fakesome', () => {
 			const res = await fetch(value, {redirect: 'follow'})
 
 			assert.equal(res.status, 200, 'GET ' + value + ' ' + res.status)
+		})
+	})
+
+
+	describe('filter', () => {
+
+		it('should apply the filter', () => {
+			repeat('few', () => {
+				assert.equal(fakesome.integer(0, 100, n => n % 10 === 0) % 10, 0)
+				assert(fakesome.float(0, 1, n => n > 0.9) > 0.9)
+			})
+		})
+
+		it('should throw instead of looping forever if nothing passes', () => {
+			assert.throws(() => fakesome.integer(0, 9, () => false), /filter/)
+			assert.throws(() => fakesome.float(0, 1, () => false), /filter/)
+		})
+
+		it('should throw if the filter is no function', () => {
+			assert.throws(
+				() => fakesome.integer(0, 9, 'even' as unknown as () => boolean),
+				TypeError,
+			)
 		})
 	})
 

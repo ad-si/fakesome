@@ -200,6 +200,19 @@ function randomDatetime(
 	return new Date(start + Math.random() * (end - start))
 }
 
+/** Random alpha value with at most 2 decimal places within the bounds */
+function randomAlpha(min: number, max: number): number {
+	// Round away floating point artifacts like 0.57 * 100 = 56.99999999999999
+	const toHundredths = (value: number) => Math.round(value * 100 * 1e6) / 1e6
+	const lower = Math.ceil(toHundredths(Math.min(min, max)))
+	const upper = Math.floor(toHundredths(Math.max(min, max)))
+
+	// No value with 2 decimal places between the bounds
+	if (lower > upper) return randomFloat(min, max)
+
+	return randomInt(lower, upper) / 100
+}
+
 function inferColorType(min: string, max: string): ColorType | undefined {
 	if (min.includes('rgb') || max.includes('rgb'))
 		return (min.includes('rgba') || max.includes('rgba')) ? 'rgba' : 'rgb'
@@ -222,7 +235,7 @@ function randomColor(
 
 	const minColor = color(min || 'rgba(0,0,0,0)')
 	const maxColor = color(max || 'rgba(255,255,255,1)')
-	const alpha = randomFloat(minColor.alpha(), maxColor.alpha())
+	const alpha = randomAlpha(minColor.alpha(), maxColor.alpha())
 
 	// Channels can be fractional when the bounds are not in rgb notation
 	const value = color.rgb([
@@ -302,9 +315,39 @@ function randomElement<T>(array: readonly T[]): T {
 	return array[Math.floor(Math.random() * array.length)] as T
 }
 
-function checkFilter(filter: unknown): void {
+const maxFilterAttempts = 100000
+const maxUniqueAttempts = 1000
+
+/** Generate values until one is accepted or the attempts are exhausted */
+function generateUntil<T>(
+	generate: () => T,
+	accept: (value: T) => boolean,
+	maxAttempts: number,
+	errorMessage: string,
+): T {
+	for (let attempt = 0; attempt < maxAttempts; attempt++) {
+		const value = generate()
+
+		if (accept(value)) return value
+	}
+
+	throw new Error(errorMessage)
+}
+
+function generateFiltered(
+	generate: () => number,
+	filter: NumberFilter,
+): number {
 	if (typeof filter !== 'function')
 		throw new TypeError('Filter must be a function.')
+
+	return generateUntil(
+		generate,
+		filter,
+		maxFilterAttempts,
+		'No value passing the filter was found in ' + maxFilterAttempts +
+		' attempts. Please check the filter or increase the range.',
+	)
 }
 
 function randomSentence(min: number, max: number): string {
@@ -400,19 +443,9 @@ const fakesome = {
 		filter?: NumberFilter,
 	): number {
 
-		if (filter) {
-			checkFilter(filter)
-
-			let value: number
-
-			do {
-				value = randomFloat(min, max)
-			} while (!filter(value))
-
-			return value
-		}
-
-		return randomFloat(min, max)
+		return filter
+			? generateFiltered(() => randomFloat(min, max), filter)
+			: randomFloat(min, max)
 	},
 
 	imgURL(conf: ImgURLConfig = {}): string {
@@ -453,19 +486,9 @@ const fakesome = {
 		filter?: NumberFilter,
 	): number {
 
-		if (filter) {
-			checkFilter(filter)
-
-			let value: number
-
-			do {
-				value = randomInt(min, max)
-			} while (!filter(value))
-
-			return value
-		}
-
-		return randomInt(min, max)
+		return filter
+			? generateFiltered(() => randomInt(min, max), filter)
+			: randomInt(min, max)
 	},
 
 	object(schema: object): Record<string, any> {
@@ -614,9 +637,6 @@ const fakesome = {
 
 		return wrapGenerators<UniqueGenerators>((generator, name) =>
 			(...args) => {
-				let counter = 0
-				let value: unknown
-
 				if (reset === true && !alreadyReset.has(name)) {
 					uniqueMap[name] = new Set()
 					alreadyReset.add(name)
@@ -624,18 +644,13 @@ const fakesome = {
 
 				const usedValues = uniqueMap[name] ??= new Set()
 
-				do {
-					if (counter >= 1000) {
-						throw new Error(
-							'Unique value couldn\'t be generated (efficiently). ' +
-							'Please increase the domain.',
-						)
-					}
-
-					value = generator(...args)
-					counter++
-				}
-				while (usedValues.has(uniqueKey(value)))
+				const value = generateUntil(
+					() => generator(...args),
+					candidate => !usedValues.has(uniqueKey(candidate)),
+					maxUniqueAttempts,
+					'Unique value couldn\'t be generated (efficiently). ' +
+					'Please increase the domain.',
+				)
 
 				usedValues.add(uniqueKey(value))
 

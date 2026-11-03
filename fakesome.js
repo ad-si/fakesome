@@ -1885,6 +1885,13 @@ var fakesome = (() => {
     const end = new Date(endDate != null ? endDate : /* @__PURE__ */ new Date()).getTime();
     return new Date(start + Math.random() * (end - start));
   }
+  function randomAlpha(min, max) {
+    const toHundredths = (value) => Math.round(value * 100 * 1e6) / 1e6;
+    const lower = Math.ceil(toHundredths(Math.min(min, max)));
+    const upper = Math.floor(toHundredths(Math.max(min, max)));
+    if (lower > upper) return randomFloat(min, max);
+    return randomInt(lower, upper) / 100;
+  }
   function inferColorType(min, max) {
     if (min.includes("rgb") || max.includes("rgb"))
       return min.includes("rgba") || max.includes("rgba") ? "rgba" : "rgb";
@@ -1897,7 +1904,7 @@ var fakesome = (() => {
       type = inferColorType(min, max);
     const minColor = (0, import_color.default)(min || "rgba(0,0,0,0)");
     const maxColor = (0, import_color.default)(max || "rgba(255,255,255,1)");
-    const alpha = randomFloat(minColor.alpha(), maxColor.alpha());
+    const alpha = randomAlpha(minColor.alpha(), maxColor.alpha());
     const value = import_color.default.rgb([
       randomInt(Math.round(minColor.red()), Math.round(maxColor.red())),
       randomInt(Math.round(minColor.green()), Math.round(maxColor.green())),
@@ -1955,9 +1962,24 @@ var fakesome = (() => {
   function randomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
   }
-  function checkFilter(filter) {
+  var maxFilterAttempts = 1e5;
+  var maxUniqueAttempts = 1e3;
+  function generateUntil(generate, accept, maxAttempts, errorMessage) {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const value = generate();
+      if (accept(value)) return value;
+    }
+    throw new Error(errorMessage);
+  }
+  function generateFiltered(generate, filter) {
     if (typeof filter !== "function")
       throw new TypeError("Filter must be a function.");
+    return generateUntil(
+      generate,
+      filter,
+      maxFilterAttempts,
+      "No value passing the filter was found in " + maxFilterAttempts + " attempts. Please check the filter or increase the range."
+    );
   }
   function randomSentence(min, max) {
     return capitalize(
@@ -2015,15 +2037,7 @@ var fakesome = (() => {
     datetime: randomDatetime,
     element: randomElement,
     float(min, max, filter) {
-      if (filter) {
-        checkFilter(filter);
-        let value;
-        do {
-          value = randomFloat(min, max);
-        } while (!filter(value));
-        return value;
-      }
-      return randomFloat(min, max);
+      return filter ? generateFiltered(() => randomFloat(min, max), filter) : randomFloat(min, max);
     },
     imgURL(conf = {}) {
       const config = withDefaults(conf, {
@@ -2048,15 +2062,7 @@ var fakesome = (() => {
       return url;
     },
     integer(min, max, filter) {
-      if (filter) {
-        checkFilter(filter);
-        let value;
-        do {
-          value = randomInt(min, max);
-        } while (!filter(value));
-        return value;
-      }
-      return randomInt(min, max);
+      return filter ? generateFiltered(() => randomInt(min, max), filter) : randomInt(min, max);
     },
     object(schema) {
       const methods = fakesome;
@@ -2150,22 +2156,17 @@ var fakesome = (() => {
       return wrapGenerators(
         (generator, name) => (...args) => {
           var _a;
-          let counter = 0;
-          let value;
           if (reset === true && !alreadyReset.has(name)) {
             uniqueMap[name] = /* @__PURE__ */ new Set();
             alreadyReset.add(name);
           }
           const usedValues = (_a = uniqueMap[name]) != null ? _a : uniqueMap[name] = /* @__PURE__ */ new Set();
-          do {
-            if (counter >= 1e3) {
-              throw new Error(
-                "Unique value couldn't be generated (efficiently). Please increase the domain."
-              );
-            }
-            value = generator(...args);
-            counter++;
-          } while (usedValues.has(uniqueKey(value)));
+          const value = generateUntil(
+            () => generator(...args),
+            (candidate) => !usedValues.has(uniqueKey(candidate)),
+            maxUniqueAttempts,
+            "Unique value couldn't be generated (efficiently). Please increase the domain."
+          );
           usedValues.add(uniqueKey(value));
           return value;
         }

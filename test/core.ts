@@ -58,6 +58,10 @@ describe('Fakesome', () => {
 			assert.equal(array.length, 5)
 			assert(!elementEquality)
 		})
+
+		it('should return an empty array for a length of 0', () => {
+			assert.deepEqual(fakesome.array(0).integer(), [])
+		})
 	})
 
 
@@ -86,6 +90,14 @@ describe('Fakesome', () => {
 		it('should return true with a probability of 80%', () => {
 			testBoolean(0.8)
 		})
+
+		it('should always return false for a probability of 0', () => {
+			repeat('few', () => assert.equal(fakesome.boolean(0), false))
+		})
+
+		it('should always return true for a probability of 1', () => {
+			repeat('few', () => assert.equal(fakesome.boolean(1), true))
+		})
 	})
 
 
@@ -106,6 +118,14 @@ describe('Fakesome', () => {
 				const value = fakesome.character(65, 90)
 
 				assert.match(value, /^[A-Z]$/)
+			})
+		})
+
+		it('should accept 0 as lower bound', () => {
+			repeat('few', () => {
+				const charCode = fakesome.character(0, 1).charCodeAt(0)
+
+				assert(charCode === 0 || charCode === 1, String(charCode))
 			})
 		})
 	})
@@ -222,6 +242,14 @@ describe('Fakesome', () => {
 				const date = fakesome.datetime('2000-07-14', '2010-12-21')
 
 				assert(date >= new Date('2000-07-14') && date <= new Date('2010-12-21'))
+			})
+		})
+
+		it('should accept 0 (1970-01-01) as end date', () => {
+			repeat('few', () => {
+				const date = fakesome.datetime(new Date('1969-01-01'), 0)
+
+				assert(date >= new Date('1969-01-01') && date <= new Date(0), date.toJSON())
 			})
 		})
 	})
@@ -374,6 +402,14 @@ describe('Fakesome', () => {
 		it('should return a integer or null with a 20:80 chance', () => {
 			testMaybe(0.8)
 		})
+
+		it('should never return null for a probability of 0', () => {
+			repeat('few', () => assert.notEqual(fakesome.maybe(0).integer(1, 9), null))
+		})
+
+		it('should always return null for a probability of 1', () => {
+			repeat('few', () => assert.equal(fakesome.maybe(1).integer(1, 9), null))
+		})
 	})
 
 
@@ -452,6 +488,10 @@ describe('Fakesome', () => {
 				)
 			})
 		})
+
+		it('should return an empty string for a length of 0', () => {
+			assert.equal(fakesome.string(undefined, 0), '')
+		})
 	})
 
 
@@ -504,6 +544,10 @@ describe('Fakesome', () => {
 					assert.match(sentence, /^[A-Z][\w ]+$/)
 				}
 			})
+		})
+
+		it('should return an empty string for a quantity of 0', () => {
+			assert.equal(fakesome.sentences(0), '')
 		})
 	})
 
@@ -632,6 +676,10 @@ describe('Fakesome', () => {
 				assert.equal(value.split(' ').length, 5)
 				assert.match(value, /^[\w ]+$/)
 			})
+		})
+
+		it('should return an empty string for a quantity of 0', () => {
+			assert.equal(fakesome.words(0), '')
 		})
 
 		it('should not contain accidentally concatenated words', () => {

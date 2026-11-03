@@ -163,8 +163,8 @@ function randomDatetime(
 	startDate?: DateInput | null,
 	endDate?: DateInput | null,
 ): Date {
-	const start = new Date(startDate || 0).getTime()
-	const end = new Date(endDate || new Date()).getTime()
+	const start = new Date(startDate ?? 0).getTime()
+	const end = new Date(endDate ?? new Date()).getTime()
 
 	return new Date(start + Math.random() * (end - start))
 }
@@ -314,7 +314,7 @@ const fakesome = {
 
 	boolean(chanceOfTrue?: number): boolean {
 
-		chanceOfTrue = chanceOfTrue || 0.5
+		chanceOfTrue = chanceOfTrue ?? 0.5
 
 		if (typeof chanceOfTrue !== 'number') {
 			throw new TypeError(
@@ -329,7 +329,7 @@ const fakesome = {
 	},
 
 	character(min?: number, max?: number): string {
-		return String.fromCharCode(randomInt(min || 32, max || 1114112))
+		return String.fromCharCode(randomInt(min ?? 32, max ?? 1114112))
 	},
 
 	color: randomColor,
@@ -463,7 +463,9 @@ const fakesome = {
 		typeCheck(min, 'number')
 		typeCheck(max, 'number')
 
-		return randomSentence(min || 5, max || 25) + '.'
+		const sentence = randomSentence(min ?? 5, max ?? 25)
+
+		return sentence ? sentence + '.' : ''
 	},
 
 	sentences(quantity?: number, min?: number, max?: number): string {
@@ -474,10 +476,13 @@ const fakesome = {
 
 		const sentences: string[] = []
 
-		for (let i = 0; i < (quantity || 1); i++)
-			sentences.push(randomSentence(min || 5, max || 25))
+		for (let i = 0; i < (quantity ?? 1); i++) {
+			const sentence = randomSentence(min ?? 5, max ?? 25)
 
-		return sentences.join('. ') + '.'
+			if (sentence) sentences.push(sentence)
+		}
+
+		return sentences.length > 0 ? sentences.join('. ') + '.' : ''
 	},
 
 	string(alphabet?: readonly string[], length?: number): string {
@@ -485,10 +490,10 @@ const fakesome = {
 		typeCheck(alphabet, 'array')
 		typeCheck(length, 'number')
 
-		const characters = alphabet || 'abcdefghijklmnopqrstuvwxyz'.split('')
+		const characters = alphabet ?? 'abcdefghijklmnopqrstuvwxyz'.split('')
 		const string: string[] = []
 
-		for (let i = 0; i < (length || 10); i++)
+		for (let i = 0; i < (length ?? 10); i++)
 			string.push(randomElement(characters))
 
 		return string.join('')
@@ -499,7 +504,7 @@ const fakesome = {
 		typeCheck(min, 'number')
 		typeCheck(max, 'number')
 
-		return lorem.slice(0, randomInt(min || 50, max || 100))
+		return lorem.slice(0, randomInt(min ?? 50, max ?? 100))
 	},
 
 	word(minChars?: number, maxChars?: number): string {
@@ -507,8 +512,8 @@ const fakesome = {
 		typeCheck(minChars, 'number')
 		typeCheck(maxChars, 'number')
 
-		const minimum = minChars || 1
-		const maximum = maxChars || 20
+		const minimum = minChars ?? 1
+		const maximum = maxChars ?? 20
 
 		const word = shuffle(lorem.split(' '))
 			.find(element =>
@@ -532,7 +537,7 @@ const fakesome = {
 
 		const words: string[] = []
 
-		for (let i = 0; i < (quantity || 10); i++)
+		for (let i = 0; i < (quantity ?? 10); i++)
 			words.push(fakesome.word(minChars, maxChars))
 
 		return words.join(' ')
@@ -542,7 +547,7 @@ const fakesome = {
 
 		typeCheck(chanceOfNull, 'number')
 
-		const chance = chanceOfNull || 0.5
+		const chance = chanceOfNull ?? 0.5
 
 		return wrapGenerators<MaybeGenerators>(generator =>
 			(...args) => Math.random() < chance ? null : generator(...args),
@@ -583,7 +588,7 @@ const fakesome = {
 
 	array(length?: number): ArrayGenerators {
 
-		const count = length || 10
+		const count = length ?? 10
 
 		return wrapGenerators<ArrayGenerators>(generator =>
 			(...args) => {
